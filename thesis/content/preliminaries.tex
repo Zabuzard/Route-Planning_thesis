@@ -1,11 +1,163 @@
 % Preliminaries
 \section{Preliminaries}\label{preliminaries}
-	Blabla
+	Before we define our specific data models and problems we will introduce and formalize commonly reoccurring terms.
 
-%Graph
+% Graph
 \subsection{Graph}
-	Blabla
+	\begin{mydef}\label{graph}
+		A \textnormal{graph} $G$ is a tuple $(V, E)$ with a set of nodes $V$ and a set of
+		edges $E \subseteq V \times \mathbb{R}_{\ge 0} \times V$.
+		An \textnormal{edge} $e \in E$ is an ordered tuple $(u, w, v)$ with source node $u \in V$, a non-negative
+		weight $w \in \mathbb{R}_{\ge 0}$ and a destination node $v \in V$.
+	\end{mydef}\quad\\
+	Note that \defref{graph} actually defines a \textit{directed} graph, as opposed to an \textit{undirected} graph where an
+	edge like $(u, w, v)$ would be considered equal to the edge of opposite direction $(v, w, u)$. However, for transportation networks
+	an undirected graph often is not applicable, for example due to one way streets or time dependent connections like trains which depart
+	at different times for different directions.
+	
+	In the context of route planning we refer to the weight $w$ of an edge $(u, w, v)$ as \textit{cost}. It can be used to encode the length
+	of the represented connection. Or to represent the time it takes to travel the distance in a given
+	transportation mode.
+	% Graph example
+	\begin{figure}[ht]
+		\begin{center}
+			 \begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	\node[circle, draw] (v1) at (0, 0) {$v_1$};
+			 	\node[circle, draw] (v2) at (2, 0) {$v_2$};
+			 	\node[circle, draw] (v3) at (0, 2) {$v_3$};
+			 	\node[circle, draw] (v4) at (2, 2) {$v_4$};
+			 	\node[circle, draw] (v5) at (4, 0) {$v_5$};
+			 	
+			 	% Edges
+			 	\draw[thick, ->] (v1) to [bend left] node[above] {$8$} (v2);
+			 	\draw[thick, ->] (v2) to node[above] {$2$} (v5);
+			 	\draw[thick, ->] (v2) to [bend left] node[below] {$1$} (v1);
+			 	\draw[thick, ->] (v1) to node[left] {$1$} (v3);
+			 	\draw[thick, ->] (v3) to node[above] {$2$} (v4);
+			 	\draw[thick, ->] (v4) to node[left] {$1$} (v2);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Illustration of an example graph with five nodes and six edges.}
+		\label{graph_example}
+	\end{figure}\quad\\
+	As an example consider the graph $G = (V, E)$ with
+	\begin{align*}
+		V	&= \{v_1, v_2, v_3, v_4, v_5\} \text{ and}\\
+		E	&= \{(v_1, 8, v_2), (v_1, 1, v_3), (v_2, 1, v_1), (v_2, 2, v_5), (v_3, 2, v_4), (v_4, 1, v_2)\}.
+	\end{align*}
+	which is illustrated by \figref{graph_example}.
 
 %Metric
 \subsection{Metric}
-	Blabla
+	\begin{mydef}\label{metric}
+		A function $d : X \times X \to \mathbb{R}$ on a set $X$ is called a \textnormal{metric} iff for all $x, y, z \in X$
+		\begin{align*}
+			d(x, y)	&\ge 0,			&&\text{non-negativity}\\
+			d(x, y) = 0	&\Leftrightarrow x = y,	&&\text{identity of indiscernibles}\\
+			d(x, y)	&= d(y, x) \text{ and }	&&\text{symmetry}\\
+			d(x, z)	&\le d(x, y) + d(y, z)	&&\text{triangle inequality}
+		\end{align*}
+		holds.
+	\end{mydef}\quad\\
+	A metric is used to measure the distance between given locations. \sectionref{nearestNeighborProblem}
+	and \sectionref{shortestPathProblem}, in particular \sectionref{alt}, will make heavy use of this term.
+	
+	There we measure the distance between geographical locations given as pair of \textit{latitude} and \textit{longitude} coordinates.
+	Latitude and longitude, often denoted by $\phi$ and $\lambda$, are real numbers in the ranges $(-90, 90)$ and $[-180, 180)$ respectively,
+	measured in degrees. However, for convenience we represent them in radians. Both representations are equivalent to each other
+	and can easily be converted using the ratio $360^\circ = 2 \pi \text{ rad}$.\\\\
+	A commonly used measure is the \textit{as-the-crow-flies} metric, which is equivalent to the euclidean distance in the euclidean space.
+	\defref{asTheCrowFlies} defines an approximation of this distance on locations given by latitude and longitude coordinates.
+	The approximation is commonly known as equirectangular projection of the earth \libref{equiRectProjection}.
+	Note that there are more accurate methods for computing the great-circle distance for geographical locations,
+	like the haversine formula \libref{haversine}. However, they come with a significant computational overhead.
+	\begin{mydef}\label{asTheCrowFlies}
+		Given a set of coordinates $X = \left\{(\phi, \lambda) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in [-\pi, \pi)\right\}$ we define
+		$\asTheCrowFlies : X \times X \to \mathbb{R}$ such that
+		\begin{align*}
+			\left(\left(\phi_1, \lambda_1\right), \left(\phi_2, \lambda_2\right)\right) \mapsto
+				\sqrt{\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
+					+ \left(\phi_2 - \phi_1\right)^2} \cdot 6371000.
+		\end{align*}
+	\end{mydef}\quad\\
+	As a next step we prove that $\asTheCrowFlies$ is indeed a metric on the set of coordinates.
+	\begin{myproposition}
+		The function $\asTheCrowFlies$ is a metric on its domain $X$.
+	\end{myproposition}
+	\begin{proof}
+		We need to prove that all four axioms hold. Let us first set
+		\begin{align*}
+			x	&= \left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\\
+			y	&= \phi_2 - \phi_1
+		\end{align*}
+		then the function simplifies to
+		\begin{align*}
+			\sqrt{x^2 + y^2} \cdot 6371000.
+		\end{align*}
+		Obviously this can never resolve to a negative number since
+		\begin{align*}
+			\underbrace{\underbrace{\sqrt{\underbrace{x^2}_{\ge 0} + \underbrace{y^2}_{\ge 0}}}_{\ge 0} \cdot 6371000}_{\ge 0}.
+		\end{align*}
+		
+		For the second axiom we suppose that $\asTheCrowFlies\left(\left(\phi_1, \lambda_1\right), \left(\phi_2, \lambda_2\right)\right) = 0$
+		for an arbitrary pair of coordinates, we follow\\
+		\begin{center}
+			\begin{tabular}{RRL}
+							&\sqrt{\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
+								+ \left(\phi_2 - \phi_1\right)^2} \cdot 6371000	&= 0\\
+				\Leftrightarrow	&\sqrt{\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
+								+ \left(\phi_2 - \phi_1\right)^2} 				&= 0\\
+				\Leftrightarrow	&\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
+								+ \left(\phi_2 - \phi_1\right)^2 				&= 0
+			\end{tabular}
+		\end{center}
+		At this point either both summands are $0$ or one is the negative of the other. However, both summands must be positive due to the quadration.
+		Because of that we follow\\
+		\begin{center}
+			\begin{tabular}{RRL}
+							&\left(\phi_2 - \phi_1\right)^2 	&= 0\\
+				\Leftrightarrow	&\phi_2				&= \phi_1
+			\end{tabular}
+		\end{center}
+		and with that\\
+		\begin{center}
+			\begin{tabular}{RRL}
+							&\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2	&= 0\\
+				\Leftrightarrow	&\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{2 \phi_1}{2}\right)	&= 0\\
+				\Leftrightarrow	&\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\phi_1\right)	&= 0.
+			\end{tabular}
+		\end{center}
+		Since $\phi_1 \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right)$ it follows that $\cos\left(\phi_1\right) \ne 0$. As such
+		\begin{center}
+			\begin{tabular}{RRL}
+							&\lambda_2 - \lambda_1	&= 0\\
+				\Leftrightarrow	&\lambda_2			&= \lambda_1
+			\end{tabular}
+		\end{center}
+		and by that $(\phi_1, \lambda_1) = (\phi_2, \lambda_2)$, so the second axiom holds.
+		
+		Symmetry follows quickly since
+		\begin{align*}
+			\phi_1 + \phi_2	&= \phi_2 + \phi_1\\
+			(\phi_2 - \phi_1)^2	&= (\phi_1 - \phi_2)^2\\
+			\left((\lambda_2 - \lambda_1) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
+				&= (\lambda_2 - \lambda_1)^2 \cdot \cos^2\left(\frac{\phi_1 + \phi_2}{2}\right)\\
+			(\lambda_2 - \lambda_1)^2	&= (\lambda_1 - \lambda_2)^2.
+		\end{align*}
+		
+		The triangle inequality is a bit trickier, we choose three arbitrary coordinates $c_i = (\phi_i, \lambda_i)$ for $i = 1, 2, 3$
+		and start on the left side:
+		\begin{align*}
+			\asTheCrowFlies(c_1, c_3)
+				&= \sqrt{\left(\left(\lambda_3 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_3}{2}\right)\right)^2
+					+ \left(\phi_3 - \phi_1\right)^2} \cdot 6371000\\
+				&= ...\\
+				&\le \left(\sqrt{\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
+						+ \left(\phi_2 - \phi_1\right)^2} \cdot 6371000\right)\\
+					&\qquad+ \left(\sqrt{\left(\left(\lambda_3 - \lambda_2\right) \cdot \cos\left(\frac{\phi_2 + \phi_3}{2}\right)\right)^2
+						+ \left(\phi_3 - \phi_2\right)^2} \cdot 6371000\right)\\
+				&= \asTheCrowFlies(c_1, c_2) + \asTheCrowFlies(c_2, c_3)
+		\end{align*}
+		All four axioms hold, $\asTheCrowFlies$ is a metric on the set $X$.
+	\end{proof}

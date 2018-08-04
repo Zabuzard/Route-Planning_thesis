@@ -23,6 +23,7 @@
 
 \usepackage{fancyhdr}% Can create headers and footers
 \usepackage{amssymb}% Provides usage of special characters and symbols
+\usepackage{amsthm}% Offers theorem environment
 \usepackage{amsmath}% Provides mathematical symbols
 \usepackage{mathtools}% Provides some mathematical tools and symbols
 \usepackage{semantic}% Provides semantic formats
@@ -35,6 +36,8 @@
 \usepackage{textcomp}% Font that provides more special characters
 \usepackage{lscape}% Modifies margins
 \usepackage{wasysym}% More symbols
+
+\usepackage{tikz}% Offers advanced functions for drawing vector graphics
 
 \usepackage{hyperref}% Appearance of links do not get changed
 \renewcommand{\figurename}{Fig.}% Fig. instead of Figure. when linking figures
@@ -66,6 +69,11 @@
 % Table spacing
 \setlength{\tabcolsep}{0.6em}
 {\renewcommand{\arraystretch}{1.05}
+
+% Math mode columns for tabular
+\newcolumntype{L}{>{$}l<{$}}
+\newcolumntype{R}{>{$}r<{$}}
+\newcolumntype{C}{>{$}c<{$}}
 
 % Program language listings
 \lstdefinelanguage{Java}{
@@ -156,6 +164,7 @@
 \newcommand{\inlineCode}[1]{{\lstinline[style={JavaStyle}]{#1}}}
 
 % Operator
+\DeclareMathOperator{\asTheCrowFlies}{asTheCrowFlies}
 
 % Document
 \begin{document}

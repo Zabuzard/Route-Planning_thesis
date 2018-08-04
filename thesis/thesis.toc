@@ -3,28 +3,28 @@
 \contentsline {section}{\numberline {2}Preliminaries}{7}{section.2}
 \contentsline {subsection}{\numberline {2.1}Graph}{7}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}Metric}{7}{subsection.2.2}
-\contentsline {section}{\numberline {3}Models}{7}{section.3}
-\contentsline {subsection}{\numberline {3.1}Road graph}{7}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Transit graph}{7}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Link graph}{7}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Timetable}{7}{subsection.3.4}
-\contentsline {section}{\numberline {4}Nearest neighbor problem}{7}{section.4}
+\contentsline {section}{\numberline {3}Models}{8}{section.3}
+\contentsline {subsection}{\numberline {3.1}Road graph}{8}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Transit graph}{8}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Link graph}{8}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Timetable}{8}{subsection.3.4}
+\contentsline {section}{\numberline {4}Nearest neighbor problem}{8}{section.4}
 \contentsline {subsection}{\numberline {4.1}Cover tree}{8}{subsection.4.1}
 \contentsline {section}{\numberline {5}Shortest path problem}{8}{section.5}
 \contentsline {subsection}{\numberline {5.1}Time-independent}{8}{subsection.5.1}
 \contentsline {subsubsection}{\numberline {5.1.1}Dijkstra}{8}{subsubsection.5.1.1}
 \contentsline {subsubsection}{\numberline {5.1.2}A$^\star $ and ALT}{8}{subsubsection.5.1.2}
 \contentsline {subsection}{\numberline {5.2}Time-dependend}{8}{subsection.5.2}
-\contentsline {subsubsection}{\numberline {5.2.1}Connection scan}{8}{subsubsection.5.2.1}
-\contentsline {subsection}{\numberline {5.3}Multi-modal}{8}{subsection.5.3}
-\contentsline {subsubsection}{\numberline {5.3.1}Modified Dijkstra}{8}{subsubsection.5.3.1}
-\contentsline {subsubsection}{\numberline {5.3.2}Access nodes}{8}{subsubsection.5.3.2}
-\contentsline {subsection}{\numberline {5.4}Other algorithms}{8}{subsection.5.4}
-\contentsline {section}{\numberline {6}Evaluation}{8}{section.6}
+\contentsline {subsubsection}{\numberline {5.2.1}Connection scan}{9}{subsubsection.5.2.1}
+\contentsline {subsection}{\numberline {5.3}Multi-modal}{9}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Modified Dijkstra}{9}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.2}Access nodes}{9}{subsubsection.5.3.2}
+\contentsline {subsection}{\numberline {5.4}Other algorithms}{9}{subsection.5.4}
+\contentsline {section}{\numberline {6}Evaluation}{9}{section.6}
 \contentsline {subsection}{\numberline {6.1}Input data}{9}{subsection.6.1}
 \contentsline {subsection}{\numberline {6.2}Experiments}{9}{subsection.6.2}
 \contentsline {subsubsection}{\numberline {6.2.1}Nearest neighbor computation}{9}{subsubsection.6.2.1}
 \contentsline {subsubsection}{\numberline {6.2.2}Uni-modal routing}{9}{subsubsection.6.2.2}
 \contentsline {subsubsection}{\numberline {6.2.3}Multi-modal routing}{9}{subsubsection.6.2.3}
 \contentsline {subsection}{\numberline {6.3}Summary}{9}{subsection.6.3}
-\contentsline {section}{\numberline {7}Conclusion}{9}{section.7}
+\contentsline {section}{\numberline {7}Conclusion}{10}{section.7}
