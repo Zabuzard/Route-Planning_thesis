@@ -1,0 +1,226 @@
+\documentclass[11pt,oneside,bibliography=totoc,abstracton]{scrartcl}
+
+% Resemble a4wide style
+\usepackage{geometry}
+\geometry{
+	includeheadfoot,
+ 	left=1.5in,
+	right=1in,
+	top=1in,
+	bottom=1in
+	%margin=4cm
+}
+
+\usepackage[english]{babel} % Document in English language
+\usepackage{graphicx}% More options when including graphics
+\usepackage[utf8]{inputenc}% Correct font encoding for special characters
+\usepackage[T1]{fontenc}% Correct separation for special characters
+\usepackage{lmodern}% Modern font type
+
+\usepackage{array}% More table options
+\usepackage{verbatim}% New environment, also for comments
+\usepackage{listings}% New environment, mainly used for code
+
+\usepackage{fancyhdr}% Can create headers and footers
+\usepackage{amssymb}% Provides usage of special characters and symbols
+\usepackage{amsmath}% Provides mathematical symbols
+\usepackage{mathtools}% Provides some mathematical tools and symbols
+\usepackage{semantic}% Provides semantic formats
+\usepackage{stmaryrd}% More mathematical symbols
+\usepackage[ruled,vlined,linesnumbered,resetcount]{algorithm2e}% Algorithms
+\usepackage{color}% Colored text
+
+\usepackage{subcaption}% Makes it possible to create a sub captions in tables
+\usepackage{setspace}% Makes it possible to change spacing
+\usepackage{textcomp}% Font that provides more special characters
+\usepackage{lscape}% Modifies margins
+\usepackage{wasysym}% More symbols
+
+\usepackage{hyperref}% Appearance of links do not get changed
+\renewcommand{\figurename}{Fig.}% Fig. instead of Figure. when linking figures
+
+\bibliographystyle{plain}% Reference literature by number
+\pagestyle{fancy}% Fancy style, also adds header and footer
+
+%Custom colors
+\definecolor{purple}{RGB}{206,0,206}
+\definecolor{lightgray}{rgb}{.95,.95,.95}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+% Link color setup
+\hypersetup{
+	colorlinks,
+	citecolor=purple,
+	linkcolor=red,
+	urlcolor=blue
+}
+
+% Custom header
+\fancyhead[LO,RE]{}
+\fancyhead[LE,RO]{}
+
+% Table spacing
+\setlength{\tabcolsep}{0.6em}
+{\renewcommand{\arraystretch}{1.05}
+
+% Program language listings
+\lstdefinelanguage{Java}{
+	keywords={new, true, false, catch, return, null, catch, switch, var, if, in, while, do, else, case, break, public, private, package, import, final, protected, int, void, class},
+	keywordstyle=\color{pblue}\bfseries,
+	keywords=[2]{this},
+	keywordstyle=[2]\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{pgreen}\ttfamily,
+	stringstyle=\color{pred}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstset{
+	language=Java,
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
+\lstdefinestyle{JavaStyle}{
+	language=Java,
+	frame=lines
+}
+
+% Custom commands
+\newcommand{\zz}{$\mathrm{T\kern-.4em\raise-0.5ex\hbox{P}}$}
+\newcommand\restr[2]{{\left.\kern-\nulldelimiterspace#1\vphantom{\big|}\right|_{#2}}}
+\newcommand{\figref}[1]{\textbf{Fig.\,\ref{#1}}}
+\newcommand{\tableref}[1]{\textbf{Table \ref{#1}}}
+\newcommand{\progref}[1]{\textbf{Prg.\,\ref{#1}}}
+\newcommand{\lemmaref}[1]{\textbf{Lemma \ref{#1}}}
+\newcommand{\theoremref}[1]{\textbf{Theorem \ref{#1}}}
+\newcommand{\sectionref}[1]{\textbf{Section \ref{#1}}}
+\newcommand{\algoref}[1]{\textbf{Algorithm \ref{#1}}}
+\newcommand{\defref}[1]{\textbf{Definition \ref{#1}}}
+\newcommand{\libref}[1]{\textbf{\cite{#1}}}
+\newtheorem{mydef}{Definition}
+\newtheorem{mylemma}{Lemma}
+\newtheorem{mytheorem}{Theorem}
+\newtheorem{mycorollary}{Colorally}
+\newtheorem{myproposition}{Proposition}
+\newtheorem{myclaim}{Claim}
+
+% Prevent accidental usage
+\renewcommand{\succ}{\error}
+\renewcommand{\neg}{\error}
+\renewcommand{\max}{\error}
+\renewcommand{\implies}{\error}
+
+% Hacks
+\newcommand{\todo}[1]{\textcolor{cyan}{(TODO: #1)}}
+\newcommand{\macrohighlight}[1]{\textcolor{magenta}{#1}}
+\newcommand{\macro}[1]{\macrohighlight{#1}\xspace}
+\newcommand{\macrosc}[1]{\macro{\textsc{#1}}}
+\newcommand{\macromath}[1]{\macro{\ensuremath{#1}}}
+\newcommand{\macromathsf}[1]{\macro{\ensuremath{\textsf{#1}}}}
+
+% Disable hacks
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\macrohighlight}[1]{#1}
+
+% Macros
+\newcommand{\java}{\macrosc{Java}}
+\newcommand{\alt}{\macrosc{ALT}}
+\newcommand{\csa}{\macrosc{CSA}}
+\newcommand{\coverTree}{\macrosc{Cover Tree}}
+\newcommand{\opnv}{\macrosc{ÖPNV}}
+\newcommand{\dijkstra}{\macrosc{Dijkstra}}
+\newcommand{\cobweb}{\macrosc{Cobweb}}
+
+\newcommand{\true}{\macromathsf{true}}
+\newcommand{\false}{\macromathsf{false}}
+\newcommand{\nullVar}{\macromathsf{null}}
+\newcommand{\member}{\macromathsf{m}}
+
+\newcommand{\inlineCode}[1]{{\lstinline[style={JavaStyle}]{#1}}}
+
+% Operator
+
+% Document
+\begin{document}
+% Command renews that need to be inside the document
+\renewcommand{\figurename}{Fig.}% Fig. instead of Figure when linking figures
+\renewcommand{\lstlistingname}{Program}% Program instead of Listing when linking listings
+
+% Begin of content
+% Titlepage
+\begin{titlepage}
+	\hypersetup{urlcolor=black}
+	\title{Multi-Modal Route Planning in Road and Transit Networks}
+	\subtitle{Master's Thesis} 
+	\author{Daniel Tischner\\\quad\\
+		\small{University of Freiburg, Germany,}\\
+		\small{\href{mailto:daniel.tischner.cs@gmail.com}{\texttt{daniel.tischner.cs@gmail.com}}}\\\quad}
+	\publishers{
+		\begin{tabular}{ll}
+			\\
+			Supervisor:	& Prof.~Dr.~Hannah Bast \\
+			Advisor:		&  Patrick Brosi
+		\end{tabular}
+	}
+	\maketitle
+	% Suppress page number on title page
+	\thispagestyle{empty}
+\end{titlepage}
+\newpage
+{
+	\hypersetup{linkcolor=black}
+	\tableofcontents
+}
+\clearpage
+% Declaration
+\renewcommand{\abstractname}{\huge Declaration}
+\begin{abstract}
+	\vbox{}
+	I hereby declare, that I am the sole author and composer of my Thesis and that
+	no other sources or learning aids, other than those listed, have been used.
+	Furthermore, I declare that I have acknowledged the work of others by providing
+	detailed references of said work. I hereby also declare, that my Thesis has not
+	been prepared for another examination or assignment, either
+	wholly or excerpts thereof.
+	\vfill
+	\parbox{4cm}{\hrule
+	\strut \centering\footnotesize Place, Date} \hfill\parbox{4cm}{\hrule
+	\strut \centering\footnotesize Signature}
+\end{abstract}
+\clearpage
+
+\input{content/zusammenfassung}
+\clearpage
+\input{content/abstract}
+\clearpage
+% Commands that need to be after the preamble
+\fancyhead[LO,RE]{\parbox{0.7\textwidth}{\textbf{\rightmark}}}
+\fancyhead[LE,RO]{\textbf{Section \arabic{section}}}
+
+\input{content/introduction}
+\input{content/preliminaries}
+\input{content/models}
+\input{content/nearestNeighborProblem}
+\input{content/shortestPathProblem}
+\input{content/evaluation}
+\input{content/conclusion}
+
+\bibliography{literature}
+\end{document}
