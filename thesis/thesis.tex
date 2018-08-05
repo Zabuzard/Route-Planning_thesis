@@ -38,6 +38,7 @@
 \usepackage{wasysym}% More symbols
 
 \usepackage{tikz}% Offers advanced functions for drawing vector graphics
+\usetikzlibrary{patterns} % Provides patterns for filling nodes
 
 \usepackage{hyperref}% Appearance of links do not get changed
 \renewcommand{\figurename}{Fig.}% Fig. instead of Figure. when linking figures
@@ -113,6 +114,7 @@
 % Custom commands
 \newcommand{\zz}{$\mathrm{T\kern-.4em\raise-0.5ex\hbox{P}}$}
 \newcommand\restr[2]{{\left.\kern-\nulldelimiterspace#1\vphantom{\big|}\right|_{#2}}}
+\newcommand{\timef}[3]{$#1$:$#2$ \textit{#3}}
 \newcommand{\figref}[1]{\textbf{Fig.\,\ref{#1}}}
 \newcommand{\tableref}[1]{\textbf{Table \ref{#1}}}
 \newcommand{\progref}[1]{\textbf{Prg.\,\ref{#1}}}
@@ -136,7 +138,7 @@
 \renewcommand{\implies}{\error}
 
 % Hacks
-\newcommand{\todo}[1]{\textcolor{cyan}{(TODO: #1)}}
+\newcommand{\todo}[1]{\colorbox{yellow!30}{\textcolor{red!}{(TODO: #1)}}}
 \newcommand{\macrohighlight}[1]{\textcolor{magenta}{#1}}
 \newcommand{\macro}[1]{\macrohighlight{#1}\xspace}
 \newcommand{\macrosc}[1]{\macro{\textsc{#1}}}

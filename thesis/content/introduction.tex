@@ -27,7 +27,7 @@
 	Our final technique uses a modified version of \alt \libref{alt} as road algorithm and \csa \libref{csa} for the transportation network.
 	The algorithms are presented in \sectionref{alt} and \sectionref{csa} respectively.
 	We also develop a multi-modal variant of \dijkstra which is able to compute the shortest route in a combined
-	network with the possibility of changing transportation modes arbitrary. It is presented in \sectionref{modifiedDijkstra}
+	network with the possibility of changing transportation modes arbitrarily. It is presented in \sectionref{modifiedDijkstra}
 	and acts as baseline to our final technique based on access nodes.
 	
 	We compute access nodes by solving the nearest neighbor problem. For a given node in the road network its access
@@ -42,9 +42,9 @@
 	and can not easily be combined. Therefore, we use the previously mentioned generic approach based on access nodes
 	for this type of network.\\\\
 	% Cobweb frontend screenshot
-	\begin{figure}[ht]
+	\begin{figure}[!ht]
 		 \begin{center}
-			\includegraphics[scale=0.5]{res/cobweb_frontend}	
+			\includegraphics[scale=0.5]{res/cobweb_frontend}
 		\end{center}
 		\caption{Screenshot of {\cobweb}s \libref{cobweb} frontend, an open-source multi-modal route planner. It shows a multi-modal
 		route starting from a given source, using the modes \textit{foot-tram-foot-tram-foot} in that sequence to reach the destination.}
