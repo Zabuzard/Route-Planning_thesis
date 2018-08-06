@@ -8,7 +8,7 @@
 % Road graph
 \subsection{Road graph}
 	A road network typically is time independent. It consists of geographical locations and roads connecting them with each other.
-	We assume that a road can be taken at any time, with no time dependent constraints.
+	We assume that a road can be taken at any time, with no time dependent constraints (see \fakesectionref{2} of \libref{networks}).
 	
 	Modeling the network as graph is straightforward, \defref{roadGraph} goes into detail.
 	\begin{mydef}\label{roadGraph}
@@ -84,12 +84,13 @@
 	between the nodes if and only if there is a road connecting the locations.
 
 % Transit graph
-\subsection{Transit graph}
+\subsection{Transit graph}\label{transitGraph}
 	Transit networks can be modeled similar to road graphs. The key difference is that transit networks are time dependent
 	while road networks typically are not. For example an edge connecting \textit{Freiburg main station} with \textit{Karlsruhe main station}
 	can not be taken at any time since trains and other transit vehicles only depart at certain times. The schedule might even change
 	at different days.\\\\
-	The difficulty lies in modeling time dependence in a static graph. There are two common approaches to that problem.\\\\
+	The difficulty lies in modeling time dependence in a static graph. There are two common approaches to that problem
+	(see \libref{networks, transitModels, routePlanningOverview}).\\\\
 	The first approach is called \textit{time-dependent}. There edge weights are not static numbers but functions that take a
 	date with time and compute the cost it needs to take the edge when starting at the given time.
 	This includes waiting time. As an example assume an edge $(u, c, v)$ with the cost function $c$. The edge represents a
@@ -99,9 +100,9 @@
 	
 	The main problem with this model is that it makes pre-computations for route planning very difficult as
 	the starting time is not known in advance.\\\\
-	The second approach is called \textit{time-expanded}. There idea is to remove any time dependence
-	from the graph by creating additional nodes for every event at a station. A node then also has a time information
-	next to its geographic location.
+	The second approach, originally from \libref{simpleTimeExpanded}, is called \textit{time-expanded}.
+	There, idea is to remove any time dependence from the graph by creating additional nodes for every
+	event at a station. A node then also has a time information next to its geographic location.
 	\begin{mydef}\label{simpleTransitGraph}
 		A \textnormal{time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographic coordinates
 		\begin{align*}
@@ -131,13 +132,13 @@
 		 \begin{center}
 			\begin{tabular}{|c||c|cc|c|}
 				\hline
-				$\longrightarrow$	&Freiburg Hbf			&\multicolumn{2}{c|}{Offenburg}					&Karlsruhe Hbf\\
+				$\longrightarrow$	&\freiburg				&\multicolumn{2}{c|}{\offenburg}					&\karlsruhe\\
 							&\small{\texttt{departure}}	&\small{\texttt{arrival}}		&\small{\texttt{departure}}	&\small{\texttt{arrival}}\\\hline
-				ICE 104		&\timef{3}{56}{pm}		&\timef{4}{28}{pm}		&\timef{4}{29}{pm}		&\timef{4}{58}{pm}\\
-				RE 17024		&\timef{4}{03}{pm}		&\timef{4}{50}{pm}		&					&\\
-				RE 17322		&					&					&\timef{4}{35}{pm}		&\timef{5}{19}{pm}\\\hline\hline
+				\ticef			&\timef{3}{56}{pm}		&\timef{4}{28}{pm}		&\timef{4}{29}{pm}		&\timef{4}{58}{pm}\\
+				\tregiof		&\timef{4}{03}{pm}		&\timef{4}{50}{pm}		&					&\\
+				\tregios		&					&					&\timef{4}{35}{pm}		&\timef{5}{19}{pm}\\\hline\hline
 				$\longleftarrow$	&\small{\texttt{arrival}}		&\small{\texttt{departure}}	&\small{\texttt{arrival}}		&\small{\texttt{departure}}\\\hline
-				ICE  79		&\timef{8}{10}{pm}		&					&					&\timef{7}{10}{pm}\\\hline
+				\tices			&\timef{8}{10}{pm}		&					&					&\timef{7}{10}{pm}\\\hline
 			\end{tabular}\\\vphantom{a}\quad\\
 			\begin{tikzpicture}[y = -1cm]
 			 	% Nodes
@@ -153,19 +154,19 @@
 			 	\node[left] at (-1, 7.5) {\timef{8}{10}{pm}};
 			 	
 			 	% Freiburg Hbf
-			 	\node[above = 0.75cm] at (0.5, 0) {Freiburg Hbf};
+			 	\node[above = 0.75cm] at (0.5, 0) {\freiburg};
 			 	\node[circle, draw] (f1) at (0.5, 0) {\phantom{v}};
 			 	\node[circle, draw] (f3) at (0.5, 1) {\phantom{v}};
 			 	\node[circle, draw] (f4) at (0.5, 7.5) {\phantom{v}};
 			 				 	
 			 	% Offenburg
-			 	\node[above = 0.75cm] at (3.5, 0) {Offenburg};
+			 	\node[above = 0.75cm] at (3.5, 0) {\offenburg};
 			 	\node[circle, draw] (o4) at (3.5, 2) {\phantom{v}};
 			 	\node[circle, draw] (o2) at (3.5, 3) {\phantom{v}};
 			 	\node[circle, draw] (o5) at (3.5, 4) {\phantom{v}};
 			 	
 			 	% Karlsruhe Hbf
-			 	\node[above = 0.75cm] at (6.5, 0) {Karlsruhe Hbf};
+			 	\node[above = 0.75cm] at (6.5, 0) {\karlsruhe};
 			 	
 			 	\node[circle, draw] (k3) at (6.5, 4.5) {\phantom{v}};
 			 	\node[circle, draw] (k1) at (6.5, 5.5) {\phantom{v}};
@@ -204,18 +205,18 @@
 	\defref{simpleTransitGraph} defines such a time expanded transit graph and \figref{simpleTransitGraphExample} shows an example.
 	For simplicity it is assumed that the trains have no stops other than shown in the schedule. The schedule lists four trains:
 	\begin{itemize}
-		\item[1.] The ICE 104 which travels from Freiburg Hhbf to Karlsruhe Hbf via Offenburg,
-		\item[2.] the RE 17024 connecting Freiburg Hbf with Offenburg,
-		\item[3.] the RE 17322 driving from Offenburg to Karlsruhe Hbf and
-		\item[4.] ICE 79 which travels in the opposite direction, connecting Karlsruhe Hbf with Freiburg without intermediate stops.
+		\item[1.] The \ticef which travels from \freiburg to \karlsruhe via \offenburg,
+		\item[2.] the\tregiof connecting \freiburg with \offenburg,
+		\item[3.] the \tregios driving from \offenburg to \karlsruhe and
+		\item[4.] ICE \tices which travels in the opposite direction, connecting \karlsruhe with \freiburg without intermediate stops.
 	\end{itemize}
 	As seen in the example the resulting graph has no time dependency anymore and is static, as well as all edge weights.
 	The downside is that the graph size dramatically increases as a new node is introduced for every single event.
 	In order to limit the growth we assume that a schedule is the same every day and does not change. In fact, most schedules are
 	stable and often change only slightly, for example on weekends or at holidays. In practice hybrid models can be used for
 	those exceptions.\\\\
-	However, the model still lacks an important feature. It does not represent \textit{transfer buffers} yet. It takes some minimal
-	amount of time to exit a vehicle and enter a different vehicle, possibly even at a different platform.
+	However, the model still lacks an important feature. It does not represent \textit{transfer buffers} \libref{transitModels, routePlanningOverview} yet.
+	It takes some minimal amount of time to exit a vehicle and enter a different vehicle, possibly even at a different platform.
 	
 	We model that by further distinguishing the nodes by arrival and departure events. In between we can then add transfer
 	nodes which model the transfer duration. Therefore, the previous definition is adjusted and \defref{realisticTransitGraph} is received.
@@ -223,36 +224,36 @@
 		A \textnormal{realistic time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographic coordinates
 		\begin{align*}
 			V = \{(\phi, \lambda, t, e) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in \left[-\pi, \pi\right),
-			t \text{ time}, e \in \{\text{arrival}, \text{departure}, \text{transfer}\}\},
+			t \text{ time}, e \in \{\arrival, \departure, \transfer\}\},
 		\end{align*}
 		for example a train arriving at a train station at a certain time.
 		
-		A node $(\phi, \lambda, t, e) \in V$ is an \textnormal{arrival node} if $e = \text{arrival}$, analogously it is a
-		\textnormal{departure node} for $e = \text{departure}$ and a transfer node for $e = \text{transfer}$.
+		A node $(\phi, \lambda, t, e) \in V$ is an \textnormal{arrival node} if $e = \arrival$, analogously it is a
+		\textnormal{departure node} for $e = \departure$ and a transfer node for $e = \transfer$.
 		For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location, $v_t$  its time and $v_e$ its event type.\\\\
 		For every arrival node $n$ there must exist a transfer node $m$ at the same coordinates such that $m_t = n_t + d$
 		with $d$ being the average transfer duration at the corresponding stop.\\\\
 		There is an edge $(u, w, v) \in E$ iff
 		\begin{itemize}
-			\item[1.] $u_e = \text{departure} \land v_e = \text{arrival}$ such that there is a vehicle departing
+			\item[1.] $u_e = \departure \land v_e = \arrival$ such that there is a vehicle departing
 				from $u$ at time $u_t$ which arrives at $v$ at time $v_t$ without stops in between; or
-			\item[2.] $u_e = \text{arrival} \land v_e = \text{departure}$
+			\item[2.] $u_e = \arrival \land v_e = \departure$
 				such that $u$ and $v$ belong to the same connection. For example a train arriving at a station
 				and then departing again; or
-			\item[3.] $u_e = \text{arrival} \land v_e = \text{transfer}$
+			\item[3.] $u_e = \arrival \land v_e = \transfer$
 				such that $v$ is the first transfer node at the same coordinates whose time $v_t$ comes after $u_t$. That is
 				\begin{align*}
-					\forall v' \in V \setminus \{v\}	&: v'_\phi = u_\phi \land v'_\lambda = u_\lambda \land v'_e = \text{transfer} \land v'_t \ge u_t\\
+					\forall v' \in V \setminus \{v\}	&: v'_\phi = u_\phi \land v'_\lambda = u_\lambda \land v'_e = \transfer \land v'_t \ge u_t\\
 										&\Rightarrow v'_t - u_t > v_t - u_t.
 				\end{align*}
 				Such an edge represents exiting the vehicle and getting ready to enter a different vehicle; or
-			\item[4.] $u_e = \text{transfer} \land v_e = \text{transfer}$
+			\item[4.] $u_e = \transfer \land v_e = \transfer$
 				such that $v$ is the first transfer node at the same coordinates whose time $v_t$ comes after $u_t$,
 				representing waiting at a stop; or
-			\item[5.] $u_e = \text{transfer} \land v_e = \text{departure}$
+			\item[5.] $u_e = \transfer \land v_e = \departure$
 				such that $u$ is the last transfer node at the same coordinates whose time $u_t$ comes before $v_t$, i.e.
 				\begin{align*}
-					\forall u' \in V \setminus \{u\}	&: u'_\phi = v_\phi \land u'_\lambda = v_\lambda \land u'_e = \text{transfer} \land u'_t \le v_t\\
+					\forall u' \in V \setminus \{u\}	&: u'_\phi = v_\phi \land u'_\lambda = v_\lambda \land u'_e = \transfer \land u'_t \le v_t\\
 										&\Rightarrow v_t - u'_t > v_t - u_t.
 				\end{align*}
 				An edge like this represents entering a different vehicle from a stop after transferring or waiting at the stop.
@@ -288,7 +289,7 @@
 			 	\node[left] at (-1, 10.25) {\timef{8}{15}{pm}};
 			 	
 			 	% Freiburg Hbf
-			 	\node[above = 0.75cm] at (1, 0) {Freiburg Hbf};
+			 	\node[above = 0.75cm] at (1, 0) {\freiburg};
 			 	
 			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (f1) at (2, 0) {\phantom{v}};
 			 	
@@ -298,7 +299,7 @@
 			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (f8) at (1, 10.25) {\phantom{v}};
 			 				 	
 			 	% Offenburg
-			 	\node[above = 0.75cm] at (5, 0) {Offenburg};
+			 	\node[above = 0.75cm] at (5, 0) {\offenburg};
 			 	
 			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o3) at (4, 1.5) {\phantom{v}};
 			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (o4) at (6, 2) {\phantom{v}};
@@ -310,7 +311,7 @@
 			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (o8) at (5, 5) {\phantom{v}};
 			 	
 			 	% Karlsruhe Hbf
-			 	\node[above = 0.75cm] at (9, 0) {Karlsruhe Hbf};
+			 	\node[above = 0.75cm] at (9, 0) {\karlsruhe};
 			 	
 			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k3) at (8, 5.75) {\phantom{v}};
 			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (k5) at (9, 6.5) {\phantom{v}};
@@ -365,15 +366,15 @@
 	The weight of edges connecting arrival nodes with transfer nodes is equal to the transfer duration, $5$ minutes in the example.
 	The transfer duration can be different for each edge. A transfer is now possible if the departure of the desired vehicle is after
 	the arrival of the current vehicle plus the duration time. As seen in the example, edges connecting transfer nodes with departure
-	nodes are present exactly in this case. A transfer from ICE 104 to RE 17322 in Offenburg is indicated by taking the edge to the
-	first transfer node in Offenburg and then following the edge with cost $2$ to the departure node of the train.
+	nodes are present exactly in this case. A transfer from \ticef to \tregios in \offenburg is indicated by taking the edge to the
+	first transfer node in \offenburg and then following the edge with cost $2$ to the departure node of the train.
 % Link graph
 \subsection{Link graph}
 	In this section we examine how a road and a transit graph can be combined into a single graph such that all
 	connections of the real network are preserved.\\\\
 	The approach is simple, selected nodes in the road network are connected to nodes of a certain stop in
 	the transit network and vice versa. Since starting time is not known in advance the graph must connect a
-	road node to all arrival nodes of a stop.
+	road node to all arrival nodes of a stop (compare to \libref{accessNodeRouting}).
 	
 	In order to not miss a connection the transit graph must ensure that every connection starts with an arrival node.
 	In \figref{realisticTransitGraphExample} this is not the case and all four trains start at a departure node. However,
@@ -389,12 +390,12 @@
 			\item[1.]
 				All contained elements must be arrival nodes and have the same location than $s$, i.e.
 				\begin{align*}
-					\forall s' \in S : s'_e = \text{arrival} \land s'_\phi = s_\phi \land s'_\lambda = s_\lambda.
+					\forall s' \in S : s'_e = \arrival \land s'_\phi = s_\phi \land s'_\lambda = s_\lambda.
 				\end{align*}
 			\item[2.]
 				The set must contain all arrival nodes at the location of $s$, i.e.
 				\begin{align*}
-					\nexists v \in V_T \setminus S : v_e = \text{arrival} \land v_\phi = s_\phi \land v_\lambda = s_\lambda.
+					\nexists v \in V_T \setminus S : v_e = \arrival \land v_\phi = s_\phi \land v_\lambda = s_\lambda.
 				\end{align*}
 		\end{itemize}
 		Then a \textnormal{link graph} is a graph $L = (V_R \cupdot V_T, E_R \cupdot E_T \cupdot E_L)$ with
@@ -411,4 +412,72 @@
 
 % Timetable
 \subsection{Timetable}
-	A timetable is a non-graph based representation for a transit network.
+	Timetables \libref{routePlanningOverview} are non-graph based representations for transit networks.
+	They consists of stops, trips, connections and footpaths.
+	\begin{mydef}\label{timetable}
+		A \textnormal{timetable} is a tuple $(S, T, C, F)$ with stops $S$, trips $T$, connections $C$ and footpaths $F$.
+	\end{mydef}\quad\\
+	A stop is a position where passengers can enter or exit a vehicle, for example a train station or bus stop.
+	It is represented as geographical coordinate $(\phi, \lambda)$ with $\phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right),
+	\lambda \in \left[-\pi, \pi\right)$.
+	
+	A trip is a scheduled vehicle, like the \ticef in the example schedule of \figref{simpleTransitGraphExample} or a bus.\\\\
+	In contrast to a trip a connection is only a segment of a trip without stops in between. For example the connection
+	of the \ticef from \freiburg at \timef{3}{56}{pm} to \offenburg with arrival at \timef{4}{28}{pm}.
+	It is defined as tuple $c = (s_{\dep}, s_{\arr}, t_{\dep}, t_{\arr}, o)$ with $s_{\dep}, s_{\arr} \in S$ representing the
+	departure and arrival stop of the connection respectively. Analogously $t_{\dep}$ is the time the vehicle departs
+	at $s_{\dep}$ and $t_{\arr}$ when it arrives at $s_{\arr}$. And $o \in T$ is the trip the connection belongs to.\\\\
+	Footpaths represent transfer possibilities between stops and are formalized as ordered tuple $(s_{\dep}, d, s_{\arr})$ with
+	$s_{\dep}, s_{\arr} \in S$ the stops the footpath connects. The duration it needs to take the path by foot is
+	represented by $d$, measured in seconds. Together with the set of stops $S$ the footpaths build a graph $G = (S, F)$
+	representing directed edges between stops.
+	
+	We require the following for the footpaths:
+	\begin{itemize}
+		\item[1.] The footpaths must be transitively closed, that is
+			\begin{align*}
+				\exists (a, d_1, b), (b, d_2, c) \in F \Rightarrow (a, d_3, c) \in F
+			\end{align*}
+			for arbitrary durations $d_1, d_2, d_3$.
+		\item[2.] The triangle inequality must hold for all footpaths:
+			\begin{align*}
+				\exists (a, d_1, b), (b, d_2, c) \in F \Rightarrow \exists (a, d_3, c) \in F: d_3 \le d_1 + d_2
+			\end{align*}
+		\item[3.] Every stop must have a self-loop footpath, i.e.
+			\begin{align*}
+				\forall s \in S \Rightarrow (s, d, s) \in F.
+			\end{align*}
+			The duration $d$ models the transfer time at this stop, as already
+			seen in \sectionref{transitGraph}.
+	\end{itemize}
+	The first property can easily make the set of footpaths huge. However, it is necessary for our algorithms that the
+	amount of footpaths stays relatively small. In practice, we therefore connect each stop only to stops in its vicinity
+	and then compute the transitive closure to ensure it is transitively closed.\\\\
+	To familiarize more with the model we take a look at the schedule from \figref{simpleTransitGraphExample} again.
+	The corresponding timetable consists of:
+	\begin{align*}
+		S	&= \{f, o, k\},
+	\end{align*}
+	where $f, o, k$ represent \freiburg, \offenburg and \karlsruhe respectively;
+	\begin{align*}
+		T	&= \{t_{104}, t_{17024}, t_{17322}, t_{79}\},
+	\end{align*}
+	representing the four trains \ticef, \tregiof, \tregios and \tices; the connections
+	\begin{align*}
+		&(f, o, \timef{3}{56}{pm}, \timef{4}{28}{pm}, t_{104}),\\
+		&(o, k, \timef{4}{29}{pm}, \timef{4}{58}{pm}, t_{104}),\\
+		&(f, o, \timef{4}{03}{pm}, \timef{4}{50}{pm}, t_{17024}),\\
+		&(o, k, \timef{4}{35}{pm}, \timef{5}{19}{pm}, t_{17322}),\\
+		&(k, f, \timef{7}{10}{pm}, \timef{8}{10}{pm}, t_{79})
+	\end{align*}
+	and at least the footpaths
+	\begin{align*}
+		&(f, 300, f),\\
+		&(o, 300, o),\\
+		&(k, 300, k)
+	\end{align*}
+	for transferring at the same stop with a duration of $300$ seconds ($5$ minutes).
+	
+	If we would decide that \offenburg is reachable from \freiburg by foot and analogously \karlsruhe from
+	\offenburg, we would also need to add a footpath connecting \freiburg directly with \karlsruhe.
+	Else the footpaths would not be transitively closed anymore.

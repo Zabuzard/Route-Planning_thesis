@@ -1,5 +1,4 @@
 % Encoding: UTF-8
-
 @inproceedings{alt,
   author = {Goldberg, Andrew V. and Harrelson, Chris},
   title = {Computing the Shortest Path: A Search Meets Graph Theory},
@@ -15,7 +14,6 @@
   publisher = {Society for Industrial and Applied Mathematics},
   address = {Philadelphia, PA, USA},
 }
-
 @article{csa,
   author    = {Julian Dibbelt and
                Thomas Pajor and
@@ -32,7 +30,6 @@
   biburl    = {https://dblp.org/rec/bib/journals/corr/DibbeltPSW17},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
-
 @book{dijkstra,
   author = {Cormen, Thomas H. and Leiserson, Charles E. and Rivest, Ronald L. and Stein, Clifford},
   title = {Introduction to Algorithms, Third Edition},
@@ -41,7 +38,6 @@
   edition = {3rd},
   publisher = {The MIT Press},
 }
-
 @misc{cobweb,
 	author = "Tischner, Daniel",
 	title = "Cobweb",
@@ -51,7 +47,6 @@
 	howpublished = "\url{https://github.com/ZabuzaW/Cobweb}",
 	commit = "77fcc50324bc1c52866e23b17b74b0a3837d9d87"
 }
-
 @article{equiRectProjection,
   author = {P. Snyder, John},
   year = {1994},
@@ -60,7 +55,6 @@
   title = {Flattening the Earth: Two Thousand Years of Map Projections},
   booktitle = {Bibliovault OAI Repository, the University of Chicago Press}
 }
-
 @article{haversine,
   ISSN = {00029890, 19300972},
   URL = {http://www.jstor.org/stable/2309088},
@@ -72,4 +66,133 @@
   title = {The Cosine-Haversine Formula},
   volume = {64},
   year = {1957}
+}
+@book{graphTheory,
+  author    = {Reinhard Diestel},
+  title     = {Graph Theory, 4th Edition},
+  series    = {Graduate texts in mathematics},
+  volume    = {173},
+  publisher = {Springer},
+  year      = {2012},
+  isbn      = {978-3-642-14278-9},
+  timestamp = {Mon, 04 Mar 2013 20:55:42 +0100},
+  biburl    = {https://dblp.org/rec/bib/books/daglib/0030488},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@Inbook{networks,
+  author="Delling, Daniel
+    and Sanders, Peter
+    and Schultes, Dominik
+    and Wagner, Dorothea",
+  editor="Lerner, J{\"u}rgen
+    and Wagner, Dorothea
+    and Zweig, Katharina A.",
+  title="Engineering Route Planning Algorithms",
+  bookTitle="Algorithmics of Large and Complex Networks: Design, Analysis, and Simulation",
+  year="2009",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="117--139",
+  abstract="Algorithms for route planning in transportation networks have recently undergone a rapid development, leading to methods that are up to three million times faster than Dijkstra's algorithm. We give an overview of the techniques enabling this development and point out frontiers of ongoing research on more challenging variants of the problem that include dynamically changing networks, time-dependent routing, and flexible objective functions.",
+  isbn="978-3-642-02094-0",
+  doi="10.1007/978-3-642-02094-0_7",
+  url="https://doi.org/10.1007/978-3-642-02094-0_7"
+}
+@article{simpleTimeExpanded,
+  author = {Schulz, Frank and Wagner, Dorothea and Weihe, Karsten},
+  title = {Dijkstra's Algorithm On-line: An Empirical Case Study from Public Railroad Transport},
+  journal = {J. Exp. Algorithmics},
+  issue_date = {2000},
+  volume = {5},
+  month = dec,
+  year = {2000},
+  issn = {1084-6654},
+  articleno = {12},
+  url = {http://doi.acm.org/10.1145/351827.384254},
+  doi = {10.1145/351827.384254},
+  acmid = {384254},
+  publisher = {ACM},
+  address = {New York, NY, USA},
+}
+@InProceedings{transitModels,
+  author="M{\"u}ller-Hannemann, Matthias
+    and Schulz, Frank
+    and Wagner, Dorothea
+    and Zaroliagis, Christos",
+  editor="Geraets, Frank
+    and Kroon, Leo
+    and Schoebel, Anita
+    and Wagner, Dorothea
+    and Zaroliagis, Christos D.",
+  title="Timetable Information: Models and Algorithms",
+  booktitle="Algorithmic Methods for Railway Optimization",
+  year="2007",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="67--90",
+  abstract="We give an overview of models and efficient algorithms for optimally solving timetable information problems like ``given a departure and an arrival station as well as a departure time, which is the connection that arrives as early as possible at the arrival station?'' Two main approaches that transform the problems into shortest path problems are reviewed, including issues like the modeling of realistic details (e.g., train transfers) and further optimization criteria (e.g., the number of transfers). An important topic is also multi-criteria optimization, where in general all attractive connections with respect to several criteria shall be determined. Finally, we discuss the performance of the described algorithms, which is crucial for their application in a real system.",
+  isbn="978-3-540-74247-0"
+}
+@InProceedings{accessNodeRouting,
+  author="Delling, Daniel
+    and Pajor, Thomas
+    and Wagner, Dorothea",
+  editor="Fiat, Amos
+    and Sanders, Peter",
+  title="Accelerating Multi-modal Route Planning by Access-Nodes",
+  booktitle="Algorithms - ESA 2009",
+  year="2009",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="587--598",
+  abstract="Recent research on fast route planning algorithms focused either on road networks or on public transportation. However, on the long run, we are interested in planning routes in a multi-modal scenario: we start by car to reach the nearest train station, ride the train to the airport, fly to an airport near our destination and finally take a taxi. In other words, we need to incorporate public transportation into road networks. However, we do not want to switch the type of transportation too often. We end up in a label constrained variant of the shortest path problem. In this work, we present a first efficient solution to a restricted variant of this problem including experimental results for transportation networks with up to 125 Mio. edges.",
+  isbn="978-3-642-04128-0"
+}
+@Inbook{routePlanningOverview,
+  author="Bast, Hannah
+    and Delling, Daniel
+    and Goldberg, Andrew
+    and M{\"u}ller-Hannemann, Matthias
+    and Pajor, Thomas
+    and Sanders, Peter
+    and Wagner, Dorothea
+    and Werneck, Renato F.",
+  editor="Kliemann, Lasse
+    and Sanders, Peter",
+  title="Route Planning in Transportation Networks",
+  bookTitle="Algorithm Engineering: Selected Results and Surveys",
+  year="2016",
+  publisher="Springer International Publishing",
+  address="Cham",
+  pages="19--80",
+  abstract="We survey recent advances in algorithms for route planning in transportation networks. For road networks, we show that one can compute driving directions in milliseconds or less even at continental scale. A variety of techniques provide different trade-offs between preprocessing effort, space requirements, and query time. Some algorithms can answer queries in a fraction of a microsecond, while others can deal efficiently with real-time traffic. Journey planning on public transportation systems, although conceptually similar, is a significantly harder problem due to its inherent time-dependent and multicriteria nature. Although exact algorithms are fast enough for interactive queries on metropolitan transit systems, dealing with continent-sized instances requires simplifications or heavy preprocessing. The multimodal route planning problem, which seeks journeys combining schedule-based transportation (buses, trains) with unrestricted modes (walking, driving), is even harder, relying on approximate solutions even for metropolitan inputs.",
+  isbn="978-3-319-49487-6",
+  doi="10.1007/978-3-319-49487-6_2",
+  url="https://doi.org/10.1007/978-3-319-49487-6_2"
+}
+@book{vehicleNavigation,
+  title={Vehicle location and navigation systems},
+  author={Zhao, Yilin},
+  year={1997}
+}
+@INPROCEEDINGS{navHistoryEarly,
+  author={R. L. French},
+  booktitle={36th IEEE Vehicular Technology Conference},
+  title={Historical overview of automobile navigation technology},
+  year={1986},
+  volume={36},
+  number={},
+  pages={350-358},
+  keywords={Automobiles;Radio navigation;Satellite navigation systems;Vehicles;Dead reckoning;Aircraft navigation;Roads;Satellite broadcasting;Routing;Artificial intelligence},
+  doi={10.1109/VTC.1986.1623457},
+  ISSN={},
+  month={May}
+}
+@inproceedings{navHistoryNewer,
+  title={An overview of in-vehicle route guidance system},
+  author={Dong, Wei},
+  booktitle={Australasian Transport Research Forum},
+  volume={2011},
+  year={2011},
+  organization={Citeseer}
 }

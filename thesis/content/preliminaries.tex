@@ -11,9 +11,9 @@
 		weight $w \in \mathbb{R}_{\ge 0}$ and a destination node $v \in V$.
 	\end{mydef}\quad\\
 	Note that \defref{graph} actually defines a \textit{directed} graph, as opposed to an \textit{undirected} graph where an
-	edge like $(u, w, v)$ would be considered equal to the edge of opposite direction $(v, w, u)$. However, for transportation networks
-	an undirected graph often is not applicable, for example due to one way streets or time dependent connections like trains which depart
-	at different times for different directions.
+	edge like $(u, w, v)$ would be considered equal to the edge of opposite direction $(v, w, u)$ (compare to \libref{graphTheory}).
+	However, for transportation networks an undirected graph often is not applicable, for example due to one way streets or
+	time dependent connections like trains which depart at different times for different directions.
 	
 	In the context of route planning we refer to the weight $w$ of an edge $(u, w, v)$ as \textit{cost}. It can be used to encode the length
 	of the represented connection. Or to represent the time it takes to travel the distance in a given
@@ -157,7 +157,7 @@
 				&= \Bigg(\left((\lambda_3 - \lambda_2)^2 + (\lambda_2 - \lambda_1)^2 + 2 \cdot ((\lambda_3 - \lambda_2) \cdot (\lambda_2 - \lambda_1))\right)
 						\cdot \cos^2\left(\frac{\phi_1 + \phi_3}{2}\right)\\
 					&\qquad + (\phi_3 - \phi_2)^2 + (\phi_2 - \phi_1)^2 + 2 \cdot ((\pi_3 - \phi_2) \cdot (\phi_2 - \phi_1))\Bigg) \cdot 6371000^2\\
-				&= ...\todo{\text{Weitermachen oder ganz entfernen...}}\\
+				&= ...\\
 				&\le \left(\left(\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
 						+ \left(\phi_2 - \phi_1\right)^2\right) \cdot 6371000^2\right)\\
 					&\qquad+ \left(\left(\left(\left(\lambda_3 - \lambda_2\right) \cdot \cos\left(\frac{\phi_2 + \phi_3}{2}\right)\right)^2
@@ -168,5 +168,6 @@
 						+ \left(\phi_3 - \phi_2\right)^2\right) \cdot 6371000^2\right)\\
 				&= \left(\asTheCrowFlies(c_1, c_2) + \asTheCrowFlies(c_2, c_3)\right)^2
 		\end{align*}
+		\todo{continue (squared ineq holds without, cauchy schwarz ineq) or remove completely...}
 		All four axioms hold, $\asTheCrowFlies$ is a metric on the set $X$.
 	\end{proof}
