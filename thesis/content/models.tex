@@ -105,28 +105,18 @@
 	\begin{mydef}\label{simpleTransitGraph}
 		A \textnormal{time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographic coordinates
 		\begin{align*}
-			V = \{(\phi, \lambda, t, e) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in \left[-\pi, \pi\right),
-			t \text{ time}, e \in \{\text{arrival}, \text{departure}\}\},
+			V = \{(\phi, \lambda, t) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in \left[-\pi, \pi\right), t \text{ time}\},
 		\end{align*}
-		for example a train arriving at a train station at a certain time.
+		for example a train arriving or departing at a train station at a certain time.
 		
-		A node $(\phi, \lambda, t, e) \in V$ is an \textnormal{arrival node} if $e = \text{arrival}$, analogously it is a
-		\textnormal{departure node} for $e = \text{departure}$. For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location,
-		$v_t$  its time and $v_e$ its event type.
-		
-		It must be ensured that each connection starts with an arrival node.\\\\
+		For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location and $v_t$  its time.\\\\
 		There is an edge $(u, w, v) \in E$ iff
 		\begin{itemize}
-			\item[1.] $u_e = \text{departure} \land v_e = \text{arrival}$ such that there is a vehicle departing
-			from $u$ at time $u_t$ which arrives at $v$ at time $v_t$ without stops in between, or
-			\item[2.] $u_e = \text{arrival} \land v_e = \text{departure}$
-			such that $u$ and $v$ belong to the same connection. For example a train arriving at a station
-			and then departing again, or
-			\item[3.] $u_e = \text{arrival} \land v_e = \text{arrival}$
-			such that $v$ is the node at the same coordinates than $u$ with the smallest time $v_t$ that is still
+			\item[1.] there is a vehicle departing from $u$ at time $u_t$ which arrives at $v$ at time $v_t$ without stops in between, or
+			\item[2.] $v$ is the node at the same coordinates than $u$ with the smallest time $v_t$ that is still
 			greater than $u_t$. This edge represents exiting a vehicle and waiting for another connection. That is
 			\begin{align*}
-				\forall v' \in V \setminus \{v\}	&: v'_\phi = u_\phi \land v'_\lambda = u_\lambda \land v'_e = \text{arrival} \land v'_t \ge u_t\\
+				\forall v' \in V \setminus \{v\}	&: v'_\phi = u_\phi \land v'_\lambda = u_\lambda \land v'_t \ge u_t\\
 									&\Rightarrow v'_t - u_t > v_t - u_t.
 			\end{align*}
 		\end{itemize}
@@ -136,7 +126,7 @@
 		\end{align*}
 		Note that weights are still positive since $v_t \ge u_t$ always holds due to construction.
 	\end{mydef}
-	% Transit graph example
+	% Simple transit graph example
 	\begin{figure}[!ht]
 		 \begin{center}
 			\begin{tabular}{|c||c|cc|c|}
@@ -154,8 +144,7 @@
 			 	% Time line
 			 	\node[left] at (-1, 0) {\timef{3}{56}{pm}};
 			 	\node[left] at (-1, 1) {\timef{4}{03}{pm}};
-			 	\node[left] at (-1, 1.5) {\timef{4}{28}{pm}};
-			 	\node[left] at (-1, 2) {\timef{4}{29}{pm}};
+			 	\node[left] at (-1, 2) {\timef{4}{28}{pm}};
 			 	\node[left] at (-1, 3) {\timef{4}{35}{pm}};
 			 	\node[left] at (-1, 4) {\timef{4}{50}{pm}};
 			 	\node[left] at (-1, 4.5) {\timef{4}{58}{pm}};
@@ -165,74 +154,54 @@
 			 	
 			 	% Freiburg Hbf
 			 	\node[above = 0.75cm] at (0.5, 0) {Freiburg Hbf};
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (f2) at (0, 0) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (f1) at (1, 0) {\phantom{v}};
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (f5) at (0, 1) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (f3) at (1, 1) {\phantom{v}};
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (f4) at (0, 7.5) {\phantom{v}};
+			 	\node[circle, draw] (f1) at (0.5, 0) {\phantom{v}};
+			 	\node[circle, draw] (f3) at (0.5, 1) {\phantom{v}};
+			 	\node[circle, draw] (f4) at (0.5, 7.5) {\phantom{v}};
 			 				 	
 			 	% Offenburg
 			 	\node[above = 0.75cm] at (3.5, 0) {Offenburg};
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o3) at (3, 1.5) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (o4) at (4, 2) {\phantom{v}};
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o1) at (3, 3) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (o2) at (4, 3) {\phantom{v}};
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o5) at (3, 4) {\phantom{v}};
+			 	\node[circle, draw] (o4) at (3.5, 2) {\phantom{v}};
+			 	\node[circle, draw] (o2) at (3.5, 3) {\phantom{v}};
+			 	\node[circle, draw] (o5) at (3.5, 4) {\phantom{v}};
 			 	
 			 	% Karlsruhe Hbf
 			 	\node[above = 0.75cm] at (6.5, 0) {Karlsruhe Hbf};
 			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k3) at (6, 4.5) {\phantom{v}};
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k1) at (6, 5.5) {\phantom{v}};
-			 	
-			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k4) at (6, 6.5) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (k2) at (7, 7) {\phantom{v}};
+			 	\node[circle, draw] (k3) at (6.5, 4.5) {\phantom{v}};
+			 	\node[circle, draw] (k1) at (6.5, 5.5) {\phantom{v}};
+			 	\node[circle, draw] (k2) at (6.5, 7) {\phantom{v}};
 			 	
 			 	% Edges
 			 	% ICE 104
-			 	\draw[thick, ->] (f2) to node[above] {$0$} (f1);
-			 	\draw[thick, ->] (f1) to node[above right] {$32$} (o3);
-			 	\draw[thick, ->] (o3) to node[above] {$1$} (o4);
-			 	\draw[thick, ->] (o4) to node[above right] {$29$} (k3);
+			 	\draw[thick, ->] (f1) to node[above right] {$32$} (o4);
+			 	\draw[thick, ->] (o4) to node[above right] {$30$} (k3);
 			 	
 			 	% RE 17024
-			 	\draw[thick, ->] (f5) to node[above] {$0$} (f3);
 			 	\draw[thick, ->] (f3) to node[above right] {$47$} (o5);
 			 	
 			 	% RE 17322
-			 	\draw[thick, ->] (o1) to node[above] {$0$} (o2);
 			 	\draw[thick, ->] (o2) to node[below left] {$44$} (k1);
 			 	
 			 	% ICE 79
-			 	\draw[thick, ->] (k4) to node[above] {$0$} (k2);
 			 	\draw[thick, ->] (k2) to node[above] {$60$} (f4);
 			 	
 			 	% Waiting arcs
-			 	\draw[color= red, thick, dashed, ->] (f2) to node[left] {$7$} (f5);
-			 	\draw[color= red, thick, dashed, ->] (f5) to node[right] {$247$} (f4);
+			 	\draw[color= red, thick, dashed, ->] (f1) to node[left] {$7$} (f3);
+			 	\draw[color= red, thick, dashed, ->] (f3) to node[right] {$247$} (f4);
 			 	
-			 	\draw[color= red, thick, dashed, ->] (o3) to node[right] {$7$} (o1);
-			 	\draw[color= red, thick, dashed, ->] (o1) to node[right] {$15$} (o5);
+			 	\draw[color= red, thick, dashed, ->] (o4) to node[right] {$7$} (o2);
+			 	\draw[color= red, thick, dashed, ->] (o2) to node[right] {$15$} (o5);
 			 	
 			 	\draw[color= red, thick, dashed, ->] (k3) to node[right] {$21$} (k1);
-			 	\draw[color= red, thick, dashed, ->] (k1) to node[left] {$111$} (k4);
+			 	\draw[color= red, thick, dashed, ->] (k1) to node[right] {$111$} (k2);
 			\end{tikzpicture}
 		\end{center}
 		\caption{Example of a transit network with its corresponding time expanded transit graph.
-			The table shows an excerpt of a train schedule. Nodes with stripes are arrival nodes,
-			dotted nodes represent departure nodes. Regular edges indicate a train connection
-			and dashed edges waiting arcs. Edge weights are measured in minutes.}
-		\label{transitGraphExample}
+			The table shows an excerpt of a train schedule. Regular edges indicate a train connection
+			and dashed edges waiting edges. Edge weights are measured in minutes.}
+		\label{simpleTransitGraphExample}
 	\end{figure}\quad\\
-	\defref{simpleTransitGraph} defines such a time expanded transit graph and \figref{transitGraphExample} shows an example.
+	\defref{simpleTransitGraph} defines such a time expanded transit graph and \figref{simpleTransitGraphExample} shows an example.
 	For simplicity it is assumed that the trains have no stops other than shown in the schedule. The schedule lists four trains:
 	\begin{itemize}
 		\item[1.] The ICE 104 which travels from Freiburg Hhbf to Karlsruhe Hbf via Offenburg,
@@ -240,21 +209,206 @@
 		\item[3.] the RE 17322 driving from Offenburg to Karlsruhe Hbf and
 		\item[4.] ICE 79 which travels in the opposite direction, connecting Karlsruhe Hbf with Freiburg without intermediate stops.
 	\end{itemize}
-	For connections that start at a station, like the $ICE 104$ in Freiburg Hbf an additional arrival node is introduced
-	in the transit graph. The arrival node has the same time than its corresponding departure node, the connecting
-	edge has a weight of $0$ minutes. The additional node is necessary to fulfil the requirement of
-	\defref{simpleTransitGraph} that all connections start with an arrival node. It is also necessary for correctness as it must
-	be possible to transfer from an arriving train to another train that starts at station. For example to transfer from ICE 104
-	to RE 17322 in Offenburg, which is represented by the waiting arc with cost $7$ minutes.\\\\
 	As seen in the example the resulting graph has no time dependency anymore and is static, as well as all edge weights.
-	The disadvantage is that the graph size dramatically increases as a new node is introduced for every single event.
+	The downside is that the graph size dramatically increases as a new node is introduced for every single event.
 	In order to limit the growth we assume that a schedule is the same every day and does not change. In fact, most schedules are
 	stable and often change only slightly, for example on weekends or at holidays. In practice hybrid models can be used for
-	those exceptions.
+	those exceptions.\\\\
+	However, the model still lacks an important feature. It does not represent \textit{transfer buffers} yet. It takes some minimal
+	amount of time to exit a vehicle and enter a different vehicle, possibly even at a different platform.
+	
+	We model that by further distinguishing the nodes by arrival and departure events. In between we can then add transfer
+	nodes which model the transfer duration. Therefore, the previous definition is adjusted and \defref{realisticTransitGraph} is received.
+	\begin{mydef}\label{realisticTransitGraph}
+		A \textnormal{realistic time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographic coordinates
+		\begin{align*}
+			V = \{(\phi, \lambda, t, e) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in \left[-\pi, \pi\right),
+			t \text{ time}, e \in \{\text{arrival}, \text{departure}, \text{transfer}\}\},
+		\end{align*}
+		for example a train arriving at a train station at a certain time.
+		
+		A node $(\phi, \lambda, t, e) \in V$ is an \textnormal{arrival node} if $e = \text{arrival}$, analogously it is a
+		\textnormal{departure node} for $e = \text{departure}$ and a transfer node for $e = \text{transfer}$.
+		For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location, $v_t$  its time and $v_e$ its event type.\\\\
+		For every arrival node $n$ there must exist a transfer node $m$ at the same coordinates such that $m_t = n_t + d$
+		with $d$ being the average transfer duration at the corresponding stop.\\\\
+		There is an edge $(u, w, v) \in E$ iff
+		\begin{itemize}
+			\item[1.] $u_e = \text{departure} \land v_e = \text{arrival}$ such that there is a vehicle departing
+				from $u$ at time $u_t$ which arrives at $v$ at time $v_t$ without stops in between; or
+			\item[2.] $u_e = \text{arrival} \land v_e = \text{departure}$
+				such that $u$ and $v$ belong to the same connection. For example a train arriving at a station
+				and then departing again; or
+			\item[3.] $u_e = \text{arrival} \land v_e = \text{transfer}$
+				such that $v$ is the first transfer node at the same coordinates whose time $v_t$ comes after $u_t$. That is
+				\begin{align*}
+					\forall v' \in V \setminus \{v\}	&: v'_\phi = u_\phi \land v'_\lambda = u_\lambda \land v'_e = \text{transfer} \land v'_t \ge u_t\\
+										&\Rightarrow v'_t - u_t > v_t - u_t.
+				\end{align*}
+				Such an edge represents exiting the vehicle and getting ready to enter a different vehicle; or
+			\item[4.] $u_e = \text{transfer} \land v_e = \text{transfer}$
+				such that $v$ is the first transfer node at the same coordinates whose time $v_t$ comes after $u_t$,
+				representing waiting at a stop; or
+			\item[5.] $u_e = \text{transfer} \land v_e = \text{departure}$
+				such that $u$ is the last transfer node at the same coordinates whose time $u_t$ comes before $v_t$, i.e.
+				\begin{align*}
+					\forall u' \in V \setminus \{u\}	&: u'_\phi = v_\phi \land u'_\lambda = v_\lambda \land u'_e = \text{transfer} \land u'_t \le v_t\\
+										&\Rightarrow v_t - u'_t > v_t - u_t.
+				\end{align*}
+				An edge like this represents entering a different vehicle from a stop after transferring or waiting at the stop.
+		\end{itemize}
+		The weight $w$ of an edge $(u, w, v)$ is the difference between both nodes times, that is
+		\begin{align*}
+			w	&= v_t - u_t.
+		\end{align*}
+	\end{mydef}
+	% Realistic transit graph example
+	\begin{figure}[!ht]
+		 \begin{center}
+			\begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	% Time line
+			 	\node[left] at (-1, 0) {\timef{3}{56}{pm}};
+			 	\node[left] at (-1, 0.75) {\timef{4}{03}{pm}};
+			 	
+			 	\node[left] at (-1, 1.5) {\timef{4}{28}{pm}};
+			 	\node[left] at (-1, 2) {\timef{4}{29}{pm}};
+			 	\node[left] at (-1, 2.75) {\timef{4}{33}{pm}};
+			 	\node[left] at (-1, 3.5) {\timef{4}{35}{pm}};
+			 	\node[left] at (-1, 4.25) {\timef{4}{50}{pm}};
+			 	\node[left] at (-1, 5) {\timef{4}{55}{pm}};
+			 	
+			 	\node[left] at (-1, 5.75) {\timef{4}{58}{pm}};
+			 	\node[left] at (-1, 6.5) {\timef{5}{03}{pm}};
+			 	\node[left] at (-1, 7.25) {\timef{5}{19}{pm}};
+			 	\node[left] at (-1, 8) {\timef{5}{24}{pm}};
+			 	\node[left] at (-1, 8.75) {\timef{7}{10}{pm}};
+			 	
+			 	\node[left] at (-1, 9.5) {\timef{8}{10}{pm}};
+			 	\node[left] at (-1, 10.25) {\timef{8}{15}{pm}};
+			 	
+			 	% Freiburg Hbf
+			 	\node[above = 0.75cm] at (1, 0) {Freiburg Hbf};
+			 	
+			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (f1) at (2, 0) {\phantom{v}};
+			 	
+			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (f3) at (2, 0.75) {\phantom{v}};
+			 	
+			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (f4) at (0, 9.5) {\phantom{v}};
+			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (f8) at (1, 10.25) {\phantom{v}};
+			 				 	
+			 	% Offenburg
+			 	\node[above = 0.75cm] at (5, 0) {Offenburg};
+			 	
+			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o3) at (4, 1.5) {\phantom{v}};
+			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (o4) at (6, 2) {\phantom{v}};
+			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (o6) at (5, 2.75) {\phantom{v}};
+			 	
+			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (o2) at (6, 3.5) {\phantom{v}};
+			 	
+			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o5) at (4, 4.25) {\phantom{v}};
+			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (o8) at (5, 5) {\phantom{v}};
+			 	
+			 	% Karlsruhe Hbf
+			 	\node[above = 0.75cm] at (9, 0) {Karlsruhe Hbf};
+			 	
+			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k3) at (8, 5.75) {\phantom{v}};
+			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (k5) at (9, 6.5) {\phantom{v}};
+			 	
+			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k1) at (8, 7.25) {\phantom{v}};
+			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (k6) at (9, 8) {\phantom{v}};
+			 	
+			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (k2) at (10, 8.75) {\phantom{v}};
+			 	
+			 	% Edges
+			 	% ICE 104
+			 	\draw[thick, ->] (f1) to node[above right] {$32$} (o3);
+			 	\draw[thick, ->] (o3) to node[above] {$1$} (o4);
+			 	\draw[thick, ->] (o4) to node[above right] {$29$} (k3);
+			 	
+			 	% RE 17024
+			 	\draw[thick, ->] (f3) to node[below left] {$47$} (o5);
+			 	
+			 	% RE 17322
+			 	\draw[thick, ->] (o2) to node[below left] {$44$} (k1);
+			 	
+			 	% ICE 79
+			 	\draw[thick, ->] (k2) to node[above] {$60$} (f4);
+			 	
+			 	% Arrival to transfer
+			 	\draw[color= red, thick, dashed, ->] (f4) to node[below left] {$5$} (f8);
+			 	
+			 	\draw[color= red, thick, dashed, ->] (o3) to node[below left] {$5$} (o6);
+			 	\draw[color= red, thick, dashed, ->] (o5) to node[below left] {$5$} (o8);
+			 	
+			 	\draw[color= red, thick, dashed, ->] (k3) to node[above right] {$5$} (k5);
+			 	\draw[color= red, thick, dashed, ->] (k1) to node[below left] {$5$} (k6);
+			 	
+			 	% Transfer to departure
+			 	\draw[color= red, thick, dashed, ->] (o6) to node[above right] {$2$} (o2);
+			 	\draw[color= red, thick, dashed, ->] (k6) to node[above right] {$106$} (k2);
+			 	
+			 	% Transfer to transfer
+			 	\draw[color= red, thick, dashed, ->] (o6) to node[left] {$22$} (o8);
+			 	
+			 	\draw[color= red, thick, dashed, ->] (k5) to node[right] {$21$} (k6);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Illustration of a realistic time expanded transit graph representing the schedule from \figref{simpleTransitGraphExample}.
+			A transfer duration of $5$ minutes is assumed at every stop. Nodes with stripes are arrival nodes, dotted nodes
+			represent departure nodes and nodes with a grid pattern are transfer nodes. Regular edges indicate a train
+			connection and dashed edges involve transfer nodes. Edge weights are measured in minutes.}
+		\label{realisticTransitGraphExample}
+	\end{figure}\quad\\
+	\figref{realisticTransitGraphExample} shows how the transit graph from \figref{simpleTransitGraphExample} changes with transfer buffers.
+
+	The weight of edges connecting arrival nodes with transfer nodes is equal to the transfer duration, $5$ minutes in the example.
+	The transfer duration can be different for each edge. A transfer is now possible if the departure of the desired vehicle is after
+	the arrival of the current vehicle plus the duration time. As seen in the example, edges connecting transfer nodes with departure
+	nodes are present exactly in this case. A transfer from ICE 104 to RE 17322 in Offenburg is indicated by taking the edge to the
+	first transfer node in Offenburg and then following the edge with cost $2$ to the departure node of the train.
 % Link graph
 \subsection{Link graph}
-	blabla
+	In this section we examine how a road and a transit graph can be combined into a single graph such that all
+	connections of the real network are preserved.\\\\
+	The approach is simple, selected nodes in the road network are connected to nodes of a certain stop in
+	the transit network and vice versa. Since starting time is not known in advance the graph must connect a
+	road node to all arrival nodes of a stop.
+	
+	In order to not miss a connection the transit graph must ensure that every connection starts with an arrival node.
+	In \figref{realisticTransitGraphExample} this is not the case and all four trains start at a departure node. However,
+	this is easily fixed by adding an additional arrival node to the beginning of every connection not starting with an arrival node already.
+	The arrival nodes time is the same as the time of the departure node and both are connected by an edge with a weight of $0$.
+	\defref{linkGraph} formalized the model.
+	\begin{mydef}\label{linkGraph}
+		Assume a road graph $R = (V_R, E_R)$, a realistic time expanded transit graph $T = (V_T, E_T)$ where
+		every connection in $T$ starts by an arrival node and a partial function $\link : V_R \pto M$ where $M$
+		contains subsets $S \subseteq V_T$. For every element $S \in M$ with an arbitrary element $s \in S$ the following
+		properties must hold:
+		\begin{itemize}
+			\item[1.]
+				All contained elements must be arrival nodes and have the same location than $s$, i.e.
+				\begin{align*}
+					\forall s' \in S : s'_e = \text{arrival} \land s'_\phi = s_\phi \land s'_\lambda = s_\lambda.
+				\end{align*}
+			\item[2.]
+				The set must contain all arrival nodes at the location of $s$, i.e.
+				\begin{align*}
+					\nexists v \in V_T \setminus S : v_e = \text{arrival} \land v_\phi = s_\phi \land v_\lambda = s_\lambda.
+				\end{align*}
+		\end{itemize}
+		Then a \textnormal{link graph} is a graph $L = (V_R \cupdot V_T, E_R \cupdot E_T \cupdot E_L)$ with
+		an additional set of link edges $E_L = V_R \times \mathbb{R}_{\ge 0} \times V_T$.\\\\
+		There is an edge $(u, 0, v) \in E_L$ iff $\link(u)$ is defined and $v \in \link(u)$.
+	\end{mydef}\quad\\
+	The function $\link$ can be obtained in different ways. For example by creating a mapping from a road node $u$ to
+	a stop $S$ if $u$ is in the vicinity of $S$ according to the $\asTheCrowFlies$ metric.
+	
+	Another straightforward possibility is to always connect a stop with the road node nearest to it. We will explore
+	this problem in \sectionref{nearestNeighborProblem}. An obvious downside of this approach is that the nearest road node
+	might not always have a good connectivity to the road network. A solution consists in creating a road node at the coordinates
+	of the stop as representative. The node can then be connected with all road nodes in the vicinity.
 
 % Timetable
 \subsection{Timetable}
-	blabla
+	A timetable is a non-graph based representation for a transit network.

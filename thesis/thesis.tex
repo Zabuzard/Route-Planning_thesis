@@ -50,6 +50,7 @@
 \definecolor{purple}{RGB}{206,0,206}
 \definecolor{lightgray}{rgb}{.95,.95,.95}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{darkgreen}{rgb}{0,0.6,0}
 \definecolor{pblue}{rgb}{0.13,0.13,1}
 \definecolor{pgreen}{rgb}{0,0.5,0}
 \definecolor{pred}{rgb}{0.9,0,0}
@@ -75,6 +76,19 @@
 \newcolumntype{L}{>{$}l<{$}}
 \newcolumntype{R}{>{$}r<{$}}
 \newcolumntype{C}{>{$}c<{$}}
+
+% Fusion of characters
+\makeatletter
+\def\moverlay{\mathpalette\mov@rlay}
+\def\mov@rlay#1#2{\leavevmode\vtop{%
+   \baselineskip\z@skip \lineskiplimit-\maxdimen
+   \ialign{\hfil$\m@th#1##$\hfil\cr#2\crcr}}}
+\newcommand{\charfusion}[3][\mathord]{
+    #1{\ifx#1\mathop\vphantom{#2}\fi
+        \mathpalette\mov@rlay{#2\cr#3}
+      }
+    \ifx#1\mathop\expandafter\displaylimits\fi}
+\makeatother
 
 % Program language listings
 \lstdefinelanguage{Java}{
@@ -114,6 +128,10 @@
 % Custom commands
 \newcommand{\zz}{$\mathrm{T\kern-.4em\raise-0.5ex\hbox{P}}$}
 \newcommand\restr[2]{{\left.\kern-\nulldelimiterspace#1\vphantom{\big|}\right|_{#2}}}
+\newcommand{\pto}{\mathrel{\ooalign{\hfil$\mapstochar$\hfil\cr$\to$\cr}}}
+\newcommand{\ito}{\xrightarrow{\,\smash{\raisebox{-0.45ex}{\ensuremath{\scriptstyle\sim}}}\,}}
+\newcommand{\cupdot}{\charfusion[\mathbin]{\cup}{\cdot}}
+\newcommand{\bigcupdot}{\charfusion[\mathop]{\bigcup}{\cdot}}
 \newcommand{\timef}[3]{$#1$:$#2$ \textit{#3}}
 \newcommand{\figref}[1]{\textbf{Fig.\,\ref{#1}}}
 \newcommand{\tableref}[1]{\textbf{Table \ref{#1}}}
@@ -160,13 +178,12 @@
 
 \newcommand{\true}{\macromathsf{true}}
 \newcommand{\false}{\macromathsf{false}}
-\newcommand{\nullVar}{\macromathsf{null}}
-\newcommand{\member}{\macromathsf{m}}
 
 \newcommand{\inlineCode}[1]{{\lstinline[style={JavaStyle}]{#1}}}
 
 % Operator
 \DeclareMathOperator{\asTheCrowFlies}{asTheCrowFlies}
+\DeclareMathOperator{\link}{link}
 
 % Document
 \begin{document}
