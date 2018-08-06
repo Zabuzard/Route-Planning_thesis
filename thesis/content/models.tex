@@ -24,7 +24,7 @@
 	% Road graph example
 	\begin{figure}[!ht]
 		 \begin{center}
-			\includegraphics[scale=0.5]{res/road_network}\\
+			\includegraphics[scale=0.65]{res/road_network}\\
 			\qquad\\
 			\begin{tikzpicture}[y = -1cm]
 			 	% Nodes
@@ -291,35 +291,35 @@
 			 	% Freiburg Hbf
 			 	\node[above = 0.75cm] at (1, 0) {\freiburg};
 			 	
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (f1) at (2, 0) {\phantom{v}};
+			 	\node[minimum size=6mm, circle, draw, fill=blue!20] (f1) at (2, 0) {};
 			 	
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (f3) at (2, 0.75) {\phantom{v}};
+			 	\node[minimum size=6mm, circle, draw, fill=blue!20] (f3) at (2, 0.75) {};
 			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (f4) at (0, 9.5) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (f8) at (1, 10.25) {\phantom{v}};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (f4) at (0, 9.5) {};
+			 	\node[minimum size=7.5mm, diamond, draw, fill=darkgreen!20] (f8) at (1, 10.25) {};
 			 				 	
 			 	% Offenburg
 			 	\node[above = 0.75cm] at (5, 0) {\offenburg};
 			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o3) at (4, 1.5) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (o4) at (6, 2) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (o6) at (5, 2.75) {\phantom{v}};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (o3) at (4, 1.5) {};
+			 	\node[minimum size=6mm, circle, draw, fill=blue!20] (o4) at (6, 2) {};
+			 	\node[minimum size=7.5mm, diamond, draw, fill=darkgreen!20] (o6) at (5, 2.75) {};
 			 	
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (o2) at (6, 3.5) {\phantom{v}};
+			 	\node[minimum size=6mm, circle, draw, fill=blue!20] (o2) at (6, 3.5) {};
 			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (o5) at (4, 4.25) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (o8) at (5, 5) {\phantom{v}};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (o5) at (4, 4.25) {};
+			 	\node[minimum size=7.5mm, diamond, draw, fill=darkgreen!20] (o8) at (5, 5) {};
 			 	
 			 	% Karlsruhe Hbf
 			 	\node[above = 0.75cm] at (9, 0) {\karlsruhe};
 			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k3) at (8, 5.75) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (k5) at (9, 6.5) {\phantom{v}};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (k3) at (8, 5.75) {};
+			 	\node[minimum size=7.5mm, diamond, draw, fill=darkgreen!20] (k5) at (9, 6.5) {};
 			 	
-			 	\node[circle, draw, preaction={fill = red!20}, pattern=north west lines, pattern color=white] (k1) at (8, 7.25) {\phantom{v}};
-			 	\node[circle, draw, preaction={fill = darkgreen!30}, pattern=crosshatch, pattern color=white] (k6) at (9, 8) {\phantom{v}};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (k1) at (8, 7.25) {};
+			 	\node[minimum size=7.5mm, diamond, draw, fill=darkgreen!20] (k6) at (9, 8) {};
 			 	
-			 	\node[circle, draw, preaction={fill = blue!20}, pattern=dots, pattern color=white] (k2) at (10, 8.75) {\phantom{v}};
+			 	\node[minimum size=6mm, circle, draw, fill=blue!20] (k2) at (10, 8.75) {};
 			 	
 			 	% Edges
 			 	% ICE 104
@@ -356,8 +356,8 @@
 			\end{tikzpicture}
 		\end{center}
 		\caption{Illustration of a realistic time expanded transit graph representing the schedule from \figref{simpleTransitGraphExample}.
-			A transfer duration of $5$ minutes is assumed at every stop. Nodes with stripes are arrival nodes, dotted nodes
-			represent departure nodes and nodes with a grid pattern are transfer nodes. Regular edges indicate a train
+			A transfer duration of $5$ minutes is assumed at every stop. Rectangular nodes are arrival nodes, circular nodes
+			represent departure nodes and diamond shaped nodes are transfer nodes. Regular edges indicate a train
 			connection and dashed edges involve transfer nodes. Edge weights are measured in minutes.}
 		\label{realisticTransitGraphExample}
 	\end{figure}\quad\\
