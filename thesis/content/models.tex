@@ -383,19 +383,19 @@
 	\defref{linkGraph} formalized the model.
 	\begin{mydef}\label{linkGraph}
 		Assume a road graph $R = (V_R, E_R)$, a realistic time expanded transit graph $T = (V_T, E_T)$ where
-		every connection in $T$ starts by an arrival node and a partial function $\link : V_R \pto M$ where $M$
+		every connection in $T$ starts by an arrival node and a partial function $\link: V_R \pto M$ where $M$
 		contains subsets $S \subseteq V_T$. For every element $S \in M$ with an arbitrary element $s \in S$ the following
 		properties must hold:
 		\begin{itemize}
 			\item[1.]
 				All contained elements must be arrival nodes and have the same location than $s$, i.e.
 				\begin{align*}
-					\forall s' \in S : s'_e = \arrival \land s'_\phi = s_\phi \land s'_\lambda = s_\lambda.
+					\forall s' \in S: s'_e = \arrival \land s'_\phi = s_\phi \land s'_\lambda = s_\lambda.
 				\end{align*}
 			\item[2.]
 				The set must contain all arrival nodes at the location of $s$, i.e.
 				\begin{align*}
-					\nexists v \in V_T \setminus S : v_e = \arrival \land v_\phi = s_\phi \land v_\lambda = s_\lambda.
+					\nexists v \in V_T \setminus S: v_e = \arrival \land v_\phi = s_\phi \land v_\lambda = s_\lambda.
 				\end{align*}
 		\end{itemize}
 		Then a \textnormal{link graph} is a graph $L = (V_R \cupdot V_T, E_R \cupdot E_T \cupdot E_L)$ with

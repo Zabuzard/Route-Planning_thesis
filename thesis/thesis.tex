@@ -40,6 +40,12 @@
 \usepackage{tikz}% Offers advanced functions for drawing vector graphics
 \usetikzlibrary{patterns}% Provides patterns for filling nodes
 \usetikzlibrary{shapes}% Provides shapes for nodes
+\usetikzlibrary{calc}% Enables basic math for tikz
+\tikzstyle{redArea}=[draw=red!30,line width=1pt,preaction={clip, postaction={pattern=north west lines, pattern color=red!30}}]
+\tikzstyle{blueArea}=[draw=blue!30,line width=1pt,preaction={clip, postaction={pattern=dots, pattern color=blue!30}}]
+\tikzstyle{greenArea}=[draw=darkgreen!30,line width=1pt,preaction={clip, postaction={pattern=horizontal lines, pattern color=darkgreen!30}}]
+\tikzstyle{orangeArea}=[draw=orange!30,line width=1pt,preaction={clip, postaction={pattern=crosshatch, pattern color=orange!30}}]
+\tikzstyle{blueBorder}=[draw=blue,line width=1pt,preaction={clip, postaction={draw=blue,opacity=0.5,line width=12pt}}]
 
 \usepackage{hyperref}% Appearance of links do not get changed
 \renewcommand{\figurename}{Fig.}% Fig. instead of Figure. when linking figures
@@ -154,7 +160,6 @@
 % Prevent accidental usage
 \renewcommand{\succ}{\error}
 \renewcommand{\neg}{\error}
-\renewcommand{\max}{\error}
 \renewcommand{\implies}{\error}
 
 % Hacks
@@ -177,6 +182,10 @@
 \newcommand{\opnv}{\macrosc{ÖPNV}}
 \newcommand{\dijkstra}{\macrosc{Dijkstra}}
 \newcommand{\cobweb}{\macrosc{Cobweb}}
+\newcommand{\nns}{\macrosc{NNS}}
+\newcommand{\kdTree}{\macrosc{k-d tree}}
+\newcommand{\vpTree}{\macrosc{VP tree}}
+\newcommand{\bkTree}{\macrosc{BK-tree}}
 
 \newcommand{\true}{\macromathsf{true}}
 \newcommand{\false}{\macromathsf{false}}
@@ -197,8 +206,16 @@
 \newcommand{\tices}{\macromathsf{ICE 79}}
 
 % Operator
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator{\asTheCrowFlies}{asTheCrowFlies}
 \DeclareMathOperator{\link}{link}
+\DeclareMathOperator{\src}{src}
+\DeclareMathOperator{\dest}{dest}
+\DeclareMathOperator{\depth}{depth}
+\DeclareMathOperator{\height}{height}
+\DeclareMathOperator{\lvl}{lvl}
+\DeclareMathOperator{\assoc}{assoc}
 
 % Document
 \begin{document}

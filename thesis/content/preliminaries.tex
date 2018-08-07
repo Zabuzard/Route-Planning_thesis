@@ -47,11 +47,62 @@
 		E	&= \{(v_1, 8, v_2), (v_1, 1, v_3), (v_2, 1, v_1), (v_2, 2, v_5), (v_3, 2, v_4), (v_4, 1, v_2)\}.
 	\end{align*}
 	which is illustrated by \figref{graph_example}.
+	\begin{mydef}
+		Given a graph $G = (V, E)$ the function $\src: E \to V, ((u, w, v)) \mapsto u$ gets the \textnormal{source}
+		of an edge. Analogously $\dest: E \to V, ((u, w, v)) \mapsto v$ retrieves the \textnormal{destination}.
+	\end{mydef}
+	\begin{mydef}\label{path}
+		A \textnormal{path} in a graph $G = (V, E)$ is a sequence $p = e_1e_2e_3\ldots$ of edges $e_i \in E$ such that
+		\begin{align*}
+			\forall i: \dest(e_i) = \src(e_{i + 1}).
+		\end{align*}
+		The \textnormal{length} of a path is the amount of edges it contains, i.e. the length of the sequence.
+		The \textnormal{weight} or \textnormal{cost} is the sum of its edges weights.
+	\end{mydef}\quad\\
+	An example for a path in the graph $G$ would be
+	\begin{align*}
+		p	&=(v_1, 8, v_2)(v_2, 1, v_1)(v_1, 1, v_3).
+	\end{align*}
+	Its length is $3$ and it has a weight of $10$.
+	
+% Tree
+\subsection{Tree}
+	\begin{mydef}\label{tree}
+		A \textnormal{tree} is a graph $T = (V, E)$ with the following properties:
+		\begin{itemize}
+			\item[1.] There is exactly one node $r \in V$ with no ingoing edges, called the \textnormal{root}, i.e.
+				\begin{align*}
+					\exists! r \in V \nexists e \in E : \dest(e) = r.
+				\end{align*}
+			\item[2.] All other nodes $v$ have exactly one ingoing edge. The source $p$ of this edge is called \textnormal{parent} of $v$ and
+				$v$ is called \textnormal{child} of $p$:
+				\begin{align*}
+					\forall v \in V : v \neq r \Rightarrow \exists! e \in E : \dest(e) = v.
+				\end{align*}
+		\end{itemize}
+	\end{mydef}
+	\begin{mydef}\label{subTree}
+		The \textnormal{subtree} of a tree $T = (V, E)$ rooted at a node $r' \in V$ is a tree $T' = (V', E')$. $V' \subseteq V$ is the set
+		of nodes that can be reached from $r'$. That is, all nodes that are part of possible paths starting at $r'$.
+		Likewise $E' \subseteq E$ is the set of edges restricted to the vertices in $V'$. The root of $T'$ is $r'$.
+	\end{mydef}
+	\begin{mydef}\label{treeDepth}
+		The \textnormal{depth} of a node $v$ in a tree $T = (V, E)$, denoted by $\depth(v)$, is defined as the amount of
+		edges between the $v$ and the root $r$. It is the length of the unique path $p$ starting at $r$ and ending at $v$.
+		
+		The \textnormal{height} of a tree is its greatest depth, i.e.
+		\begin{align*}
+			\max_{v \in V} \depth(v).
+		\end{align*}
+	\end{mydef}\quad\\
+	Trees are hierarchical data structures. Every node, except the root, has one parent. A node itself can have multiple children.
+	Note that it is not possible to form a loop in a tree, i.e. a path that visits a node more than once. A node without
+	children is called a \textit{leaf}.
 
-%Metric
+% Metric
 \subsection{Metric}
 	\begin{mydef}\label{metric}
-		A function $d : X \times X \to \mathbb{R}$ on a set $X$ is called a \textnormal{metric} iff for all $x, y, z \in X$
+		A function $d: M \times M \to \mathbb{R}$ on a set $M$ is called a \textnormal{metric} iff for all $x, y, z \in M$
 		\begin{align*}
 			d(x, y)	&\ge 0,			&&\text{non-negativity}\\
 			d(x, y) = 0	&\Leftrightarrow x = y,	&&\text{identity of indiscernibles}\\
@@ -59,6 +110,10 @@
 			d(x, z)	&\le d(x, y) + d(y, z)	&&\text{triangle inequality}
 		\end{align*}
 		holds.
+	\end{mydef}
+	\begin{mydef}\label{metricSpace}
+		A \textnormal{metric space} is a pair $(M, d)$ where $M$ is a set
+		and $d: M \times M \to \mathbb{R}$ a metric on $M$.
 	\end{mydef}\quad\\
 	A metric is used to measure the distance between given locations. \sectionref{nearestNeighborProblem}
 	and \sectionref{shortestPathProblem}, in particular \sectionref{alt}, will make heavy use of this term.
@@ -73,8 +128,8 @@
 	Note that there are more accurate methods for computing the great-circle distance for geographical locations,
 	like the haversine formula \libref{haversine}. However, they come with a significant computational overhead.
 	\begin{mydef}\label{asTheCrowFlies}
-		Given a set of coordinates $X = \left\{(\phi, \lambda) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in [-\pi, \pi)\right\}$ we define
-		$\asTheCrowFlies : X \times X \to \mathbb{R}$ such that
+		Given a set of coordinates $M = \left\{(\phi, \lambda) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in [-\pi, \pi)\right\}$ we define
+		$\asTheCrowFlies: M \times M \to \mathbb{R}$ such that
 		\begin{align*}
 			\left(\left(\phi_1, \lambda_1\right), \left(\phi_2, \lambda_2\right)\right) \mapsto
 				\sqrt{\left(\left(\lambda_2 - \lambda_1\right) \cdot \cos\left(\frac{\phi_1 + \phi_2}{2}\right)\right)^2
@@ -83,7 +138,7 @@
 	\end{mydef}\quad\\
 	As a next step we prove that $\asTheCrowFlies$ is indeed a metric on the set of coordinates.
 	\begin{myproposition}
-		The function $\asTheCrowFlies$ is a metric on its domain $X$.
+		The function $\asTheCrowFlies$ is a metric on its domain $M$.
 	\end{myproposition}
 	\begin{proof}
 		We need to prove that all four axioms hold. Let us first set
@@ -169,5 +224,5 @@
 				&= \left(\asTheCrowFlies(c_1, c_2) + \asTheCrowFlies(c_2, c_3)\right)^2
 		\end{align*}
 		\todo{continue (squared ineq holds without, cauchy schwarz ineq) or remove completely...}
-		All four axioms hold, $\asTheCrowFlies$ is a metric on the set $X$.
+		All four axioms hold, $\asTheCrowFlies$ is a metric on the set $M$.
 	\end{proof}
