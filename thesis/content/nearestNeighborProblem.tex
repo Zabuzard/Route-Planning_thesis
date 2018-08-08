@@ -74,7 +74,7 @@
 		x_{10}	&= (20, 70),\\
 		x_{11}	&= (10, 80).
 	\end{align*}
-	All points are element of the cartesian plane $\mathbb{R}$. The euclidean distance $d$ is chosen as metric on this set.
+	All points are elements of the cartesian plane $\mathbb{R}$. The euclidean distance $d$ is chosen as metric on this set.
 	For two dimensions it can be defined as:
 	\begin{align*}
 		d: \mathbb{R}^2 \times \mathbb{R}^2, ((x_1, y_1), (x_2, y_2)) \mapsto \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
@@ -96,23 +96,41 @@
 	\end{align*}
 	Any of them is a valid solution to the nearest neighbor problem of $x_1$.\\\\
 	The search for a nearest neighbor is a well understood problem \libref{nnsOld, nnsNew} and has many
-	applications. Without restrictions solving the problem on general metrics was proven to
+	applications. Without restrictions, solving the problem on general metrics was proven to
 	require $\Omega(n)$ time \libref{nnsOld}, where $n$ is the amount of points.
 	
 	Typical approaches divide the space into regions, exploiting properties of the metric space.
 	Common examples include {\kdTree}s \libref{kdTree}, {\vpTree}s \libref{vpTree},
-	{\bkTree}s \libref{bkTree} and {\coverTree}s \libref{coverTree}.
+	{\bkTree}s \libref{bkTree} and {\coverTree}s \libref{coverTree}.\\\\
+	The problem also has a lot of variants. We elaborate on two of them:
+	\begin{mydef}
+		The \textnormal{k-nearest neighbors} of a point $x \in M$ are the
+		$k$ closest points $\{y_1, y_2, \ldots, y_k\} \subseteq M$ to $x$. That is
+		\begin{align*}
+			y_1	&= \argmin_{y' \in M \setminus \{x\}} d(x, y'),\\
+			y_2	&= \argmin_{y' \in M \setminus \{x, y_1\}} d(x, y'),\\
+				&\vdots\\
+			y_k	&= \argmin_{y' \in M \setminus \{x, y_1, \ldots, y_{k - 1}\}} d(x, y').
+		\end{align*}
+	\end{mydef}
+	\begin{mydef}
+		The \textnormal{k-neighborhood} of a point $x \in M$ is the set
+		\begin{align*}
+			\{y \in M \setminus \{x\} | d(x, y) \le k\}.
+		\end{align*}
+	\end{mydef}
 
 %Cover tree
 \subsection{Cover tree}
 	\begin{mydef}\label{coverTree}
 		A \textnormal{cover tree} $T$ on a metric space $(M, d)$ is a leveled tree $(V, E)$.
 		
-		The root is placed at the greatest level, denoted by $k \in \mathbb{N}$.
+		The root is placed at the greatest level, denoted by $i_{\vmax} \in \mathbb{Z}$.
 		The level of a node $v \in V$ is
 		\begin{align*}
 			\lvl(v)	&= k - \depth(v).
 		\end{align*}
+		The lowest level is denoted by $i_{\vmin}$.
 		Every node $v \in V$ is associated with a point $m \in M$. We write $\assoc(v) = m$.
 		Nodes of a certain level form a \textit{cover} of points in $M$. A cover for a level $i$ is defined as
 		\begin{align*}
@@ -461,6 +479,123 @@
 	
 	Note that it is not necessary that a node covers its whole subtree in its level. As example, we refer to $x_1$ in level $5$
 	which does not cover $x_{10}$, as $d(x_1, x_{10}) > 2^5$, though it is part of the subtree rooted at $x_1$. The third property only demands
-	that a parent covers all its direct children, not grandchildren or similar.
+	that a parent covers all its direct children, not grandchildren or similar.\\\\
+	% Cover tree insertion
+	\IncMargin{1em}
+	\begin{algorithm}
+		\SetKwInOut{Input}{input}
+  		\SetKwInOut{Output}{output}
+		\SetKwFunction{d}{d}\SetKwFunction{fchildren}{children}\SetKwFunction{insert}{insert}
+		\BlankLine
+		\Input{point $p \in M$, candidate cover set $Q_i \subseteq C_i$, level $i$}
+		\Output{\true if $p$ was inserted at level $i - 1$, \false otherwise}
+		\BlankLine
+		$Q := \{\fchildren(q) | q \in Q_i\}$\;
+		\BlankLine
+		\If{$d(p, Q) > 2^i$}{
+			\Return \false\tcp*{Check separation}
+		}\Else{
+			$Q_{i - 1} := \{q \in Q | \d(p, q) \le 2^i\}$\tcp*{Covering candidates}
+			\BlankLine
+			\If{$\neg\insert(p, Q_{i - 1}, i - 1) \land \d(p, Q_i) \le 2^i$}{
+				pick any $q \in Q_{i} : \d(p, q) \le 2^i$\;
+				append $q$ as child to $q$\;
+				\Return \true\;
+			}\Else{
+				\Return \false\;
+			}
+		}
+		\BlankLine
+		\caption{Inserting a point into a cover tree operating on a metric space $(M, d)$.}\label{coverTreeInsert}
+	\end{algorithm}\DecMargin{1em}\quad\\
+	The cover tree is constructed using \algoref{coverTreeInsert} with the maximal level $i_{\vmax}$ and the cover
+	set $C_k$ which only consists of the root. The algorithm is stated recursively, but can easily be implemented
+	without recursion by descending the levels and only following relevant candidates.
 	
-	\todo{Continue with algorithms}
+	A point $p$ can be appended in level $i - 1$ to a parent $q$ in level $i$ if the point has enough separation to all other
+	nodes in this level, meaning more than $2^{i - 1}$, and is covered by the parent, that is a distance of less than $2^i$.
+	The algorithm searches such a point by descending the levels, computing the separation and appending it to a
+	node if it also covers the point.\\\\
+	% Cover tree nearest neighbor search
+	\IncMargin{1em}
+	\begin{algorithm}
+		\SetKwInOut{Input}{input}
+  		\SetKwInOut{Output}{output}
+		\SetKwFunction{d}{d}\SetKwFunction{fchildren}{children}
+		\BlankLine
+		\Input{point $p \in M$}
+		\Output{a nearest neighbor to $p$ in $M$}
+		\BlankLine
+		$Q_{i_{\vmax}} := C_{i_{\vmax}}$\;
+		\For{$i$ from $i_{\vmax}$ to $i_{\vmin}$}{
+			$Q := \{\fchildren(q) | q \in Q_i\}$\;
+			$Q_{i - 1} := \{q \in Q | \d(p, q) \le \d(p, Q) + 2^i\}$\;
+		}
+		$\Return \argmin_{q \in Q_{i_{\vmin}}} \d(p, q)$\;
+		\BlankLine
+		\caption{Searching a nearest neighbor in a cover tree operating on a metric space $(M, d)$.}\label{coverTreeSearch}
+	\end{algorithm}\DecMargin{1em}\quad\\
+	A search for a nearest neighbor follows a similar approach. \algoref{coverTreeSearch} starts at the root and traverses
+	the tree by following the children. The candidate set is refined by only following children which are closer than
+	\begin{align*}
+		d(p, Q) + 2^i.
+	\end{align*}
+	There, the distance to the set represents the distance of the currently best candidate. Nodes in the subtree
+	rooted at a child can maximally be $2^i$ closer than the child itself. Therefore, take a look
+	at \figref{coverTreeExampleRange} where $x_2$ is maximally $2^5$ closer to $x_7$ than $x_1$, else it would not
+	be covered by its parent $x_1$.
+	Because of that the algorithm only follows children which can have nodes in their subtree
+	that improve over the currently best candidate. Other children are rejected.
+	
+	Note that the algorithm must track down all levels, as another node could show up in the lowest level because of
+	the separation property.\\\\
+	% Cover tree k-nearest neighbor search
+	\IncMargin{1em}
+	\begin{algorithm}
+		\SetKwInOut{Input}{input}
+  		\SetKwInOut{Output}{output}
+		\SetKwFunction{d}{d}\SetKwFunction{fchildren}{children}
+		\BlankLine
+		\Input{point $p \in M$, amount $k \in \mathbb{N}$}
+		\Output{$k$-nearest neighbors to $p$ in $M$}
+		\BlankLine
+		$Q_{i_{\vmax}} := C_{i_{\vmax}}$\;
+		\For{$i$ from $i_{\vmax}$ to $i_{\vmin}$}{
+			$Q := \{\fchildren(q) | q \in Q_i\}$\;
+			\BlankLine
+			perform a $k$-partial sort of $Q$, ascending in $\d(p, q)$\;
+			let $q'$ be the $k$-th element of $Q$\;
+			\BlankLine
+			$Q_{i - 1} := \{q \in Q | \d(p, q) \le \d(p, q') + 2^i\}$\;
+		}
+		\BlankLine
+		perform a $k$-partial sort of $Q_{i_{\vmin}}$, ascending in $\d(p, q)$\;
+		\Return first $k$ elements of $Q_{i_{\vmin}}$\;
+		\BlankLine
+		\caption{Searching the $k$-nearest neighbors in a cover tree operating on a metric space $(M, d)$.}\label{coverTreeKSearch}
+	\end{algorithm}\DecMargin{1em}\quad\\
+	% Cover tree k-neighborhood computation
+	\IncMargin{1em}
+	\begin{algorithm}
+		\SetKwInOut{Input}{input}
+  		\SetKwInOut{Output}{output}
+		\SetKwFunction{d}{d}\SetKwFunction{fchildren}{children}
+		\BlankLine
+		\Input{point $p \in M$, radius $k \in \mathbb{R}_{\ge 0}$}
+		\Output{$k$-neighborhood of $p$ in $M$}
+		\BlankLine
+		$Q_{i_{\vmax}} := C_{i_{\vmax}}$\;
+		\For{$i$ from $i_{\vmax}$ to $i_{\vmin}$}{
+			$Q := \{\fchildren(q) | q \in Q_i\}$\;
+			$Q_{i - 1} := \{q \in Q | \d(p, q) \le k + 2^i\}$\;
+		}
+		$\Return \{q \in Q_{i_{\vmin}} | \d(p, q) \le k\}$\;
+		\BlankLine
+		\caption{Computing the $k$-neighborhood by using a cover tree which operates on a metric space $(M, d)$.}\label{coverTreeKNeighborhood}
+	\end{algorithm}\DecMargin{1em}\quad\\
+	The cover tree can also be used to efficiently compute the $k$-nearest neighbors or the $k$-neighborhood.
+	In order to compute the $k$-nearest neighbors, \algoref{coverTreeKSearch} extends the range bound from the currently
+	best candidate to the $k$-th best candidate. Likewise does \algoref{coverTreeKNeighborhood} extend the bound to
+	the given range $k$ instead of involving candidate distances.\\\\
+	For other operations and a detailed analysis of the cover tree, as well as its complexity and a comparison
+	against other techniques, refer to \libref{coverTree}.

@@ -94,10 +94,14 @@
 		\begin{align*}
 			\max_{v \in V} \depth(v).
 		\end{align*}
+		And
+		\begin{align*}
+			\children(v)	&= \{c \in T | c \text{ child of } v\}.
+		\end{align*}
 	\end{mydef}\quad\\
 	Trees are hierarchical data structures. Every node, except the root, has one parent. A node itself can have multiple children.
 	Note that it is not possible to form a loop in a tree, i.e. a path that visits a node more than once. A node without
-	children is called a \textit{leaf}.
+	children is called a \textit{leaf}.\todo{Maybe add some illustrations here...}
 
 % Metric
 \subsection{Metric}
@@ -114,6 +118,13 @@
 	\begin{mydef}\label{metricSpace}
 		A \textnormal{metric space} is a pair $(M, d)$ where $M$ is a set
 		and $d: M \times M \to \mathbb{R}$ a metric on $M$.
+	\end{mydef}
+	\begin{mydef}\label{metricSet}
+		Given a metric $d$ on a set $M$, the distance of a point $p \in M$ to a subset $Q \subseteq M$
+		is defined as the distance from $p$ to its nearest point in $Q$:
+		\begin{align*}
+			d(p, Q)	&= \min_{q \in Q} d(p, q)
+		\end{align*}
 	\end{mydef}\quad\\
 	A metric is used to measure the distance between given locations. \sectionref{nearestNeighborProblem}
 	and \sectionref{shortestPathProblem}, in particular \sectionref{alt}, will make heavy use of this term.
