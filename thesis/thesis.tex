@@ -175,7 +175,9 @@
 
 % Macros
 \newcommand{\java}{\macrosc{Java}}
+\newcommand{\astar}{\macrosc{A\ensuremath{^{\star}}}}
 \newcommand{\alt}{\macrosc{ALT}}
+\newcommand{\bfs}{\macrosc{BFS}}
 \newcommand{\csa}{\macrosc{CSA}}
 \newcommand{\coverTree}{\macrosc{Cover Tree}}
 \newcommand{\opnv}{\macrosc{ÖPNV}}
@@ -185,11 +187,15 @@
 \newcommand{\kdTree}{\macrosc{k-d tree}}
 \newcommand{\vpTree}{\macrosc{VP tree}}
 \newcommand{\bkTree}{\macrosc{BK-tree}}
+\newcommand{\earliestArrivalProblem}{\macrosc{Earliest Arrival Problem}}
+\newcommand{\shortestPathProblem}{\macrosc{Shortest Path Problem}}
+\newcommand{\nearestNeighborProblem}{\macrosc{Nearest Neighbor Problem}}
 
 \newcommand{\true}{\macromathsf{true}}
 \newcommand{\false}{\macromathsf{false}}
 \newcommand{\vmax}{\macromathsf{max}}
 \newcommand{\vmin}{\macromathsf{min}}
+\newcommand{\vundef}{\macromathsf{undefined}}
 
 \newcommand{\inlineCode}[1]{{\lstinline[style={JavaStyle}]{#1}}}
 
@@ -218,6 +224,8 @@
 \DeclareMathOperator{\lvl}{lvl}
 \DeclareMathOperator{\assoc}{assoc}
 \DeclareMathOperator{\children}{children}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\orev}{prev}
 
 % Document
 \begin{document}
