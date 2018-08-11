@@ -244,15 +244,16 @@
 			The illustration is from \libref{routePlanningOverview}.}
 		\label{dijkstra_vs_astar}
 	\end{figure}\quad\\
-	Unfortunately, computing the exact goal direction is equivalent to computing the shortest path to the target.
+	Unfortunately, computing the exact goal direction is as hard as computing the shortest path to the target.
 	Therefore, a heuristic is used to approximate the direction. The choice of the heuristic heavily depends on the underlying network.
 	In the worst case, a heuristic may not improve over \dijkstra and the same search space is received. In the best case,
 	the algorithm explores only the nodes on the shortest path.
 	
 	Such a heuristic must fulfill two properties, formulated by \defref{heuristic}.
 	\begin{mydef}\label{heuristic}
-		Given a graph $G = (V, E)$, a metric $\dist$ on the set $V$ (see \defref{metric}), a \textnormal{heuristic} $h$
-		is a metric on $V$ which approximates $\dist$. The heurstic $h$ must be
+		Given a graph $G = (V, E)$, a metric $\dist$ on $V$ (see \defref{metric}),
+		a \textnormal{heuristic} is a function $h: V \times V \to \mathbb{R}_{\ge 0}$ which approximates $\dist$.
+		The heurstic $h$ must be
 		\begin{itemize}
 			\item[1.] \textnormal{admissable}, i.e. never overestimate:
 				\begin{align*}
@@ -263,16 +264,131 @@
 					\forall t \in V\,\forall (u, w, v) \in E: h(u, t) \le w + h(v, t)
 				\end{align*}
 		\end{itemize}
-	\end{mydef}
-	\todo{Write something...}
+	\end{mydef}\quad\\
+	Given such a heuristic $h$, the \astar algorithm is received by adjusting \textbf{line 7} of \algoref{dijkstra} to
+	\begin{align*}
+		u \leftarrow \argmin_{u' \in Q} \dist(u') + h(u', t).
+	\end{align*}
+	This will prefer nodes that are estimated to be closer to the target before others. By that, the algorithms search space
+	first expands into a direction that minimizes the distance according to the heuristic $h$.\\\\
+	A common choice for a simple heuristic is the \textit{as-the-crow-flies} metric (see \defref{asTheCrowFlies}).
+	The properties are easily verified. A theoretically shortest path has the shortest possible distance and uses
+	the fastest available transportation mode. This is exactly the path represented by the \textit{straight-line} distance,
+	computed by the \textit{as-the-crow-flies} metric. It can thus never overestimate. It is also trivially monotone since it is a metric,
+	i.e. the triangle inequality holds for all elements.
+	
+	A heuristic is a good choice if it approximates the actual shortest path distance well. As such, the \textit{as-the-crow-flies} heuristic works well
+	on networks with a high connectivity in all directions. For example a residential area of a city without one way streets. Unfortunately, in road
+	networks, the common case is to first drive into the opposite direction in order to reach a fast highway. This even gets worse on networks
+	where the importance of nodes heavily differ, such as public transit networks. For train networks, the typical case is that one first needs
+	to travel to a main station. This is obviously due to a main station having a much better connectivity and faster trains available.
+	Because of that, the effectiveness of \textit{as-the-crow-flies} is very limited on such networks.\\\\
+	The \textit{landmark heurstic} partially solves the issue. An \astar algorithm using the landmark heuristic is called \alt \libref{alt},
+	which stands for \textit{landmarks and triangle inequality}.
+	
+	The heuristic provides a more generic approach by approximating the distance
+	between nodes $u$ and $v$ by using pre-computed distances with pre-determined nodes $l$, called \textit{landmarks}.
+	\begin{mydef}
+		Given a set of landmarks $L \subseteq V$, the heuristic $\landmarks$ is defined by
+		\begin{align*}
+			\landmarks(u, v)	&= \max_{l \in L} \left(\max \{\dist(u, l) - \dist(v, l), \dist(l, v) - \dist(l, u)\}\right).
+		\end{align*}
+	\end{mydef}\quad\\
+	Obviously, the heuristic improves if the set of landmarks is increased. However, actual shortest path distances from all landmarks
+	to all other nodes in the graph must be pre-computed. With an increasing amount of landmarks the pre-computation might not
+	be feasible anymore because it takes too long or consumes too much space. Note that if $L = V$, the heuristic becomes the
+	actual shortest path distance function, i.e. $\landmarks = \dist$.
+	
+	In practice, an amount between $20$ and $50$ randomly chosen nodes seems to be a good compromise.
+	Refer to \libref{alt} for a detailed analysis.\\\\
+	The computation of the actual shortest path distances, to and from the landmarks, can be done by using \dijkstra. But, instead of
+	running the algorithm for all pairs of nodes, the distances can be obtained with two runs only. Therefore, the algorithm is slightly modified by dropping
+	\textbf{lines 9} and \textbf{10}, such that the algorithm relaxes the whole network. By that, a single run of \dijkstra with a landmark $l$ as source,
+	computes the distances $\dist(l, v)$ to all nodes $v$ in the network. By reversing the graph, i.e. edges $(u, w, v)$ become $(v, w, u)$, the distances to
+	the landmarks can be obtained analogously with $l$ as source again. Depending on the graph implementation, reversal can be done
+	in $\mathcal{O}(1)$ by only implicitly reversing the edges.
 
-%Time-dependend
-\subsection{Time-dependend}
-	Blabla
+%Time-dependent
+\subsection{Time-dependent}
+	Approaches designed for time-independent networks, such as \alt, have an important drawback. Optimization is always done on
+	assuming that edge costs are constant. However, in a time-dependent network, this is not the case. The weight of an edge is
+	dependent on the departure time, which is not known in advance.\\\\
+	\dijkstra and its variants \astar and \alt can easily be adapted to also work in time-dependent networks by taking the departure
+	time into consideration when computing the weight of an edge. However, their effectiveness is very limited.
+	Nonetheless, they where used for a long time for time-dependent networks too. With increasing research on route
+	planning in time-dependent networks, more effective algorithms, such as \transferPatterns \libref{transferPatterns}
+	and \csa \libref{csa}, were developed. Many of them do not use graphs and prefer data-structures that are designed
+	for time-dependent data, such as \textit{timetables} (see \sectionref{timetable_sec}).
 
 %Connection scan
 \subsubsection{Connection scan}\label{csa}
-	Blabla
+	Connection scan (\csa) \libref{csa} is an algorithm for route planning specially designed for time-dependent networks,
+	such as public transit networks. It processes the network represented as timetable, as defined by \defref{timetable}.\\\\
+	The algorithm is very simple. All connections of the timetable are sorted by their departure time.
+	Give a query connections are explored increasing in their departure time. The algorithm is fast primarily due to the fact that
+	connections can be maintained in a simple array. In contrast to \dijkstra, it does not need to maintain a priority queue or
+	other more complex data-structures. Arrays are heavily optimized and benefit from a lot of effects, like cache locality \libref{cacheLocality}.
+	% CSA implementation
+	\IncMargin{1em}
+	\begin{algorithm}
+		\SetKwInOut{Input}{input}
+  		\SetKwInOut{Output}{output}
+  		\SetKw{Break}{break}
+  		\SetKwData{undef}{undefined}
+		\BlankLine
+		\Input{timetable $(S, T, C, F)$, source $s \in S$, target $t \in S$, departure time $\tau$}
+		\Output{shortest path from $s$ to $t$}
+		\BlankLine
+		\tcp{Initialization}
+		\lFor{$u \in S$}{
+			$S[u] \leftarrow \infty$
+		}
+		\lFor{$o \in T$}{
+			$T[o] \leftarrow \undef$
+		}
+		\lFor{$u \in S$}{
+			$J[u] \leftarrow (\undef, \undef, \undef)$
+		}
+		\BlankLine
+		\For{$f = (u_{\dep}, d, u_{\arr}) \in F : u_{\dep} = s$}{
+			$S[u_{\arr}] \leftarrow \tau + d$\;
+			$J[u_{\arr}] \leftarrow (\undef, \undef, f)$\;
+		}
+		\BlankLine
+		\tcp{Explore connections increasing in departure time}
+		$c_0 \leftarrow \argmin_{(u_{\dep}, u_{\arr}, \tau_{\dep}, \tau_{\arr}, o) \in C : \tau_{\dep} \ge \tau} \tau_{\dep}$\;
+		\For{$c = (u_{\dep}, u_{\arr}, \tau_{\dep}, \tau_{\arr}, o) \in C$ increasing by $\tau_{\dep}$, starting from $c_0$}{
+			\If{$\tau_{\dep} \ge S[t]$}{
+				\Break\;
+			}
+			\BlankLine
+			\If{$T[o] \neq \undef \lor \tau_{\dep} \ge S[u_{\dep}]$}{
+				$T[o] \leftarrow c$\;
+				\If{$\tau_{\arr} < S[u_{\arr}]$}{
+					\For{$f = (v_{\dep}, d, v_{\arr}) \in F : v_{\dep} = u_{\arr}$}{
+						\If{$\tau_{\arr} + d < S[v_{\arr}]$}{
+							$S[v_{\arr}] \leftarrow \tau_{\arr} + d$\;
+							$J[v_{\arr}] \leftarrow (T[o], c, f)$\;
+						}
+					}
+				}
+			}
+		}
+		\BlankLine
+		\tcp{Extract path by backtracking}
+		$p \leftarrow$ empty path\;
+		$u \leftarrow t$\;
+		\While{$c_{\enter} \neq \undef : (c_{\enter}, c_{\exit}, f) = J[u]$}{
+			prepend $f$ to $p$\;
+			prepend the part of the trip between $c_{\enter}$ and $c_{\exit}$ to $p$\;
+			$u \leftarrow v_{\dep} : (v_{\dep}, v_{\arr}, \tau'_{\dep}, \tau'_{\arr}, o) = c_{\enter}$\;
+		}
+		prepend $f : (\undef, \undef, f) = J[s]$ to $p$\;
+		\Return $p$\;
+		\BlankLine
+		\caption{Connection scan algorithm for computing shortest paths in time-dependent networks, represented by timetables.}\label{csa_algo}
+	\end{algorithm}\DecMargin{1em}\quad\\\\
+	\algoref{csa_algo} shows the full connection scan algorithm. \todo{Explain the algorithm, make an example...}
 
 %Multi-modal
 \subsection{Multi-modal}
