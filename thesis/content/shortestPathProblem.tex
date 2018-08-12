@@ -363,7 +363,9 @@
 			}
 			\BlankLine
 			\If{$T[o] \neq \undef \lor \tau_{\dep} \ge S[u_{\dep}]$}{
-				$T[o] \leftarrow c$\;
+				\If{$T[o] == \undef$}{
+					$T[o] \leftarrow c$\;
+				}
 				\If{$\tau_{\arr} < S[u_{\arr}]$}{
 					\For{$f = (v_{\dep}, d, v_{\arr}) \in F : v_{\dep} = u_{\arr}$}{
 						\If{$\tau_{\arr} + d < S[v_{\arr}]$}{
@@ -388,8 +390,101 @@
 		\BlankLine
 		\caption{Connection scan algorithm for computing shortest paths in time-dependent networks, represented by timetables.}\label{csa_algo}
 	\end{algorithm}\DecMargin{1em}\quad\\\\
-	\algoref{csa_algo} shows the full connection scan algorithm. \todo{Explain the algorithm, make an example...}
-
+	\algoref{csa_algo} shows the full connection scan algorithm. The array $S$ stores for each stop the currently best arrival time.
+	$T$ associates for each trip the first connection it is taken with. $J$ is used for path extraction and memorizes for each stop a
+	segment of a trip, consisting of enter and exit connections $c_{\enter}$ and $c_{\exit}$ respectively, and a footpath $f$:
+	\begin{align*}
+		(c_{\enter}, c_{\exit}, f)
+	\end{align*}
+	It represents a path which takes the segment of the trip starting at $c_{\enter}$, ending at $c_{\exit}$ and then taking the footpath $f$ from
+	the arrival stop of $c_{\exit}$. Such an entry is associated to the arrival stop of the footpath $f$, always representing the parent path
+	that results in the current best arrival time for the corresponding stop.\\\\
+	The algorithm starts by initializing the arrays with default values and relaxing all initial footpaths. Connections are then explored
+	increasing in their departure time, starting from the first connection $c_0$ that starts after the departure time $\tau$. \textbf{Line 7}
+	is typically implemented as \textit{binary search} \libref{binarySearch} on a sorted array of connections $C$.
+	
+	\textbf{Line 9} is the stopping criteria, which lets the algorithm terminate once a connection departs after the current best arrival
+	time at the target $t$. Since connections are explored increasing in time, it is impossible that a connection can improve on the
+	arrival time anymore.
+	
+	\textbf{Line 11} will only explore a connection if a previous connection of the same trip was already used, indicating
+	traveling without a transfer; or if it was already possible to arrive at the stop earlier with a previous connection, indicating
+	a transfer at this stop.
+	
+	A connection is then only relaxed if it improves the arrival time at its arrival stop, represented by \textbf{line 14}.
+	If so, all outgoing footpaths are explored. A footpath represents exiting the vehicle, walking to the arrival stop of the footpath
+	ready for entering another vehicle. Note that self-loop footpaths must be contained in timetables (compare to \defref{timetable}),
+	making it possible to transfer at one stop.
+	
+	\textbf{Line 16} only considers footpaths that improve the arrival time at the corresponding stop. \textbf{Line 18} stores the path
+	represented by taking this connection and the footpath.\\\\
+	For an example, we refer to the schedule of \figref{simpleTransitGraphExample} again. The corresponding timetable is
+	explained in \sectionref{timetable_sec}, we use the same notion again.
+	It consists of five connections, denoted by $c_1, c_2, c_3, c_4$ and $c_5$,
+	sorted by departure time. We assume only the three self-loop footpaths on the stops $f$, $o$ and $k$.
+	
+	Assume a query from \freiburg, represented by stop $f$ to \karlsruhe, represented by $k$, with a departure time of
+	$\tau = \timef{3}{50}{pm}$. The initial configuration after \textbf{line 3} is
+	\begin{align*}
+		S[f]		&= S[o] = S[k] = \infty,\\
+		T[t_{104}]	&= T[t_{17024}] = T[t_{17322}] = T[t_{79}] = \vundef,\\
+		J[f]		&= J[o] = J[k] = (\vundef, \vundef, \vundef).
+	\end{align*}
+	Then the footpath $(f, 300, f)$ departing at \freiburg is relaxed, resulting in
+	\begin{align*}
+		S[f]	&= \timef{3}{55}{pm},\\
+		J[f]	&= (\vundef, \vundef, (f, 300, f)).
+	\end{align*}
+	Connections are now explored increasing in departure time, starting with
+	\begin{align*}
+		c_1	&= (f, o, \timef{3}{56}{pm}, \timef{4}{28}{pm}, t_{104}).
+	\end{align*}
+	The connection is considered since we already arrived at \freiburg before \timef{3}{56}{pm}. The trip is set and the
+	footpath at \offenburg is relaxed, yielding
+	\begin{align*}
+		T[t_{104}]	&= c_1,\\
+		S[o]		&= \timef{4}{33}{pm},\\
+		J[o]		&= (c_1, c_1, (o, 300, o)).
+	\end{align*}
+	The next connection is
+	\begin{align*}
+		c_2	&= (f, o, \timef{4}{03}{pm}, \timef{4}{50}{pm}, t_{17024}).
+	\end{align*}
+	However, it induces no changes, as the previous connection already arrived at \offenburg earlier.
+	The algorithm continues by exploring
+	\begin{align*}
+		c_3	&= (o, k, \timef{4}{29}{pm}, \timef{4}{58}{pm}, t_{104}).
+	\end{align*}
+	The connection is considered because the trip $t_{104}$ was used before already, indicating that the trip can be taken without transferring.
+	Else it would not be applicable, since the current best arrival time at \offenburg, including the transfer duration of $5$ minutes,
+	is \timef{4}{33}{pm}, which is after the departure time of $c_3$. The changes are
+	\begin{align*}
+		S[k]		&= \timef{5}{03}{pm},\\
+		J[k]		&= (c_1, c_3, (k, 300, k)).
+	\end{align*}
+	In the next iteration
+	\begin{align*}
+		c_4	&= (o, k, \timef{4}{35}{pm}, \timef{5}{19}{pm}, t_{17322})
+	\end{align*}
+	is considered, again inducing no changes. The algorithm then terminates exploration since the last connection
+	\begin{align*}
+		c_5	&= (k, f, \timef{7}{10}{pm}, \timef{8}{10}{pm}, t_{79})
+	\end{align*}
+	departs after the current best arrival time at \karlsruhe, which is $S[k] = \timef{5}{03}{pm}$.
+	
+	Path construction is straightforward, it is
+	\begin{align*}
+		J[k]	&= (c_1, c_3, (k, 300, k)),\\
+		J[f]	&= (\vundef, \vundef, (f, 300, f)),
+	\end{align*}
+	which yields the path which takes
+	\begin{itemize}
+		\item[] the footpath from \freiburg to \freiburg,
+		\item[] $t_{104}$ starting with $c_1$ to $c_3$, which is using the \ticef from \freiburg to \karlsruhe,
+		\item[] and a final footpath from \karlsruhe to \karlsruhe.
+	\end{itemize}
+	The earliest arrival time at \karlsruhe is $S[k] = \timef{5}{03}{pm}$.
+	
 %Multi-modal
 \subsection{Multi-modal}
 	Blabla
