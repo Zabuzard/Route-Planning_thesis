@@ -21,7 +21,7 @@
 	% Graph example
 	\begin{figure}[!ht]
 		\begin{center}
-			 \begin{tikzpicture}[y = -1cm]
+			\begin{tikzpicture}[y = -1cm]
 			 	% Nodes
 			 	\node[circle, draw] (v1) at (0, 0) {$v_1$};
 			 	\node[circle, draw] (v2) at (2, 0) {$v_2$};
@@ -68,7 +68,7 @@
 % Tree
 \subsection{Tree}
 	\begin{mydef}\label{tree}
-		A \textnormal{tree} is a graph $T = (V, E)$ with the following properties:
+		A \textnormal{tree} is an graph $T = (V, E)$ with the following properties:
 		\begin{itemize}
 			\item[1.] There is exactly one node $r \in V$ with no ingoing edges, called the \textnormal{root}, i.e.
 				\begin{align*}
@@ -101,7 +101,114 @@
 	\end{mydef}\quad\\
 	Trees are hierarchical data structures. Every node, except the root, has one parent. A node itself can have multiple children.
 	Note that it is not possible to form a loop in a tree, i.e. a path that visits a node more than once. A node without
-	children is called a \textit{leaf}.\todo{Maybe add some illustrations here...}
+	children is called a \textit{leaf}.\\
+	% Tree example
+	\begin{figure}[!ht]
+		\begin{center}
+			\begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	\node[circle, draw] (v1) at (3, 0) {$v_1$};
+			 	\node[circle, draw] (v2) at (1, 1.5) {$v_2$};
+			 	\node[circle, draw] (v3) at (3, 1.5) {$v_3$};
+			 	\node[circle, draw] (v4) at (4, 1.5) {$v_4$};
+			 	\node[circle, draw] (v5) at (0, 3) {$v_5$};
+			 	\node[circle, draw] (v6) at (2, 3) {$v_6$};
+			 	\node[circle, draw] (v7) at (4, 3) {$v_7$};
+			 	
+			 	% Edges
+			 	\draw[thick, ->] (v1) to (v2);
+			 	\draw[thick, ->] (v1) to (v3);
+			 	\draw[thick, ->] (v1) to (v4);
+			 	\draw[thick, ->] (v2) to (v5);
+			 	\draw[thick, ->] (v2) to (v6);
+			 	\draw[thick, ->] (v4) to (v7);
+			\end{tikzpicture}\qquad\qquad\qquad
+			\begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	\node[circle, draw] (v2) at (1, 0) {$v_2$};
+			 	\node[circle, draw] (v5) at (0, 1.5) {$v_5$};
+			 	\node[circle, draw] (v6) at (2, 1.5) {$v_6$};
+			 	
+			 	% Edges
+			 	\draw[thick, ->] (v2) to (v5);
+			 	\draw[thick, ->] (v2) to (v6);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Example of an unlabeled tree (left) and the subtree of $v_2$ (right).}
+		\label{treeExample}
+	\end{figure}\quad\\
+	\figref{treeExample} shows a tree with $7$ nodes. The node $v_1$ is the root; $v_5, v_6, v_3$
+	and $v_7$ are the leaves. The tree has a height of $2$, the depth of $v_4$ is $1$. The subtree rooted at $v_2$
+	only consists of the nodes $v_2, v_5$ and $v_6$.
+
+% Automaton
+\subsection{Automaton}\label{automaton_sec}
+	Automata are labeled graphs. They are used to represent states and the correlation between them.
+	\begin{mydef}\label{automaton}
+		A \textnormal{deterministic finite automaton} (\dfa) $A$ is a tuple $(Q, \sigma, \Delta, q_0, F)$ with
+		\begin{itemize}
+			\item[] a set of states $Q$,
+			\item [] a set of labels $\sigma$, called \textnormal{alphabet},
+			\item[] a transition relation $\Delta \subseteq Q \times \sigma \times Q$,
+			\item[] an initial state $q_0 \in Q$ and
+			\item[] a set of accepting states $F \subseteq Q$.
+		\end{itemize}
+	\end{mydef}
+	\begin{mydef}
+		A \textnormal{word} $w \in \Sigma^{\star}$ is a finite sequence of letters
+		\begin{align*}
+			w	&= a_0a_1a_2 \ldots a_{k - 1}
+		\end{align*}
+		with $a_i \in \Sigma$ and some $k \in \mathbb{N}$. The empty word is denoted by $\varepsilon$.
+		
+		A word is called \textnormal{accepted} iff
+		\begin{itemize}
+			\item[1.] \begin{align*}
+					\forall i: (q_i, a_i, q_{i + 1}) \in \Delta,
+				\end{align*}
+				for some $q_i \in Q$,
+			\item[2.] $q_0$ is the initial state of the automaton and
+			\item[3.] the last state is accepting, i.e. $q_k \in F$.
+		\end{itemize}
+		We say, the automaton $A$ accepts the word $w$.
+	\end{mydef}
+	\begin{mydef}
+		The language $\mathcal{L}(A)$ of an automaton $A$ is defined as the set of accepted words:
+		\begin{align*}
+			\mathcal{L}(A)	&= \{w \in \Sigma^{\star} | A \text{ accepts } w\}
+		\end{align*}
+	\end{mydef}\quad\\
+	% Automaton example
+	\begin{figure}[!ht]
+		\begin{center}
+			\begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	\node[initial, state] (q0) at (0, 0) {$q_0$};
+			 	\node[state] (q1) at (2, 0) {$q_1$};
+			 	\node[accepting, state] (q2) at (4, 0) {$q_2$};
+			 	
+			 	% Edges
+			 	\draw[thick, ->] (-1, 0) to (q0);
+			 	\draw[thick, ->] (q0) to [bend left] node[above] {$a$} (q1);
+			 	\draw[thick, ->] (q1) to [bend left] node[below] {$b$} (q0);
+			 	\draw[thick, ->] (q1) to node[above] {$c$} (q2);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Example of a deterministic finite automaton. $q_0$ is the initial state and $q_2$ is accepting.}
+		\label{automatonExample}
+	\end{figure}\quad\\
+	For an example, refer to \figref{automatonExample} which accepts the language
+	\begin{align*}
+		(ab)^{\star}ac
+	\end{align*}
+	denoting words with a finite sequence of $ab$, then one $a$ and one $c$. Such as:
+	\begin{align*}
+		&ac\\
+		&abac\\
+		&ababac\\
+		&abababac\\
+		&\vdots
+	\end{align*}
 
 % Metric
 \subsection{Metric}

@@ -5,7 +5,7 @@
 	in transportation types.
 	
 	In this chapter, we will first give an informal description of the \earliestArrivalProblem. Followed by
-	the \shortestPathProblem, which is equivalent to the \earliestArrivalProblem for our graph-based network
+	the \shortestPathProblem, which is equivalent to the \earliestArrivalProblem for our graph based network
 	representations.
 	
 	Then, we introduce algorithms for solving the problem. First, for time-independent networks, then for time-dependent.
@@ -487,7 +487,68 @@
 	
 %Multi-modal
 \subsection{Multi-modal}
-	Blabla
+	So far, all presented route planning algorithms are limited to networks only consisting routes of one transportation mode,
+	for example a train network. We only distinguished between time-independent and time-dependent networks. However, in practice
+	we want to plan routes involving multiple transportation modes. For example using a bicycle to drive to the next train main station,
+	using the road network, and then entering a train.\\\\
+	To represent transportation mode possibilities in the networks, we slightly modify our models. All edges in graph based models
+	get transportation mode labels, formalized by \defref{multiModalGraph}.
+	\begin{mydef}\label{multiModalGraph}
+		Given a set of transportation mode labels $M$, a \textnormal{\multiModal graph} $G = (V, E)$ is
+		a graph with a label function
+		\begin{align*}
+			\mode: E \to \{S \subseteq M\}
+		\end{align*}
+		that assigns to each vertex a set of available transportation modes.
+	\end{mydef}\quad\\
+	In our implementation in \cobweb we use the modes
+	\begin{align*}
+		M	&= \{\car, \bike, \foot, \tram\}.
+	\end{align*}
+	The \textit{timetable} model is adjusted by assigning all connections the mode $\tram$ and
+	all footpaths \foot.\\\\
+	Another difficulty of \multiModal routing is that, in practice, it is usually not be applicable to change transportation modes arbitrarily.
+	User have different requirements and preferences regarding the change of modes. For example, it might not be possible to
+	use a car right after traveling with a tram and then leaving it at a train station before continuing the journey using a train.
+	If the model does not account for this, the algorithm should not be allowed to pick such a route.\\
+	% Transportation mode automata example
+	\begin{figure}[!ht]
+		\begin{center}
+			\begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	\node[initial, accepting, state] (q0) at (0, 0) {\phantom{v}};
+			 	\node[accepting, state] (q1) at (2, 0) {\phantom{v}};
+			 	\node[accepting, state] (q2) at (4, 0) {\phantom{v}};
+			 	
+			 	% Edges
+			 	\draw[thick, ->] (-1, 0) to (q0);
+			 	\draw[thick, ->] (q0) to [loop above] node[above] {\foot} (q0);
+			 	\draw[thick, ->] (q0) to node[above] {$\foot$} (q1);
+			 	\draw[thick, ->] (q0) to [bend right] node[below] {$\foot$} (q2);
+			 	\draw[thick, ->] (q1) to [loop above] node[above] {\tram} (q1);
+			 	\draw[thick, ->] (q1) to node[above] {$\tram$} (q2);
+			 	\draw[thick, ->] (q2) to [loop above] node[above] {\car} (q2);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Automaton representing transportation mode constraints.}
+		\label{transportationModeAutomataExample}
+	\end{figure}\quad\\
+	Applicable transportation mode sequences are typically represented as languages of
+	automata (see \sectionref{automaton_sec}) \libref{labelShortestPath}. \figref{transportationModeAutomataExample} shows an example.
+	The automaton accepts words consisting of routes that
+	\begin{itemize}
+		\item[1.] are empty,
+		\item[2.] only use \foot,
+		\item[3.] use the \tram after walking to a stop,
+		\item[4.] use the \car after walking to a stop and using the \tram, and
+		\item[5.] use the \car directly after walking.
+	\end{itemize}
+	A route that takes the \tram after using a \car is not accepted by the automaton and thus, not applicable.\\\\
+	The search of shortest paths, restricted to such transportation mode automata, is called
+	the \labelConstrainedShortestPathProblem \libref{labelShortestPath} (\lcspp). Common algorithms, like \dijkstra, \astar and \alt, were
+	adapted and analyzed with respect to the \lcspp \libref{labelShortestPath, alt, lcsppShortcuts}.\\\\
+	We will now study a simple extension of \dijkstra and its variants that adapts the algorithm for \multiModal route planning.
+	Afterwards, we present a generic approach to combine any \uniModal algorithms for limited \multiModal route planning.
 
 %Modified Dijkstra
 \subsubsection{Modified Dijkstra}\label{modifiedDijkstra}

@@ -6,12 +6,12 @@
 	of relevant topics and development of route planner software \libref{navHistoryEarly, navHistoryNewer, vehicleNavigation}.
 	
 	However, a common problem of most such services is that they are limited to one transportation mode only.
-	That is a route can only be taken by a car or train but not by both at the same time. This is known as uni-modal routing.
-	In contrast to that multi-modal routing allows the alternation of transportation modes. For example a route that
+	That is a route can only be taken by a car or train but not by both at the same time. This is known as \uniModal routing.
+	In contrast to that \multiModal routing allows the alternation of transportation modes. For example a route that
 	first uses a car to drive to a train station, then a train which travels to a another train station and finally
 	using a bicycle from there to reach the destination.
 	
-	The difficulty with multi-modal routing lies in most algorithms being fitted to networks with specific properties.
+	The difficulty with \multiModal routing lies in most algorithms being fitted to networks with specific properties.
 	Unfortunately, road networks differ a lot from public transit networks. As such, a route planning algorithm
 	fitted to a certain type of network will likely yield undesired results, have an impractical running time or not
 	even be able to be used at all on different networks. We will explore this later in \sectionref{evaluation}.\\\\
@@ -27,7 +27,7 @@
 	in \sectionref{accessNodes}.\\\\
 	Our final technique uses a modified version of \alt \libref{alt} as road algorithm and \csa \libref{csa} for the transportation network.
 	The algorithms are presented in \sectionref{alt} and \sectionref{csa} respectively.
-	We also develop a multi-modal variant of \dijkstra \libref{dijkstra} which is able to compute the shortest route in a combined
+	We also develop a \multiModal variant of \dijkstra \libref{dijkstra} which is able to compute the shortest route in a combined
 	network with the possibility of changing transportation modes arbitrarily. It is presented in \sectionref{modifiedDijkstra}
 	and acts as baseline to our final technique based on access nodes.
 	
@@ -37,7 +37,7 @@
 	\sectionref{models} starts by defining types of networks. We represent road networks by graphs only.
 	For transit networks we provide a graph representation too. Both graphs can then be combined into a linked graph.
 	The advantage of graph based models is that they are well studied and therefore we are able to use our
-	multi-modal variant of \dijkstra to compute routes on them.
+	\multiModal variant of \dijkstra to compute routes on them.
 	However, we also propose a non-graph based representation for transit networks, a timetable. The timetable is used by \csa,
 	an efficient algorithm for route planning on public transit networks. With that, our road and transit networks get incompatible
 	and can not easily be combined. Therefore, we use the previously mentioned generic approach based on access nodes
@@ -47,10 +47,10 @@
 		 \begin{center}
 			\includegraphics[scale=0.5]{res/cobweb_frontend}
 		\end{center}
-		\caption{Screenshot of {\cobweb}s \libref{cobweb} frontend, an open-source multi-modal route planner. It shows a multi-modal
+		\caption{Screenshot of {\cobweb}s \libref{cobweb} frontend, an open-source \multiModal route planner. It shows a \multiModal
 		route starting from a given source, using the modes \textit{foot-tram-foot-tram-foot} in that sequence to reach the destination.}
 		\label{cobweb_frontend}
 	\end{figure}\quad\\
-	Further, we implemented the presented algorithms in the \cobweb \libref{cobweb} project, which is an open-source multi-modal
+	Further, we implemented the presented algorithms in the \cobweb \libref{cobweb} project, which is an open-source \multiModal
 	route planner (see \figref{cobweb_frontend} for an image of its frontend).
 	In \sectionref{evaluation} we show our experimental results and compare the techniques with each other.
