@@ -287,7 +287,7 @@
 	which stands for \textit{landmarks and triangle inequality}.
 	
 	The heuristic provides a more generic approach by approximating the distance
-	between nodes $u$ and $v$ by using pre-computed distances with pre-determined nodes $l$, called \textit{landmarks}.
+	between nodes $u$ and $v$ by using precomputed distances with pre-determined nodes $l$, called \textit{landmarks}.
 	\begin{mydef}
 		Given a set of landmarks $L \subseteq V$, the heuristic $\landmarks$ is defined by
 		\begin{align*}
@@ -295,7 +295,7 @@
 		\end{align*}
 	\end{mydef}\quad\\
 	Obviously, the heuristic improves if the set of landmarks is increased. However, actual shortest path distances from all landmarks
-	to all other nodes in the graph must be pre-computed. With an increasing amount of landmarks the pre-computation might not
+	to all other nodes in the graph must be precomputed. With an increasing amount of landmarks the precomputation might not
 	be feasible anymore because it takes too long or consumes too much space. Note that if $L = V$, the heuristic becomes the
 	actual shortest path distance function, i.e. $\landmarks = \dist$.
 	
@@ -547,12 +547,87 @@
 	The search of shortest paths, restricted to such transportation mode automata, is called
 	the \labelConstrainedShortestPathProblem \libref{labelShortestPath} (\lcspp). Common algorithms, like \dijkstra, \astar and \alt, were
 	adapted and analyzed with respect to the \lcspp \libref{labelShortestPath, alt, lcsppShortcuts}.\\\\
-	We will now study a simple extension of \dijkstra and its variants that adapts the algorithm for \multiModal route planning.
+	However, we will study two algorithms that are restricted to fixed languages, not accepting arbitrary automata.
+	First, we show a simple extension of \dijkstra and its variants that adapts the algorithm for \multiModal route planning.
 	Afterwards, we present a generic approach to combine any \uniModal algorithms for limited \multiModal route planning.
 
 %Modified Dijkstra
 \subsubsection{Modified Dijkstra}\label{modifiedDijkstra}
-	Blabla
+	In order to adapt \dijkstra and its variants \astar and \alt for \multiModal graphs (see \defref{multiModalGraph}), the algorithm
+	needs to account for the labels at edges.\\\\
+	Given a \multiModal graph, a source $s$ and a target $t$, and a set of available transportation modes
+	\begin{align*}
+		S	\subseteq \{\car, \bike, \foot, \tram\} = M
+	\end{align*}
+	The modified \dijkstra computes a shortest path $p$ from $s$ to $t$ which does only use
+	edges labeled with available modes, i.e.
+	\begin{align*}
+		\forall e \in p: \mode(e) \subseteq S.
+	\end{align*}
+	Therefore, we adjust \textbf{line 11} of \algoref{dijkstra} to only consider outgoing edges such that
+	\begin{align*}
+		e = (u, w, v) \in E : \mode(e) \subseteq S.
+	\end{align*}
+	When multiple transportation modes are available, such as $\{\bike, \car\}$, the edge weight is not static anymore,
+	as a \car can travel the distance faster than a \bike. To break the ties, we always choose the fastest transportation mode,
+	referring to the order
+	\begin{align*}
+		\foot \sqsubset \bike \sqsubset \tram \sqsubset \car.
+	\end{align*}
+	The edge weight $w$ in \textbf{line 11} is then computed as if the fastest, on this edge available, transportation mode is used:
+	\begin{align*}
+		\max\nolimits_{\sqsubset} \mode(e)
+	\end{align*}\quad\\
+	% Modified Dijkstra transportation mode automaton
+	\begin{figure}[!ht]
+		\begin{center}
+			\begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	\node[initial, accepting, state] (q0) at (0, 0) {\phantom{v}};
+			 	\node[state] (q1) at (4, 0) {\phantom{v}};
+			 	
+			 	% Edges
+			 	\draw[thick, ->] (-1, 0) to (q0);
+			 	\draw[thick, ->] (q0) to [loop above] node[above] {$m \in S$} (q0);
+			 	\draw[thick, ->] (q0) to node[above] {$m' \in M \setminus S$} (q1);
+			 	\draw[thick, ->] (q1) to [loop above] node[above] {$m' \in M \setminus S$} (q1);
+			\end{tikzpicture}
+		\end{center}
+		\caption{The transportation mode constraints of \dijkstra, adapted to \multiModal routing.}
+		\label{modifiedDijkstraModesAutomaton}
+	\end{figure}
+	The modified \dijkstra accepts the transportation mode model shown by \figref{modifiedDijkstraModesAutomaton}.\\\\
+	While this modification works perfectly fine for \dijkstra, it does impair the effectiveness of \astar and \alt. The problem is that
+	the heuristic of \astar can not know the transportation mode restrictions $S$ beforehand. Because of that, a heuristic must
+	always assume that the fastest possible transportation mode is chosen. Else, it might be possible that the actual shortest
+	path uses a faster mode than the heuristic assumed, in which case the
+	heuristic would overestimate the travel time and violate \defref{heuristic}.
+	
+	For $\asTheCrowFlies$ this means that it must assume that the straight-line distance is traveled using a \car, or more general:
+	\begin{align*}
+		\max\nolimits_{\sqsubset} M
+	\end{align*}
+	For \alt all precomputation must be done under the assumption that, at query time, there are no transportation
+	mode restrictions, i.e.
+	\begin{align*}
+		S	&= M.
+	\end{align*}
+	The actual impact on the effectiveness heavily depends on the type of network. It has no effect at all, if all edges on
+	the shortest path for $S = M$ can also be taken with the actual restricted version of $S$. It gets worse if edges are
+	not available anymore, for example a highway that can not be taken for $S = \{\foot\}$, although the heuristic assumed
+	it can be taken using a \car.
+	
+	In a typical road network most edges support all road-type transportation modes, i.e. $\{\foot, \bike, \car\}$. The most
+	common exceptions are highways, pedestrian zones and bikeways. However, the latter two do typically not cover big distances
+	and a regular road connecting the same locations is often available too. Because of that \astar and \alt typically perform worse
+	only on long-distance routes, which make heavy usage of highways, if the transportation modes are restricted to modes
+	not available on highways. A similar observation can be done for combined networks, like a link graph (see \sectionref{linkGraph_sec}).\\\\
+	For \alt this problem can be tackled by precomputing the distances to the landmarks for every possible transportation mode
+	restriction $S$ individually. However, this results in
+	\begin{align*}
+		|\mathcal{P}(M)|	&= 2^{|M|}
+	\end{align*}
+	combinations, which is usually not feasible.
 
 %Access nodes
 \subsubsection{Access nodes}\label{accessNodes}
