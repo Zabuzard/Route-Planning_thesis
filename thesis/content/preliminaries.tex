@@ -59,6 +59,18 @@
 		We write $e \in p$ if an edge $e$ is contained at least once in the path $p$.
 		The \textnormal{length} of a path is the amount of edges it contains, i.e. the length of the sequence.
 		The \textnormal{weight} or \textnormal{cost} is the sum of its edges weights.
+		
+		Let $k$ be the length of a path $p$, then we define:
+		\begin{align*}
+			\src(p)	&= \src(e_1)\\
+			\dest(p)	&= \dest(e_k)
+		\end{align*}\quad\\
+		Given two paths $q_1 = e_1\ldots e_k$ and $q_2 = e'_1\ldots e'_l$ where $\dest(e_k) = \src(e'_1)$,
+		the concatenation of both paths is a path
+		\begin{align*}
+			p	&= e_1\ldots e_k e'_1\ldots e'_l
+		\end{align*}
+		with length $k + l$, also denoted by $p = q_1q_2$.
 	\end{mydef}\quad\\
 	An example for a path in the graph $G$ would be
 	\begin{align*}

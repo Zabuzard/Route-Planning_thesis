@@ -42,6 +42,7 @@
 \usetikzlibrary{shapes}% Provides shapes for nodes
 \usetikzlibrary{calc}% Enables basic math for tikz
 \usetikzlibrary{automata,arrows}% Enable automata related commands for tikz
+\usetikzlibrary{positioning}% Special commands for positioning paths
 \tikzstyle{redArea}=[draw=red!30,line width=1pt,preaction={clip, postaction={pattern=north west lines, pattern color=red!30}}]
 \tikzstyle{blueArea}=[draw=blue!30,line width=1pt,preaction={clip, postaction={pattern=dots, pattern color=blue!30}}]
 \tikzstyle{greenArea}=[draw=darkgreen!30,line width=1pt,preaction={clip, postaction={pattern=horizontal lines, pattern color=darkgreen!30}}]
@@ -195,6 +196,8 @@
 \newcommand{\labelConstrainedShortestPathProblem}{\macrosc{Label-Constrained Shortest Path Problem}}
 \newcommand{\dfa}{\macrosc{DFA}}
 \newcommand{\lcspp}{\macrosc{LCSPP}}
+\newcommand{\anr}{\macrosc{ANR}}
+\newcommand{\accessNodeRouting}{\macrosc{Access-Node Routing}}
 
 \newcommand{\true}{\macromathsf{true}}
 \newcommand{\false}{\macromathsf{false}}

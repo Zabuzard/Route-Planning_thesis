@@ -631,7 +631,123 @@
 
 %Access nodes
 \subsubsection{Access nodes}\label{accessNodes}
-	Blabla
+	Often, combining multiple networks of different types into one representation, such as a graph, is not appropriate.
+	We have seen that graph representations for public transit networks dramatically scale in size, due to
+	representing time information. A timetable is more suited for such a network type and algorithms optimized to a
+	specific network type, such as \csa, perform much better than a generic approach like \dijkstra.\\\\
+	In this section, we elaborate on a generic technique that allows to combine any networks with corresponding algorithms
+	for a restricted variant of the \shortestPathProblem. We describe the algorithm by combining a road with a public transit
+	network, using the \multiModal variant of \alt and \csa respectively. The general technique is known as \accessNodeRouting (\anr)
+	\libref{accessNodeRouting, routePlanningOverview}.\\\\
+	Given a source and a destination node in the road network, we first compute \textit{access nodes}.
+	Those are nodes where we will switch from the road into the public transit network. Therefore, the access nodes
+	are computed as the k-nearest neighbors (see \defref{kNearestNeighborsDef}) for both, the source and the destination node,
+	in the public transit network. The amount $k$ should be kept small in order to keep query time low, we use $3$ in our implementation.
+	
+	In the best case, the access nodes are \textit{important}, i.e. they maximize the amount of shortest paths, from the
+	source to the destination, of which they are part of. Because of that, typically they are precomputed, using a ranking among the
+	nodes. For example, a train main station is preferred over a small tram stop. The computation can be optimized further by using
+	heuristics and techniques like \alt were some paths are already precomputed. See \libref{accessNodeRouting} for details on
+	how to obtain \textit{good} access nodes.
+	
+	Given the access nodes for source and destination, a path is computed piecewise, by computing shortest paths from
+	\begin{itemize}
+		\item[1.] the source to all its access nodes,
+		\item[2.] the access nodes of the source to all access nodes of the destination, and
+		\item[3.] the access nodes of the destination to the destination.
+	\end{itemize}
+	We denote the corresponding sets of paths by $P_s$, $P_{st}$ and $P_t$ respectively. The resulting path is chosen
+	as the concatenation of paths from those sets, such that the cost is minimized. That is, we receive a path
+	\begin{align*}
+		p	&= p_1p_2p_3
+	\end{align*}
+	with $p_1 \in P_s, p_2 \in P_{st}$ and $p_3 \in P_t$ such that
+	\begin{align*}
+		\dest(p_1)	&= \src(p_2),\\
+		\dest(p_2)	&= \src(p_3).
+	\end{align*}
+	Of all paths satisfying this constraints, $p$ is chosen as the path with the smallest cost. Additionally, we consider the shortest path $q$
+	between the source and destination that only uses the road network. The final path is again the one with the smaller cost.
+	\figref{accessNodesScheme} illustrates the scheme of this approach.
+	% Access Nodes Scheme
+	\begin{figure}[!ht]
+		 \begin{center}
+			\begin{tikzpicture}[y = -1cm]
+			 	% Source
+			 	\node[minimum size=6mm, circle, draw, fill=red!20] (s) at (0, 2) {};
+			 	
+			 	% Source access nodes
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (sa1) at (2, 0) {};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (sa2) at (2, 2) {};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=red!20] (sa3) at (2, 4) {};
+			 	
+			 	% Destination access nodes
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=blue!20] (ta1) at (6, 0) {};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=blue!20] (ta2) at (6, 2) {};
+			 	\node[minimum size=5.5mm, rectangle, draw, fill=blue!20] (ta3) at (6, 4) {};
+			 	
+			 	% Destination
+			 	\node[minimum size=6mm, circle, draw, fill=blue!20] (t) at (8, 2) {};
+			 	
+				% Edges
+			 	% Source to access nodes
+			 	\draw[thick, ->] (s) to (sa1);
+			 	\draw[thick, ->] (s) to (sa2);
+			 	\draw[thick, ->] (s) to (sa3);
+			 	
+			 	% Access to access nodes
+			 	\draw[thick, dashed, ->] (sa1) to (ta1);
+			 	\draw[thick, dashed, ->] (sa1) to (ta2);
+			 	\draw[thick, dashed, ->] (sa1) to (ta3);
+			 	
+			 	\draw[thick, dashed, ->] (sa2) to (ta1);
+			 	\draw[thick, dashed, ->] (sa2) to (ta2);
+			 	\draw[thick, dashed, ->] (sa2) to (ta3);
+			 	
+			 	\draw[thick, dashed, ->] (sa3) to (ta1);
+			 	\draw[thick, dashed, ->] (sa3) to (ta2);
+			 	\draw[thick, dashed, ->] (sa3) to (ta3);
+			 	
+			 	% Access nodes to destination
+			 	\draw[thick, ->] (ta1) to (t);
+			 	\draw[thick, ->] (ta2) to (t);
+			 	\draw[thick, ->] (ta3) to (t);
+			 	
+			 	% Source to destination
+			 	\draw [thick, ->] (s) |- ++(8, 3) -- (t);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Scheme of \accessNodeRouting. Circular nodes represent the source and destination node,
+		rectangular nodes are their corresponding access nodes. Solid edges indicate shortest paths in the first network,
+		dashed lines are in the second network.}
+		\label{accessNodesScheme}
+	\end{figure}\quad\\
+	The accepted transportation mode model is shown by \figref{accessNodesModesAutomaton}.
+	% Access Nodes transportation mode automaton
+	\begin{figure}[!ht]
+		\begin{center}
+			\begin{tikzpicture}[y = -1cm]
+			 	% Nodes
+			 	\node[initial, accepting, state] (q0) at (0, 0) {\phantom{v}};
+			 	\node[state] (q1) at (3.5, 0) {\phantom{v}};
+			 	\node[state] (q2) at (7, 0) {\phantom{v}};
+			 	\node[accepting, state] (q3) at (10.5, 0) {\phantom{v}};
+			 	
+			 	% Edges
+			 	\draw[thick, ->] (-1, 0) to (q0);
+			 	\draw[thick, ->] (q0) to node[above] {$w_1 \in \mathcal{L}(A)$} (q1);
+			 	\draw[thick, ->] (q1) to node[above] {$w_2 \in \mathcal{L}(B)$} (q2);
+			 	\draw[thick, ->] (q2) to node[above] {$w_3 \in \mathcal{L}(A)$} (q3);
+			 	\draw[thick, ->] (q0) to [bend right] node[below] {$w_4 \in \mathcal{L}(A)$} (q3);
+			\end{tikzpicture}
+		\end{center}
+		\caption{The transportation mode constraints of \accessNodeRouting with two networks. $A$ represents the transportation
+		mode model accepted by the algorithm on the first network, $B$ refers to the automaton of the algorithm on the second network.}
+		\label{accessNodesModesAutomaton}
+	\end{figure}\quad\\
+	Note that the resulting path is not necessarily a valid solution to the \shortestPathProblem anymore. A correct solution may not even contain any
+	of the used access nodes. However, if access nodes are chosen well, the resulting path is likely to be appropriate and a good approximation
+	to the actual solution.
 
 %Other algorithms
 \subsection{Other algorithms}
