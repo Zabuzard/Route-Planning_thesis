@@ -1,9 +1,190 @@
 % Evaluation
 \section{Evaluation}\label{evaluation}
-	Blabla
+	In this section we report on our experimental results for the presented algorithms on three data sets of increasing size.
+	Therefore, we first give insights on the data sets and how the network models are obtained. Afterwards we evaluate
+	{\coverTree}s, \dijkstra, \astar (with $\asTheCrowFlies$), \alt, \csa and \multiModal methods such as the adopted \dijkstra
+	and our simplified version of \anr on the given data sets.\\\\
+	When evaluating shortest path queries on randomly chosen source and target nodes, the resulting paths tend to be long-range.
+	However, in practice most queries are only local and algorithms like \dijkstra do not scale well with increasing range.
+	To overcome this measurement problem, we introduce the notion of a \textit{Dijkstra rank} \libref{dijkstraRank}.
+	\begin{mydef}\label{dijkstraRank}
+		Given a graph $G = (V, E)$, the \textnormal{Dijkstra rank} of a node $v \in V$ is the number of the iteration in which,
+		when running \dijkstra on the graph, it is polled from the priority queue (see \textbf{line 7} of \algoref{dijkstra}).
+		
+		That is the position $i$ for $v_i$ in the order of vertices when sorted ascending by their distance to the source, i.e.
+		\begin{align*}
+			v_1, v_2, \ldots, v_{|V|}
+		\end{align*}
+		with $\dist(v_i) \le \dist(v_{i + 1})$ for all $i$.
+	\end{mydef}\quad\\
+	Instead of choosing queries randomly, we only choose source nodes randomly and then select targets by their
+	\textit{Dijkstra rank} to the source. Queries can then be sorted by the \textit{Dijkstra rank} and, by that,
+	evaluated in terms of increasing range.
 
 %Input data
 \subsection{Input data}
+	We consider three data sets, consisting of road and public transit data. The road network is extracted from \osm \libref{osm}
+	formatted data and transit data is given in the \gtfs \libref{gtfs} format.\\\\
+	Our data sets represent the region around the german cities \freiburgR and \stuttgartR. Their road network is
+	of similar size, while our transit data for \freiburgR only includes tram data, whereas the data for \stuttgartR
+	also includes train and bus connections. The size of our transit network for \stuttgartR is about ten times the size of
+	the network for \freiburgR.
+	
+	Furthermore, we include a road and transit network for the country \switzerlandR. The transit data consists of train, tram and
+	bus connections. Both networks are about three times the size of the {\stuttgartR}s.
+
+%OSM
+\subsubsection{\osm}
+	\osm data \libref{osm} is represented in a \xml structure describing
+	\begin{itemize}
+		\item[1.] \textit{nodes}, with an unique identifier and a coordinate given as pair of latitude and longitude;
+		\item[2.] \textit{ways}, also with an unique identifier, consisting of multiple nodes referenced by their identifier;
+		\item[3.] \textit{relations}, consisting of nodes, ways and other relations, representing relationships between the referenced data;
+		\item[4.] \textit{tags} as key-value pairs, storing metadata about the other items.
+	\end{itemize}
+	\begin{lstlisting}[caption={\osm example data set.},label={osmExample},style={XMLStyle},mathescape={true},
+		float,floatplacement=ht]
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6">
+  <bounds minlon="7.253190" minlat="47.299090" maxlon="9.246965" maxlat="48.751520"/>
+  <node id="29764598" lat="47.8512831" lon="7.9230269"/>
+  <node id="669209525" lat="47.8513215" lon="7.9231227"/>
+  <node id="3993821274" lat="47.8513342" lon="7.923183"/>
+  <node id="832450227" lat="47.8157938" lon="8.8487527">
+    <tag k="highway" v="motorway_junction"/>
+    <tag k="name" v="Kreuz Hegau"/>
+  </node>
+  <node id="100036455" lat="47.5728421" lon="8.0365409">
+    <tag k="name" v="Niederhof"/>
+    <tag k="traffic_sign" v="city_limit"/>
+  </node>
+  <way id="29764598">
+    <nd ref="669209525"/>
+    <nd ref="3993821274"/>
+    <tag k="highway" v="motorway"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <relation id="56688">
+    <member type="node" ref="29764598" role=""/>
+    <member type="node" ref="669209525" role=""/>
+    <member type="way" ref="29764598" role=""/>
+    <tag k="name" v="Bus line 1"/>
+    <tag k="network" v="VVW"/>
+    <tag k="ref" v="1"/>
+    <tag k="route" v="bus"/>
+    <tag k="type" v="route"/>
+  </relation>
+</osm>
+	\end{lstlisting}\quad\\
+	A small \osm example data set is shown by \progref{osmExample}. Ways are used to represent roads consisting
+	of nodes. Tags are used to describe metadata like speed limits for a road or whether it is a one-way street or not.
+	However, the format also contains a lot of data not directly relevant for route planning, like shapes of buildings
+	and outlines of public parks. Therefore, we filter \osm data and only keep relevant information.
+	\begin{lstlisting}[caption={Tag filter for \osm ways.},label={osmFilter},style={FilterStyle},mathescape={true},
+		float,floatplacement=ht]
+--KEEP
+
+#highways
+highway=motorway
+highway=trunk
+highway=primary
+highway=secondary
+highway=tertiary
+highway=residential
+highway=living_street
+highway=unclassified
+highway=cycleway
+
+#highwaylinks
+highway=motorway_link
+highway=trunk_link
+highway=primary_link
+highway=secondary_link
+highway=tertiary_link
+highway=residential_link
+
+#non-standard
+way=primary
+way=seconday
+
+--DROP
+
+area=yes
+train=yes
+access=no
+type=multipolygon
+railway=platform
+railway=station
+highway=proposed
+highway=construction
+building=yes
+building=train_station
+	\end{lstlisting}\quad\\\\
+	As we are only interested in the road network itself, we start by reading the ways. We filter them based on the tags
+	described by \progref{osmFilter}. Ways having at least one of the key-value pairs described under \textit{$--$KEEP}
+	and none of the pairs under \textit{$--$DROP} are kept, as they represent roads of the network. All other ways are
+	rejected, as well as all relations.
+	After that, we read the nodes and only keep nodes that occurred at least once in any of the ways that passed the filter.
+	Our road network is then build using the remaining nodes as graph nodes, translating the ways into edges between the nodes.
+	
+	Ways with a positive \textit{oneway} tag are translated into edges only going into the given direction, else we generate
+	both edges for both directions. The cost of an edge is computed as the time it needs to travel the direct distance between
+	the source and destination coordinates (see \defref{asTheCrowFlies}) with a certain speed. The speed is determined either
+	by a given \textit{maxspeed} tag or the average speed for the road type defined by the \textit{highway} tag.
+	Therefore, we use the average speed references shown by \tableref{highwaySpeeds}.
+	\begin{table}[ht]
+	 	\begin{center}
+	 		\phantom{v}\quad\\
+	 		\begin{tabular}{|l|r|}
+	 			\hline
+	 			\multicolumn{1}{|c|}{tag value}	&\multicolumn{1}{c|}{$\o$ km/h}\\\hline
+
+				motorway		&$120$\\
+				trunk			&$110$\\
+				primary		&$100$\\
+				secondary		&$80$\\
+				tertiary		&$70$\\
+				motorway\_link	&$50$\\
+				trunk\_link		&$50$\\
+				primary\_link		&$50$\\
+				secondary\_link	&$50$\\
+				residential		&$50$\\
+				unclassified		&$40$\\
+				unsurfaced		&$30$\\
+				road			&$20$\\
+				cycleway		&$14$\\
+				living\_street		&$7$\\
+				service		&$7$\\\hline
+			\end{tabular}
+		\end{center}
+		\caption{Average speed in km/h for a \osm way with the corresponding value for the \textit{highway} tag.}
+		\label{highwaySpeeds}
+	\end{table}\quad\\\\
+	The size of the resulting road graphs (see \sectionref{roadGraphSec}) for all three data sets is reported in \tableref{osmSize}.
+	As seen, filtering the \osm data sets beforehand reduces the size of data that is to be processed by $95\%$ to $97\%$.
+	The road graphs have approximately two edges per node. This is due to most streets being two-way streets, thus generating
+	two edges per connection between two nodes. Obviously, road junctions are, compared to the amount of nodes, rare and thus,
+	multiple edges do only rarely share the same node. The in- and out-degree of nodes is extremely low, mostly either $1$ or $2$.
+	\begin{table}[ht]
+	 	\begin{center}
+	 		\phantom{v}\quad\\
+			\begin{tabular}{|l||r|r|r|r|}
+				\hline
+							&\multicolumn{2}{c|}{\osm data (MB)}	&\multicolumn{2}{c|}{Road graph}\\
+							&\multicolumn{1}{c|}{raw}	&\multicolumn{1}{c|}{filtered}	&\multicolumn{1}{c|}{nodes}
+								&\multicolumn{1}{c|}{edges}\\\hline
+				\freiburgR		&$2\,260$	&$86$		&$743\,003$		&$1\,494\,883$\\
+				\stuttgartR		&$2\,420$	&$118$	&$973\,142$		&$1\,950\,978$\\
+				\switzerlandR	&$5\,530$	&$279$	&$2\,627\,645$	&$5\,226\,060$\\\hline
+			\end{tabular}
+		\end{center}
+		\caption{Size of the \osm data sets, in megabyte (MB) before and after filtering, and the size of the resulting road graphs
+			in amount of nodes $|V|$ and edges $|E|$.}
+		\label{osmSize}
+	\end{table}
+
+%GTFS
+\subsubsection{\gtfs}
 	Blabla
 
 %Experiments

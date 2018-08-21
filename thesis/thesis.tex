@@ -133,6 +133,74 @@
 	language=Java,
 	frame=lines
 }
+\lstdefinelanguage{XML}{
+	keywords={new, true, false, catch, return, null, catch, switch, var, if, in, while,
+		do, else, case, break, public, private, package, import, final, protected, int,
+		void, class, xml, osm, bounds, node, tag, way, nd, relation, member},
+	keywordstyle=\color{pblue}\bfseries,
+	keywords=[2]{this},
+	keywordstyle=[2]\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{pgreen}\ttfamily,
+	stringstyle=\color{pred}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstset{
+	language=XML,
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
+\lstdefinestyle{XMLStyle}{
+	language=XML,
+	frame=lines
+}
+\lstdefinelanguage{Filter}{
+	keywords={highway, way, area, train, access, type, railway, highway, building},
+	keywordstyle=\color{pblue}\bfseries,
+	keywords=[2]{KEEP, DROP},
+	keywordstyle=[2]\color{pred}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{\#},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{pgreen}\ttfamily,
+	stringstyle=\color{pred}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstset{
+	language=Filter,
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
+\lstdefinestyle{FilterStyle}{
+	language=Filter,
+	frame=lines
+}
 
 % Custom commands
 \newcommand{\zz}{$\mathrm{T\kern-.4em\raise-0.5ex\hbox{P}}$}
@@ -198,6 +266,9 @@
 \newcommand{\lcspp}{\macrosc{LCSPP}}
 \newcommand{\anr}{\macrosc{ANR}}
 \newcommand{\accessNodeRouting}{\macrosc{Access-Node Routing}}
+\newcommand{\osm}{\macrosc{OSM}}
+\newcommand{\gtfs}{\macrosc{GTFS}}
+\newcommand{\xml}{\macrosc{XML}}
 
 \newcommand{\true}{\macromathsf{true}}
 \newcommand{\false}{\macromathsf{false}}
@@ -227,6 +298,9 @@
 \newcommand{\exit}{\macromathsf{exit}}
 \newcommand{\uniModal}{\macromathsf{uni-modal}}
 \newcommand{\multiModal}{\macromathsf{multi-modal}}
+\newcommand{\freiburgR}{\macromathsf{Freiburg}}
+\newcommand{\stuttgartR}{\macromathsf{Stuttgart}}
+\newcommand{\switzerlandR}{\macromathsf{Switzerland}}
 
 % Operator
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -263,9 +337,10 @@
 	\publishers{
 		\begin{tabular}{ll}
 			\\
-			Supervisor:	& Prof.~Dr.~Hannah Bast \\
+			Supervisor:	& Prof.~Dr.~Hannah Bast\\
 			Advisor:		&  Patrick Brosi
 		\end{tabular}
+		\todo{disable todos and macro highlights.}% Remove todo for final submission
 	}
 	\maketitle
 	% Suppress page number on title page
@@ -302,7 +377,6 @@
 \fancyhead[LO,RE]{\parbox{0.7\textwidth}{\textbf{\rightmark}}}
 \fancyhead[LE,RO]{\textbf{Section \arabic{section}}}
 
-\todo{disable todos and macro highlights.}% Remove todo for final submission
 \input{content/introduction}
 \input{content/preliminaries}
 \input{content/models}

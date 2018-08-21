@@ -5,28 +5,29 @@
 \contentsline {subsection}{\numberline {2.2}Tree}{9}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Automaton}{10}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Metric}{11}{subsection.2.4}
-\contentsline {section}{\numberline {3}Models}{14}{section.3}
-\contentsline {subsection}{\numberline {3.1}Road graph}{14}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Transit graph}{16}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Link graph}{20}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Timetable}{21}{subsection.3.4}
-\contentsline {section}{\numberline {4}Nearest neighbor problem}{23}{section.4}
-\contentsline {subsection}{\numberline {4.1}Cover tree}{25}{subsection.4.1}
-\contentsline {section}{\numberline {5}Shortest path problem}{31}{section.5}
-\contentsline {subsection}{\numberline {5.1}Time-independent}{32}{subsection.5.1}
-\contentsline {subsubsection}{\numberline {5.1.1}Dijkstra}{32}{subsubsection.5.1.1}
-\contentsline {subsubsection}{\numberline {5.1.2}\leavevmode {\color {magenta}\textsc {A\ensuremath {^{\star }}}}\xspace and \leavevmode {\color {magenta}\textsc {ALT}}\xspace }{35}{subsubsection.5.1.2}
-\contentsline {subsection}{\numberline {5.2}Time-dependent}{37}{subsection.5.2}
-\contentsline {subsubsection}{\numberline {5.2.1}Connection scan}{37}{subsubsection.5.2.1}
-\contentsline {subsection}{\numberline {5.3}Multi-modal}{41}{subsection.5.3}
-\contentsline {subsubsection}{\numberline {5.3.1}Modified Dijkstra}{42}{subsubsection.5.3.1}
-\contentsline {subsubsection}{\numberline {5.3.2}Access nodes}{44}{subsubsection.5.3.2}
-\contentsline {subsection}{\numberline {5.4}Other algorithms}{46}{subsection.5.4}
-\contentsline {section}{\numberline {6}Evaluation}{46}{section.6}
-\contentsline {subsection}{\numberline {6.1}Input data}{46}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}Experiments}{46}{subsection.6.2}
-\contentsline {subsubsection}{\numberline {6.2.1}Nearest neighbor computation}{46}{subsubsection.6.2.1}
-\contentsline {subsubsection}{\numberline {6.2.2}Uni-modal routing}{46}{subsubsection.6.2.2}
-\contentsline {subsubsection}{\numberline {6.2.3}Multi-modal routing}{46}{subsubsection.6.2.3}
-\contentsline {subsection}{\numberline {6.3}Summary}{46}{subsection.6.3}
-\contentsline {section}{\numberline {7}Conclusion}{46}{section.7}
+\contentsline {section}{\numberline {3}Models}{12}{section.3}
+\contentsline {subsection}{\numberline {3.1}Road graph}{12}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Transit graph}{14}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Link graph}{17}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Timetable}{19}{subsection.3.4}
+\contentsline {section}{\numberline {4}Nearest neighbor problem}{21}{section.4}
+\contentsline {subsection}{\numberline {4.1}Cover tree}{23}{subsection.4.1}
+\contentsline {section}{\numberline {5}Shortest path problem}{28}{section.5}
+\contentsline {subsection}{\numberline {5.1}Time-independent}{29}{subsection.5.1}
+\contentsline {subsubsection}{\numberline {5.1.1}Dijkstra}{30}{subsubsection.5.1.1}
+\contentsline {subsubsection}{\numberline {5.1.2}\leavevmode {\color {magenta}\textsc {A\ensuremath {^{\star }}}}\xspace and \leavevmode {\color {magenta}\textsc {ALT}}\xspace }{32}{subsubsection.5.1.2}
+\contentsline {subsection}{\numberline {5.2}Time-dependent}{34}{subsection.5.2}
+\contentsline {subsubsection}{\numberline {5.2.1}Connection scan}{34}{subsubsection.5.2.1}
+\contentsline {subsection}{\numberline {5.3}Multi-modal}{38}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Modified Dijkstra}{39}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.2}Access nodes}{41}{subsubsection.5.3.2}
+\contentsline {section}{\numberline {6}Evaluation}{43}{section.6}
+\contentsline {subsection}{\numberline {6.1}Input data}{44}{subsection.6.1}
+\contentsline {subsubsection}{\numberline {6.1.1}\leavevmode {\color {magenta}\textsc {OSM}}\xspace }{44}{subsubsection.6.1.1}
+\contentsline {subsubsection}{\numberline {6.1.2}\leavevmode {\color {magenta}\textsc {GTFS}}\xspace }{47}{subsubsection.6.1.2}
+\contentsline {subsection}{\numberline {6.2}Experiments}{47}{subsection.6.2}
+\contentsline {subsubsection}{\numberline {6.2.1}Nearest neighbor computation}{47}{subsubsection.6.2.1}
+\contentsline {subsubsection}{\numberline {6.2.2}Uni-modal routing}{48}{subsubsection.6.2.2}
+\contentsline {subsubsection}{\numberline {6.2.3}Multi-modal routing}{48}{subsubsection.6.2.3}
+\contentsline {subsection}{\numberline {6.3}Summary}{48}{subsection.6.3}
+\contentsline {section}{\numberline {7}Conclusion}{48}{section.7}
