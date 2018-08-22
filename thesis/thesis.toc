@@ -24,10 +24,10 @@
 \contentsline {section}{\numberline {6}Evaluation}{43}{section.6}
 \contentsline {subsection}{\numberline {6.1}Input data}{44}{subsection.6.1}
 \contentsline {subsubsection}{\numberline {6.1.1}\leavevmode {\color {magenta}\textsc {OSM}}\xspace }{44}{subsubsection.6.1.1}
-\contentsline {subsubsection}{\numberline {6.1.2}\leavevmode {\color {magenta}\textsc {GTFS}}\xspace }{47}{subsubsection.6.1.2}
-\contentsline {subsection}{\numberline {6.2}Experiments}{47}{subsection.6.2}
-\contentsline {subsubsection}{\numberline {6.2.1}Nearest neighbor computation}{47}{subsubsection.6.2.1}
-\contentsline {subsubsection}{\numberline {6.2.2}Uni-modal routing}{48}{subsubsection.6.2.2}
-\contentsline {subsubsection}{\numberline {6.2.3}Multi-modal routing}{48}{subsubsection.6.2.3}
-\contentsline {subsection}{\numberline {6.3}Summary}{48}{subsection.6.3}
-\contentsline {section}{\numberline {7}Conclusion}{48}{section.7}
+\contentsline {subsubsection}{\numberline {6.1.2}\leavevmode {\color {magenta}\textsc {GTFS}}\xspace }{48}{subsubsection.6.1.2}
+\contentsline {subsection}{\numberline {6.2}Experiments}{51}{subsection.6.2}
+\contentsline {subsubsection}{\numberline {6.2.1}Nearest neighbor computation}{51}{subsubsection.6.2.1}
+\contentsline {subsubsection}{\numberline {6.2.2}Uni-modal routing}{51}{subsubsection.6.2.2}
+\contentsline {subsubsection}{\numberline {6.2.3}Multi-modal routing}{52}{subsubsection.6.2.3}
+\contentsline {subsection}{\numberline {6.3}Summary}{52}{subsection.6.3}
+\contentsline {section}{\numberline {7}Conclusion}{52}{section.7}

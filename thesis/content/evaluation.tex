@@ -31,18 +31,21 @@
 	the network for \freiburgR.
 	
 	Furthermore, we include a road and transit network for the country \switzerlandR. The transit data consists of train, tram and
-	bus connections. Both networks are about three times the size of the {\stuttgartR}s.
+	bus connections. Both networks are about three times the size of the {\stuttgartR}s.\\\\
+	We obtain our road networks from \libref{freiburgRoadSource, stuttgartRoadSource, switzerlandRoadSource}
+	and our transit networks from \libref{freiburgTransitSource, switzerlandTransitSource}.
+	The transit data used for \stuttgartR is under restricted public access (refer to \libref{vvsContact}).
 
 %OSM
 \subsubsection{\osm}
-	\osm data \libref{osm} is represented in a \xml structure describing
+	\osm \libref{osm} (OpenStreetMap) data is represented in a \xml structure describing
 	\begin{itemize}
 		\item[1.] \textit{nodes}, with an unique identifier and a coordinate given as pair of latitude and longitude;
 		\item[2.] \textit{ways}, also with an unique identifier, consisting of multiple nodes referenced by their identifier;
 		\item[3.] \textit{relations}, consisting of nodes, ways and other relations, representing relationships between the referenced data;
 		\item[4.] \textit{tags} as key-value pairs, storing metadata about the other items.
 	\end{itemize}
-	\begin{lstlisting}[caption={\osm example data set.},label={osmExample},style={XMLStyle},mathescape={true},
+	\begin{lstlisting}[caption={\osm example data set, derived from \libref{osmExample}.},label={osmExample},style={XMLStyle},mathescape={true},
 		float,floatplacement=ht]
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version="0.6">
@@ -76,7 +79,7 @@
   </relation>
 </osm>
 	\end{lstlisting}\quad\\
-	A small \osm example data set is shown by \progref{osmExample}. Ways are used to represent roads consisting
+	A small \osm example data set is shown by \lstref{osmExample}. Ways are used to represent roads consisting
 	of nodes. Tags are used to describe metadata like speed limits for a road or whether it is a one-way street or not.
 	However, the format also contains a lot of data not directly relevant for route planning, like shapes of buildings
 	and outlines of public parks. Therefore, we filter \osm data and only keep relevant information.
@@ -121,7 +124,7 @@ building=yes
 building=train_station
 	\end{lstlisting}\quad\\\\
 	As we are only interested in the road network itself, we start by reading the ways. We filter them based on the tags
-	described by \progref{osmFilter}. Ways having at least one of the key-value pairs described under \textit{$--$KEEP}
+	described by \lstref{osmFilter}. Ways having at least one of the key-value pairs described under \textit{$--$KEEP}
 	and none of the pairs under \textit{$--$DROP} are kept, as they represent roads of the network. All other ways are
 	rejected, as well as all relations.
 	After that, we read the nodes and only keep nodes that occurred at least once in any of the ways that passed the filter.
@@ -159,18 +162,13 @@ building=train_station
 		\end{center}
 		\caption{Average speed in km/h for a \osm way with the corresponding value for the \textit{highway} tag.}
 		\label{highwaySpeeds}
-	\end{table}\quad\\\\
-	The size of the resulting road graphs (see \sectionref{roadGraphSec}) for all three data sets is reported in \tableref{osmSize}.
-	As seen, filtering the \osm data sets beforehand reduces the size of data that is to be processed by $95\%$ to $97\%$.
-	The road graphs have approximately two edges per node. This is due to most streets being two-way streets, thus generating
-	two edges per connection between two nodes. Obviously, road junctions are, compared to the amount of nodes, rare and thus,
-	multiple edges do only rarely share the same node. The in- and out-degree of nodes is extremely low, mostly either $1$ or $2$.
+	\end{table}
 	\begin{table}[ht]
 	 	\begin{center}
 	 		\phantom{v}\quad\\
 			\begin{tabular}{|l||r|r|r|r|}
 				\hline
-							&\multicolumn{2}{c|}{\osm data (MB)}	&\multicolumn{2}{c|}{Road graph}\\
+							&\multicolumn{2}{c|}{data (MB)}	&\multicolumn{2}{c|}{Road graph}\\
 							&\multicolumn{1}{c|}{raw}	&\multicolumn{1}{c|}{filtered}	&\multicolumn{1}{c|}{nodes}
 								&\multicolumn{1}{c|}{edges}\\\hline
 				\freiburgR		&$2\,260$	&$86$		&$743\,003$		&$1\,494\,883$\\
@@ -181,11 +179,196 @@ building=train_station
 		\caption{Size of the \osm data sets, in megabyte (MB) before and after filtering, and the size of the resulting road graphs
 			in amount of nodes $|V|$ and edges $|E|$.}
 		\label{osmSize}
+	\end{table}\quad\\\\
+	The size of the resulting road graphs (see \sectionref{roadGraphSec}) for all three data sets is reported in \tableref{osmSize}.
+	As seen, filtering the \osm data sets beforehand reduces the size of data that is to be processed by $95\%$ to $97\%$.
+	The road graphs have approximately two edges per node. This is due to most streets being two-way streets, thus generating
+	two edges per connection between two nodes. Obviously, road junctions are, compared to the amount of nodes, rare and thus,
+	multiple edges do only rarely share the same node. The in- and outdegree of nodes is extremely low, mostly $2$ ($\approx 80\%$),
+	as seen in \tableref{roadDegree}.
+	\begin{table}[ht]
+	 	\begin{center}
+	 		\phantom{v}\quad\\
+	 		\begin{tabular}{l}
+			\begin{tabular}{|l||r|r|r|r|r|r|r|}
+				\hline
+							&\multicolumn{7}{c|}{indegree $\degG^{-}$}\\
+							&\multicolumn{1}{c|}{0}	&\multicolumn{1}{c|}{1}	&\multicolumn{1}{c|}{2}	&\multicolumn{1}{c|}{3}
+								&\multicolumn{1}{c|}{4}	&\multicolumn{1}{c|}{5}	&\multicolumn{1}{c|}{6}\\\hline
+				\freiburgR		&$90$		&$64\,990$		&$611\,055$		&$59\,751$		&$7\,057$	&$58$		&$2$\\
+				\stuttgartR		&$145$	&$109\,808$		&$759\,157$		&$93\,354$		&$10\,599$	&$76$		&$3$\\
+				\switzerlandR	&$325$	&$235\,069$		&$2\,201\,945$	&$174\,333$		&$15\,767$	&$202$	&$4$\\\hline
+			\end{tabular}\\
+			\quad\\
+			\quad\\
+			\begin{tabular}{|l||r|r|r|r|r|r|r|r|}
+				\hline
+							&\multicolumn{8}{c|}{outdegree $\degG^{+}$}\\
+							&\multicolumn{1}{c|}{0}	&\multicolumn{1}{c|}{1}	&\multicolumn{1}{c|}{2}	&\multicolumn{1}{c|}{3}
+								&\multicolumn{1}{c|}{4}	&\multicolumn{1}{c|}{5}	&\multicolumn{1}{c|}{6}	&\multicolumn{1}{c|}{7}\\\hline
+				\freiburgR		&$105$	&$65\,336$		&$610\,353$		&$60\,059$		&$7\,088$	&$60$		&$2$	&$0$\\
+				\stuttgartR		&$162$	&$110\,002$		&$758\,740$		&$93\,545$		&$10\,607$	&$83$		&$3$	&$0$\\
+				\switzerlandR	&$328$	&$235\,255$		&$2\,201\,711$	&$174\,247$		&$15\,884$	&$215$	&$4$	&$1$\\\hline
+			\end{tabular}
+			\end{tabular}
+		\end{center}
+		\caption{Table showing the number of nodes of the corresponding road graph that have a certain in- or outdegree.
+		That is, the number of ingoing and outgoing edges respectively.}
+		\label{roadDegree}
 	\end{table}
 
 %GTFS
 \subsubsection{\gtfs}
-	Blabla
+	\gtfs \libref{gtfs} is short for General Transit Feed Specification, it defines a common format
+	for public transit schedules. It comes compressed as \zip archive, consisting multiple
+	text files formatted as \csv tables. The mandatory tables are
+	\begin{itemize}
+		\item[1.] \textit{agency.txt}, defining metadata about the transit agency;
+		\item[2.] \textit{routes.txt}, containing information about complete routes, like all trips belonging to a bus line;
+		\item[3.] \textit{trips.txt}, consisting of single trips, belonging to a route;
+		\item[4.] \textit{stop\_times.txt}, having departure and arrival times at the stops for all connections in the network;
+		\item[5.] \textit{stops.txt}, providing metadata and coordinates of all stops;
+		\item[6.] \textit{calendar.txt} defining the service pattern at which routes are available.
+	\end{itemize}
+	Furthermore, there are a couple of optional tables of which we are only interested in
+	\begin{itemize}
+		\item[7.] \textit{transfer.txt}, provides transfer possibilities between stops and their duration.
+	\end{itemize}
+		\begin{lstlisting}[caption={\gtfs example data set, inspired by \libref{gtfsExample}.},label={gtfsExample},style={GTFSStyle},mathescape={true},
+		float,floatplacement=ht]
+// agency.txt
+agency_id, agency_name, agency_url, agency_timezone, agency_phone, agency_lang
+FunBus, The Fun Bus, , (310) 555-0222, en
+
+// routes.txt
+route_id, route_short_name, route_long_name, route_desc, route_type
+A, 17, Mission, From lower Mission to Downtown., 3
+
+// trips.txt
+route_id, service_id, trip_id, trip_headsign, block_id
+A, WE, AWE1, Downtown, 1
+A, WE, AWE2, Downtown, 2
+
+// stop_times.txt
+trip_id, arrival_time, departure_time, stop_id, stop_sequence, pickup_type, drop_off_type
+AWE1, 0:06:10, 0:06:10, S1, 1, 0, 0
+AWE1, 0:06:20, 0:06:30, S3, 3, 0, 0
+AWE1, 0:06:45, 0:06:45, S6, 5, 0, 0
+AWD1, 0:06:10, 0:06:10, S1, 1, 0, 0
+AWD1, 0:06:20, 0:06:20, S3, 3, 0, 0
+AWD1, 0:06:45, 0:06:45, S6, 6, 0, 0
+
+// stops.txt
+stop_id, stop_name, stop_desc, stop_lat, stop_lon, stop_url, location_type, parent_station
+S1, Mission St. & Silver Ave., , 37.728631, -122.431282, , ,
+S3, Mission St. & 24th St., , 37.75223, -122.418581, , ,
+S6, Mission St. & 15th St., , 37.766629, -122.419782, , ,
+
+// calendar.txt
+service_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_date, end_date
+WE, 0, 0, 0, 0, 0, 1, 1, 20060701, 20060731
+WD, 1, 1, 1, 1, 1, 0, 0, 20060701, 20060731
+
+// transfers.txt
+from_stop_id, to_stop_id, transfer_type, min_transfer_time
+S3, S6, 2, 300
+S6, S3 3, 180
+	\end{lstlisting}\quad\\
+	An example feed can be seen in \lstref{gtfsExample}. The format is similar to our definition of timetables (see \sectionref{timetable_sec}),
+	with the difference that connections are not directly given as edges departing from one stop and another, but as pair of arrival and
+	departure time at stops. Also, it contains a lot of metadata which we do not process.\\\\
+	Construction of a realistic time expanded transit graph (see \defref{realisticTransitGraph}) is straightforward and mainly
+	involves around parsing \textit{stop\_times.txt}. We build two nodes for every entry, one representing the arrival event at the stop
+	and another for the departure. Furthermore, we create a transfer node for every arrival node, indicating a transfer at the given stop.
+	Each arrival node is then connected by an edge with its corresponding departure and transfer node.
+	
+	After parsing all data, we connect departure nodes with the arrival nodes at the next stop in a trip. Therefore, we
+	process each trip and follow the \textit{stop\_times.txt} entries belonging to that trip in the order defined by
+	the \textit{stop\_sequence} field.
+	
+	As a next step, waiting edges are created by sorting transfer nodes of a stop ascending in time and then creating edges
+	connecting them in that order. Finally, every departure node is connected to its previous transfer node. We find the
+	transfer node by using a \textit{binary search} \libref{binarySearch} on the sorted list of transfer nodes for this stop.\\\\
+	Timetables (see \defref{timetable}) are received similar. But simpler, as transfer nodes are not present. We process
+	all stops and trips defined in \textit{stops.txt} and \textit{trips.txt} and obtain the sets $S$ and $T$ respectively.
+	Connections are created by again processing entries in \textit{stop\_times.txt}, belonging to one trip, in the sequence
+	defined by \textit{stop\_sequence}. We create one connection for every departure node with the corresponding
+	next arrival node.
+	
+	For the footpaths, we initially take the transfers given in \textit{transfers.txt}. In order to increase the quality
+	of our footpath model, we also connect stops with footpaths if they are within $600$ meters to each other.
+	
+	However, our footpaths need to fulfill strong properties (see \sectionref{timetable_sec}), which the given
+	transfers usually not obey. Therefore, we have to add self-loop footpaths, if not present. And we need to compute
+	the transitive closure of the given footpaths in order to ensure that they are transitively closed. Therefore, it is
+	crucial that the range, for which close stops are connected, is kept low. Else, the amount of footpaths dramatically increases
+	due to the transitive closure.
+	
+	The \textit{triangle inequality} property is ensured by rejecting given transfer durations and approximating all durations by using $\asTheCrowFlies$.
+	Additionally, all footpath durations must not be lower than the transfer buffer used for the self-loop footpaths. We do so by taking the
+	$\max$ of the transfer buffer and the calculated duration.
+	\begin{table}[ht]
+	 	\begin{center}
+	 		\phantom{v}\quad\\
+	 		\begin{tabular}{l}
+			\begin{tabular}{|l||r|r|r|}
+				\hline
+							&\multicolumn{1}{c|}{data (KB)}	&\multicolumn{2}{c|}{Transit graph}\\
+							&	&\multicolumn{1}{c|}{nodes}	&\multicolumn{1}{c|}{edges}\\\hline
+				\freiburgR		&$1\,713$		&$613\,329$		&$1\,006\,862$\\
+				\stuttgartR		&$32\,213$		&$4\,517\,511$	&$7\,415\,894$\\
+				\switzerlandR	&$75\,477$		&$32\,688\,498$	&$53\,370\,236$\\\hline
+			\end{tabular}\\
+			\quad\\
+			\begin{tabular}{|l||r|r|r|r|}
+				\hline
+							&\multicolumn{4}{c|}{Timetable}\\
+							&\multicolumn{1}{c|}{stops}	&\multicolumn{1}{c|}{trips}
+								&\multicolumn{1}{c|}{connections} &\multicolumn{1}{c|}{footpaths}\\\hline
+				\freiburgR		&$713$	&$13\,249$		&$191\,194$		&$255\,495$\\
+				\stuttgartR		&$7\,877$	&$90\,475$		&$1\,415\,362$	&$1\,926\,611$\\
+				\switzerlandR	&$30\,227$	&$1\,014\,699$	&$9\,881\,467$	&$3\,793\,581$\\\hline
+			\end{tabular}\\
+			\quad\\
+			\begin{tabular}{|l||r|r|r|r|}
+				\hline
+							&\multicolumn{4}{c|}{Footpaths}\\
+							&\multicolumn{1}{c|}{given}	&\multicolumn{1}{c|}{self-loops}
+								&\multicolumn{1}{c|}{close} &\multicolumn{1}{c|}{closure}\\\hline
+				\freiburgR		&$0$		&$713$		&$9\,008$		&$245\,774$\\
+				\stuttgartR		&$6\,080$	&$7\,877$		&$73\,730$		&$1\,838\,924$\\
+				\switzerlandR	&$22\,402$	&$30\,227$		&$174\,698$		&$3\,566\,254$\\\hline
+			\end{tabular}
+			\end{tabular}
+		\end{center}
+		\caption{Size of the \gtfs feeds, in kilobyte (KB) and the size of the resulting realistic time expanded transit graphs
+			in amount of nodes $|V|$ and edges $|E|$. Also, the size of the obtained timetable and details about the
+			footpath generation.\\
+			The column \textit{given} denotes the amount of footpaths already given in the \textit{transfer.txt} file,
+			\textit{self-loops} represents how many missing self-loop paths were added. Likewise does \textit{close} report how
+			many footpaths we added for connecting close stops with each other. And \textit{closure} denotes
+			the amount of paths added to ensure that the model is transitively closed.}
+		\label{gtfsSize}
+	\end{table}\quad\\\\
+	\tableref{gtfsSize} reports the size of the feed and the resulting network. It can be clearly seen that a timetable has a
+	much smaller amount of objects, compared to a realistic time expanded transit graph. In particular compared to the size of a
+	road graph (see \tableref{osmSize}). This even becomes worse if we use it to construct a link graph, as seen in \sectionref{linkGraph_sec},
+	as we need to add an incoming and outgoing edge for each arrival node, in order to connect it with the road graph. \tableref{linkGraphSize}
+	reports the exact amount of added link edges.
+	\begin{table}[ht]
+	 	\begin{center}
+	 		\phantom{v}\quad\\
+			\begin{tabular}{|l||r|}
+				\hline
+							&\multicolumn{1}{c|}{link edges}\\\hline
+				\freiburgR		&$306\,906$\\
+				\stuttgartR		&$1\,944\,388$\\
+				\switzerlandR	&$19\,584\,786$\\\hline
+			\end{tabular}
+		\end{center}
+		\caption{Amount of link edges that are added when combining road with transit graphs to create a link graph.}
+		\label{linkGraphSize}
+	\end{table}\quad\\\\
 
 %Experiments
 \subsection{Experiments}

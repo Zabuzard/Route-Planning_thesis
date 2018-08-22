@@ -201,6 +201,48 @@
 	language=Filter,
 	frame=lines
 }
+\lstdefinelanguage{GTFS}{
+	keywords={agency_id, agency_name, agency_url, agency_timezone, agency_phone, agency_lang,
+		stop_id, stop_name, stop_desc, stop_lat, stop_lon, stop_url, location_type, parent_station,
+		route_id, route_short_name, route_long_name, route_desc, route_type,
+		route_id, service_id, trip_id, trip_headsign, block_id,
+		trip_id, arrival_time, departure_time, stop_id, stop_sequence, pickup_type, drop_off_type,
+		service_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_date, end_date,
+		service_id, date, exception_type,
+		fare_id, price, currency_type, payment_method, transfers, transfer_duration,
+		fare_id, route_id, origin_id, destination_id, contains_id,
+		shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled,
+		trip_id, start_time, end_time, headway_secs,
+		from_stop_id, to_stop_id, transfer_type, min_transfer_time},
+	keywordstyle=\color{pblue}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{pgreen}\ttfamily,
+	stringstyle=\color{pred}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstset{
+	language=GTFS,
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
+\lstdefinestyle{GTFSStyle}{
+	language=GTFS,
+	frame=lines,
+}
 
 % Custom commands
 \newcommand{\zz}{$\mathrm{T\kern-.4em\raise-0.5ex\hbox{P}}$}
@@ -213,6 +255,7 @@
 \newcommand{\figref}[1]{\textbf{Fig.\,\ref{#1}}}
 \newcommand{\tableref}[1]{\textbf{Table \ref{#1}}}
 \newcommand{\progref}[1]{\textbf{Prg.\,\ref{#1}}}
+\newcommand{\lstref}[1]{\textbf{Lst.\,\ref{#1}}}
 \newcommand{\lemmaref}[1]{\textbf{Lemma \ref{#1}}}
 \newcommand{\theoremref}[1]{\textbf{Theorem \ref{#1}}}
 \newcommand{\sectionref}[1]{\textbf{Section \ref{#1}}}
@@ -269,6 +312,8 @@
 \newcommand{\osm}{\macrosc{OSM}}
 \newcommand{\gtfs}{\macrosc{GTFS}}
 \newcommand{\xml}{\macrosc{XML}}
+\newcommand{\zip}{\macrosc{ZIP}}
+\newcommand{\csv}{\macrosc{CSV}}
 
 \newcommand{\true}{\macromathsf{true}}
 \newcommand{\false}{\macromathsf{false}}
@@ -318,12 +363,12 @@
 \DeclareMathOperator{\orev}{prev}
 \DeclareMathOperator{\landmarks}{landmarks}
 \DeclareMathOperator{\mode}{mode}
+\DeclareMathOperator{\degG}{deg}
 
 % Document
 \begin{document}
 % Command renews that need to be inside the document
 \renewcommand{\figurename}{Fig.}% Fig. instead of Figure when linking figures
-\renewcommand{\lstlistingname}{Program}% Program instead of Listing when linking listings
 
 % Begin of content
 % Titlepage
