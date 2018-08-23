@@ -372,11 +372,41 @@ S6, S3 3, 180
 
 %Experiments
 \subsection{Experiments}
-	Blabla
+	This section shows our experimental results for the algorithms presented in \sectionref{nearestNeighborProblem}
+	and \sectionref{shortestPathProblem}. The algorithms are implemented in the context of the \cobweb \libref{cobweb} project,
+	which is an open-source \multiModal route planner written in \java.\\\\
+	Results are measured from a sequential execution on a $6$-core Intel Xeon E5649 machine running at $2.53$ GHz.
+	The maximal heap size of {\java}s virtual machine is restricted to $85$ GB.
 
 %Nearest neighbor computation
 \subsubsection{Nearest neighbor computation}
-	Blabla
+	For solving the \nearestNeighborProblem we implemented a \coverTree data-structure with corresponding retrieval methods,
+	as explained in \sectionref{coverTree}. It operates on nodes of the road network obtained from the data sets
+	\freiburgR, \stuttgartR and \switzerlandR, using $\asTheCrowFlies$ as metric on the nodes.\\\\
+	The experiment contains of continuous insertion of nodes, for each of the three networks respectively, and then measuring
+	random nearest neighbor queries, i.e. the execution time of \algoref{coverTreeSearch}. Measurements are done for tree sizes
+	of $1$, $10\,000$ and then in steps of $10\,000$. Each measurement is averaged over $1\,000$ queries using randomly selected nodes.\\
+	% Cover tree results
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.55,angle=-90]{res/plots/coverTreeResults}
+		\end{center}
+		\caption{Query durations for \algoref{coverTreeSearch} in a \coverTree with increasing size,
+		for three road networks respectively. Measurements are done at a size of $1$, $10\,000$ and then in steps
+		of $10\,000$, averaged over $1\,000$ random queries. Running time is stated in milliseconds.}
+		\label{coverTreeResults}
+	\end{figure}\quad\\
+	\figref{coverTreeResults} shows the results of the experiment. The method is comparably fast, even for large road
+	networks like \switzerlandR. The graph appears to be similar for all three data sets. This is obviously due to the fact that
+	they all represent the same type of network, with a similar distribution of nodes.
+	
+	In a road network, nodes are typically close to each other and appear in local groups, representing cities and structured
+	road segments. In particular, they are not uniformly distributed. A \coverTree benefits from this, as a node can be the
+	parent of many other, locally close nodes. And as such, the tree is balanced well, resulting in efficient queries
+	that are able to quickly find the correct path in the tree that leads to the nearest neighbor.
+	
+	Due to the same reason, the running time scales approximately logarithmic with increasing size. Queries take longer, if the
+	depth of the tree increases. In a well balanced \coverTree, the depth is logarithmic to its size.
 
 %Uni-modal routing
 \subsubsection{Uni-modal routing}
