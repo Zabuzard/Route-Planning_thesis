@@ -288,7 +288,7 @@
 	
 	The heuristic provides a more generic approach by approximating the distance
 	between nodes $u$ and $v$ by using precomputed distances with pre-determined nodes $l$, called \textit{landmarks}.
-	\begin{mydef}
+	\begin{mydef}\label{alt_heuristic}
 		Given a set of landmarks $L \subseteq V$, the heuristic $\landmarks$ is defined by
 		\begin{align*}
 			\landmarks(u, v)	&= \max_{l \in L} \left(\max \{\dist(u, l) - \dist(v, l), \dist(l, v) - \dist(l, u)\}\right).
@@ -309,7 +309,7 @@
 	in $\mathcal{O}(1)$ by only implicitly reversing the edges.
 
 %Time-dependent
-\subsection{Time-dependent}
+\subsection{Time-dependent}\label{time_dependent_sec}
 	Approaches designed for time-independent networks, such as \alt, have an important drawback. Optimization is always done on
 	assuming that edge costs are constant. However, in a time-dependent network, this is not the case. The weight of an edge is
 	dependent on the departure time, which is not known in advance.\\\\

@@ -410,7 +410,112 @@ S6, S3 3, 180
 
 %Uni-modal routing
 \subsubsection{Uni-modal routing}
-	Blabla
+	The first experiment for \uniModal routing compares time independent methods for solving the \shortestPathProblem.
+	It measures an implementation of \dijkstra (see \algoref{dijkstra}), the \astar algorithm (see \sectionref{alt})
+	using $\asTheCrowFlies$ as heuristic and \alt with the precomputed heuristic shown in \defref{alt_heuristic}.
+	
+	Queries are performed on the road graphs obtained by the data sets \freiburgR, \stuttgartR and \switzerlandR.
+	We choose $50$ random source nodes and then determine the \textit{Dijkstra rank} (see \defref{dijkstraRank})
+	for the source nodes to all other nodes in the graph. Source nodes with a bad connectivity are rejected and exchanged
+	against another random source node. This is determined by a source node having no node in the graph with a rank of at
+	least $2^{15}$ which is only rarely the case for randomly chosen nodes.
+	We then choose nodes as destinations that have a Dijkstra of
+	\begin{align*}
+		2^0, 2^1, \ldots, 2^k
+	\end{align*}
+	where $k \ge 15$ is the maximal rank all source nodes have in common. By that, the queries cover all types of
+	ranges, highlighting how well the algorithms scale with queries of increasing ranges.
+	By that, we receive for every rank $2^i$ in total $50$ different queries of which we average the
+	measured running time over.\\
+	% Uni-modal time-independent results
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.55,angle=-90]{res/plots/uniModalTimeIndependentResults}
+		\end{center}
+		\caption{Query durations for \uniModal time independent route planning algorithms computing shortest paths.
+			Running time is measured in milliseconds, presented on a logarithmic scale.
+			Every point represents $50$ queries from a random source to a random target with the given \textit{Dijkstra rank}
+			over which the measurement is averaged over. \textit{Errorbars} indicate the results on the three data sets.
+			The upper end of the bar represents \switzerlandR, the dot \stuttgartR and the lower end \freiburgR.}
+		\label{uniModalTimeIndependentResults}
+	\end{figure}\quad\\
+	\figref{uniModalTimeIndependentResults} shows the results of the experiment. First of all, it can be seen that all
+	three methods do not scale well with queries of increasing ranges. Long range queries, like for a rank of $2^{20}$ or $2^{21}$ range
+	from $1$ to $10$ seconds. In fact, the running time scales exponentially for increasing ranges. Further, \astar and \alt are slower
+	than \dijkstra for short range queries. This is due to the increased overhead of the modified \dijkstra variants. Both need to
+	additionally evaluate their corresponding heuristic on every relaxed edge. However, for mid and, in particular, for long
+	range queries, \astar performs similar to \dijkstra and \alt even is about twice as fast. At this point the additional overhead is
+	negligible and the benefit of a good heuristic pays off. It can also be seen that $\asTheCrowFlies$, which is used by \astar, is not a good
+	heuristic for road networks and does not improve over the ordinary \dijkstra approach, as already explained in \sectionref{alt}.\\
+	% Uni-modal time-independent results external
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.75]{res/uniModalTimeIndependentResultsExternal}
+		\end{center}
+		\caption{Experimental results from \libref{routePlanningOverview} measured similar to \figref{uniModalTimeIndependentResults}
+			for carefully implemented \uniModal time independent route planning algorithms.}
+		\label{uniModalTimeIndependentResultsExternal}
+	\end{figure}\quad\\
+	Furthermore, if \alt is implemented very carefully and optimized, it can outperform \dijkstra earlier. For a comparison, we include the results
+	from \libref{routePlanningOverview} of similar measured experiments for highly optimized variants of \dijkstra and other
+	techniques for \uniModal time independent route planning in \figref{uniModalTimeIndependentResultsExternal}.
+	The results show that {\dijkstra}s performance can be increased by approximately a factor of $1\,000$, compared to our implementation,
+	if heavily optimized. However, the running time for long range queries is still not feasible. Fortunately, there exist other approaches
+	which tackle this problem, like seen in the figure. The presented algorithms are referenced and briefly explained in \libref{routePlanningOverview}.
+	
+	Additionally, they give a general overview of \uniModal time independent route planning techniques, comparing their average query time and
+	their necessary preprocessing time. We include their overview in \figref{uniModalTimeIndependentResultsExternalOverview}.\\
+	% Uni-modal time-independent results external overview
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.75]{res/uniModalTimeIndependentResultsExternalOverview}
+		\end{center}
+		\caption{Overview from \libref{routePlanningOverview} of \uniModal time independent route planning
+			techniques, comparing their average query time in milliseconds and their necessary preprocessing time in minutes.}
+		\label{uniModalTimeIndependentResultsExternalOverview}
+	\end{figure}\quad\\
+	The second experiment compares time dependent solutions to the \shortestPathProblem. We measure the performance of an
+	adopted \dijkstra variant (see \sectionref{time_dependent_sec}) against \csa (using \algoref{csa_algo}) over the duration of one day,
+	with changing time. The experiment is measured for the $10.10.2018$, which is a Wednesday, representing an average day in the schedule
+	of the transit network. \dijkstra runs on a realistic time expanded transit graph (see \defref{realisticTransitGraph}) and \csa on a
+	timetable (see \defref{timetable}), both obtained from the public transit data of \freiburgR, \stuttgartR and \switzerlandR.
+	
+	Measurements are taken in steps of $10$ minutes over the whole day, averaged over $50$ randomly chosen queries.
+	The only exception is \dijkstra for \switzerlandR, which is done in steps of $30$ minutes, due to very long running times.\\
+	 % Uni-modal time-dependent results all
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.55,angle=-90]{res/plots/uniModalTimeDependentResultsAll}
+		\end{center}
+		\caption{Query durations of an time-independent variant of \dijkstra and \csa for three data sets, measured in milliseconds
+			on a logarithmic scale. Measurements are done for every $10$ minutes of the $10.10.2018$, averaged over $50$ random queries.
+			\dijkstra for \switzerlandR is measured in steps of $30$ minutes.}
+		\label{uniModalTimeDependentResultsAll}
+	\end{figure}
+	% Uni-modal time-dependent results single
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.55,angle=-90]{res/plots/uniModalTimeDependentResultsSingle}
+		\end{center}
+		\caption{Results from \figref{uniModalTimeDependentResultsAll}, but isolated and with a linear scale for the query duration.
+			The duration is measured in milliseconds and all graphs range from \timef{12}{00}{am} to \timef{11}{59}{pm} for the $10.10.2018$.}
+		\label{uniModalTimeDependentResultsSingle}
+	\end{figure}\quad\\
+	 The algorithms are compared in \figref{uniModalTimeDependentResultsAll}, with their single performance
+	 highlighted by \figref{uniModalTimeDependentResultsSingle}.
+	 
+	 Both algorithms perform worse if the size of the time schedule increases, roughly increasing by a factor of $10$ for all three data sets.
+	 However, \csa runs on \switzerlandR $10$ times faster than \dijkstra on the small schedule of \freiburgR, where \csa even performs better
+	 by a factor of $1\,000$. Clearly, \csa outperforms \dijkstra for time dependent routing, making it a very viable choice. \csa can even successfully
+	 compete against other approaches designed especially for time dependent route planning, as shown by \libref{csa}.
+	 
+	 It can also be seen that \csa is subject to the traffic congestion of the time schedule. Yielding better running times in the evening and night
+	 from \timef{6}{00}{pm} to \timef{6}{00}{am}, than in the morning, noon and afternoon from \timef{6}{00}{am} to \timef{6}{00}{pm}.
+	 This is due to the fact that \csa needs to iterate all connections from a given time, not only relevant connections. In a rush hour, the schedule
+	 has way more connections that need to be processed, leading to a worse performance.
+	 
+	 \dijkstra, on the other hand, only needs to scan connections available from the already processed routes. Thus, it is not affected by traffic
+	 congestion as much as \csa and is still more subject to the range of queries, which is not captured by this experiment.
 
 %Multi-modal routing
 \subsubsection{Multi-modal routing}

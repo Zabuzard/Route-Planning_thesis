@@ -28,6 +28,6 @@
 \contentsline {subsection}{\numberline {6.2}Experiments}{51}{subsection.6.2}
 \contentsline {subsubsection}{\numberline {6.2.1}Nearest neighbor computation}{52}{subsubsection.6.2.1}
 \contentsline {subsubsection}{\numberline {6.2.2}Uni-modal routing}{52}{subsubsection.6.2.2}
-\contentsline {subsubsection}{\numberline {6.2.3}Multi-modal routing}{52}{subsubsection.6.2.3}
-\contentsline {subsection}{\numberline {6.3}Summary}{53}{subsection.6.3}
-\contentsline {section}{\numberline {7}Conclusion}{53}{section.7}
+\contentsline {subsubsection}{\numberline {6.2.3}Multi-modal routing}{57}{subsubsection.6.2.3}
+\contentsline {subsection}{\numberline {6.3}Summary}{57}{subsection.6.3}
+\contentsline {section}{\numberline {7}Conclusion}{57}{section.7}
