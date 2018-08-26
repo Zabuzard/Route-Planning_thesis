@@ -410,7 +410,7 @@ S6, S3 3, 180
 
 %Uni-modal routing
 \subsubsection{Uni-modal routing}
-	The first experiment for \uniModal routing compares time independent methods for solving the \shortestPathProblem.
+	The first experiment for \uniModal routing compares time-independent methods for solving the \shortestPathProblem.
 	It measures an implementation of \dijkstra (see \algoref{dijkstra}), the \astar algorithm (see \sectionref{alt})
 	using $\asTheCrowFlies$ as heuristic and \alt with the precomputed heuristic shown in \defref{alt_heuristic}.
 	
@@ -432,7 +432,7 @@ S6, S3 3, 180
 		 \begin{center}
 			\includegraphics[scale=0.55,angle=-90]{res/plots/uniModalTimeIndependentResults}
 		\end{center}
-		\caption{Query durations for \uniModal time independent route planning algorithms computing shortest paths.
+		\caption{Query durations for \uniModal time-independent route planning algorithms computing shortest paths.
 			Running time is measured in milliseconds, presented on a logarithmic scale.
 			Every point represents $50$ queries from a random source to a random target with the given \textit{Dijkstra rank}
 			over which the measurement is averaged over. \textit{Errorbars} indicate the results on the three data sets.
@@ -453,28 +453,28 @@ S6, S3 3, 180
 			\includegraphics[scale=0.75]{res/uniModalTimeIndependentResultsExternal}
 		\end{center}
 		\caption{Experimental results from \libref{routePlanningOverview} measured similar to \figref{uniModalTimeIndependentResults}
-			for carefully implemented \uniModal time independent route planning algorithms.}
+			for carefully implemented \uniModal time-independent route planning algorithms.}
 		\label{uniModalTimeIndependentResultsExternal}
 	\end{figure}\quad\\
 	Furthermore, if \alt is implemented very carefully and optimized, it can outperform \dijkstra earlier. For a comparison, we include the results
 	from \libref{routePlanningOverview} of similar measured experiments for highly optimized variants of \dijkstra and other
-	techniques for \uniModal time independent route planning in \figref{uniModalTimeIndependentResultsExternal}.
+	techniques for \uniModal time-independent route planning in \figref{uniModalTimeIndependentResultsExternal}.
 	The results show that {\dijkstra}s performance can be increased by approximately a factor of $1\,000$, compared to our implementation,
 	if heavily optimized. However, the running time for long range queries is still not feasible. Fortunately, there exist other approaches
 	which tackle this problem, like seen in the figure. The presented algorithms are referenced and briefly explained in \libref{routePlanningOverview}.
 	
-	Additionally, they give a general overview of \uniModal time independent route planning techniques, comparing their average query time and
+	Additionally, they give a general overview of \uniModal time-independent route planning techniques, comparing their average query time and
 	their necessary preprocessing time. We include their overview in \figref{uniModalTimeIndependentResultsExternalOverview}.\\
 	% Uni-modal time-independent results external overview
 	\begin{figure}[!ht]
 		 \begin{center}
 			\includegraphics[scale=0.75]{res/uniModalTimeIndependentResultsExternalOverview}
 		\end{center}
-		\caption{Overview from \libref{routePlanningOverview} of \uniModal time independent route planning
+		\caption{Overview from \libref{routePlanningOverview} of \uniModal time-independent route planning
 			techniques, comparing their average query time in milliseconds and their necessary preprocessing time in minutes.}
 		\label{uniModalTimeIndependentResultsExternalOverview}
 	\end{figure}\quad\\
-	The second experiment compares time dependent solutions to the \shortestPathProblem. We measure the performance of an
+	The second experiment compares time-dependent solutions to the \shortestPathProblem. We measure the performance of an
 	adopted \dijkstra variant (see \sectionref{time_dependent_sec}) against \csa (using \algoref{csa_algo}) over the duration of one day,
 	with changing time. The experiment is measured for the $10.10.2018$, which is a Wednesday, representing an average day in the schedule
 	of the transit network. \dijkstra runs on a realistic time expanded transit graph (see \defref{realisticTransitGraph}) and \csa on a
@@ -506,8 +506,8 @@ S6, S3 3, 180
 	 
 	 Both algorithms perform worse if the size of the time schedule increases, roughly increasing by a factor of $10$ for all three data sets.
 	 However, \csa runs on \switzerlandR $10$ times faster than \dijkstra on the small schedule of \freiburgR, where \csa even performs better
-	 by a factor of $1\,000$. Clearly, \csa outperforms \dijkstra for time dependent routing, making it a very viable choice. \csa can even successfully
-	 compete against other approaches designed especially for time dependent route planning, as shown by \libref{csa}.
+	 by a factor of $1\,000$. Clearly, \csa outperforms \dijkstra for time-dependent routing, making it a very viable choice. \csa can even successfully
+	 compete against other approaches designed especially for time-dependent route planning, as shown by \libref{csa}.
 	 
 	 It can also be seen that \csa is subject to the traffic congestion of the time schedule. Yielding better running times in the evening and night
 	 from \timef{6}{00}{pm} to \timef{6}{00}{am}, than in the morning, noon and afternoon from \timef{6}{00}{am} to \timef{6}{00}{pm}.
@@ -519,8 +519,64 @@ S6, S3 3, 180
 
 %Multi-modal routing
 \subsubsection{Multi-modal routing}
-	Blabla
-
-%Summary
-\subsection{Summary}
-	Blabla
+	For \multiModal routing we compare a modified \dijkstra (see \sectionref{modifiedDijkstra}), running on a link graph (see \defref{linkGraph}), with
+	our simplified version of \anr (refer to \sectionref{accessNodes}. \anr runs on a road graph and a timetable, using an ordinary \dijkstra for the road
+	and \csa for the transit network. For a given query, it computes the three nearest neighbors to the source and destination as access nodes,
+	using a \coverTree, then it runs \dijkstra to compute the shortest paths from the source and destination to their access nodes. After that, \csa is
+	used to compute the shortest paths between the sources and destinations access nodes. Additionally, one shortest path query from the source
+	to the destination, limited to the road network, is run. In total this makes
+	\begin{itemize}
+		\item[] $2 \times$ $3$-nearest neighbor queries from source and destination,
+		\item[] $6 \times$ \dijkstra from source and destination to access nodes,
+		\item[] $9 \times$ \csa between access nodes,
+		\item[] $1 \times$ \dijkstra from source to destination, limited to the road graph.
+	\end{itemize}
+	The measurement is done similar to the experiments for \uniModal time-independent routing, as seen
+	in \figref{uniModalTimeIndependentResults}, measuring for specific increasing \textit{Dikstra rank}s. Additionally, the measurement is fixed
+	to the $10.10.2018$ at \timef{12}{00}{pm}. The first experiment has no limitations on the transportation modes. All modes of the set
+	\begin{align*}
+		\{\car, \bike, \foot, \tram\}
+	\end{align*}
+	are available, while the second experiment limits the available modes to
+	\begin{align*}
+		\{\bike, \tram\}.
+	\end{align*}
+	The results are given by \figref{multiModalResultsBaseline} and \figref{multiModalResultsRestricted} respectively.\\
+	% Multi-modal results baseline
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.55,angle=-90]{res/plots/multiModalResultsBaseline}
+		\end{center}
+		\caption{Results of \multiModal route planning with transportation modes $\{\car, \bike, \foot, \tram\}$.
+			Query duration of \dijkstra on a link graph and a simplified version of \anr using \dijkstra on a road graph and \csa on a timetable
+			are shown. Measurements are averaged over $50$ random queries with the specified Dijkstra rank. Query duration is measured
+			in milliseconds, presented on a logarithmic scale.}
+		\label{multiModalResultsBaseline}
+	\end{figure}
+	% Multi-modal results restricted
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.55,angle=-90]{res/plots/multiModalResultsRestricted}
+		\end{center}
+		\caption{Experiment from \figref{multiModalResultsBaseline}, but restricted to the transportation modes $\{\bike, \tram\}$.}
+		\label{multiModalResultsRestricted}
+	\end{figure}\quad\\
+	Transportation mode restrictions do not impair the running time of \dijkstra or \anr. Which is due to \dijkstra not using any
+	optimizations relying on transportation modes. Computation is done on the fly, without using precomputed results. The same holds for
+	the simplified \anr, which uses ordinary \dijkstra and \csa. Unfortunately, optimizations like \alt do not adapt well to \multiModal route planning,
+	since the precomputation must be done under the assumption of specific transportation modes restrictions, which might be different at query time.
+	
+	A key problem of \dijkstra on link graphs is that its running time is not applicable for long range queries and that a link graph scales
+	very bad in space consumption. In our experiments, the link graph for \switzerlandR consumes approximately $75$ GB, while \anr allocates
+	only about $15$ GB for the road graph and the timetable.\\\\
+	As expected, the simplified version of \anr does not beat the ordinary \dijkstra, as it still needs to compute long range routes on the road graph
+	using \dijkstra. The key problem of our approach is that access nodes, which are chosen as nearest neighbors, might be far away or not even
+	be reachable when using the road network. Geographic proximity does not necessarily imply short travel times.
+	In this case, the $6$ short range \dijkstra computations are actually long range computations, for which \dijkstra scales bad.
+	
+	However, \anr has one major advantage over \dijkstra. It can use any algorithm that computes shortest paths on a road network.
+	This stands in contrast to the link graph approach which needs an algorithm that is able to route on a combined network, containing
+	road and transit data. Because of that, a well implemented \anr uses a fast algorithm for road networks
+	(compare to \figref{uniModalTimeIndependentResultsExternalOverview}) and selects access nodes more sophisticated. Which leads
+	to \anr easily beating the query time of \dijkstra on link graphs, making it a feasible approach for \multiModal route planning
+	(see \libref{accessNodeRouting}).
