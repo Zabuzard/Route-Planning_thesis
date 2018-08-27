@@ -1,3 +1,46 @@
 % Conclusion
 \section{Conclusion}\label{conclusion}
-	Blabla
+	Route planning is a problem of much interest that gained a lot of interest in the last decades. Problem settings like \uniModal route planning are
+	well researched, efficient solutions were developed. Corresponding research is now focused on \multiModal routing and other difficult problems
+	occurring in practice, such as turn penalties and multi criteria routing.\\\\
+	We have presented common and established models for road and transit networks. Graph-based solutions are straightforward representations of the network,
+	but can not easily adapt to time dependent data, such as transit networks. Timetables are non-graph based alternatives for public transit networks
+	which fit their structure better than static graphs. Additionally, a link graph can be used to combine graph-based models for multiple networks in a
+	straightforward manner. While it might not necessarily be an effective approach, it makes route planning on combined networks for graph-based
+	algorithms possible.
+	
+	In order to explain more sophisticated route planning approaches, we presented the \nearestNeighborProblem and thoroughly discussed an
+	efficient solution to the problem and various variants, using {\coverTree}s.
+	
+	We covered basic route planning algorithms, such as \dijkstra and common optimizations like \astar. The effectiveness of \astar heavily relies on the chosen
+	heuristic, which depends on the underlying structure of the network. \alt was presented as a solution to this problem, providing a general applicable heuristic
+	which is based on the actual shortest path distances to chosen landmarks. For an overview of more sophisticated \uniModal time-independent
+	algorithms, we refer to \libref{routePlanningOverview}.
+	
+	\csa was introduced as an efficient approach for time-dependent route planning on timetables. The approach is very simple, it just processes all connections
+	available after the initial departure time. \csa is fast because it heavily exploits cache locality \libref{cacheLocality} and other low-level optimizations
+	for arrays.
+	
+	For \multiModal route planning we show how \dijkstra can be adapted to run on a link graph, representing a combined network. Further, we present the
+	general concept of \anr and propose a simplified variant of it, generalized to an arbitrary algorithm for road networks and another algorithm for transit
+	networks. This makes it possible to combine a graph-based solution like \dijkstra, or even more sophisticated approaches, for the road network,
+	with a timetable based approach for transit networks, such as \csa.
+	
+	Further, we present experimental results of implementations in the \cobweb project \libref{cobweb} and discuss them. For the experiments three data sets are used,
+	\freiburgR, \stuttgartR and \switzerlandR. The setup, as well as the structure of the input data, is thoroughly explained.
+	{\coverTree}s and \csa turn out to be a a very efficient solution to their corresponding problems. \dijkstra works well for short range queries,
+	but scales bad for increasing ranges. Further, it lacks behind more sophisticated approaches as seen in \figref{uniModalTimeIndependentResultsExternalOverview}.
+	\astar using $\asTheCrowFlies$ does not perform well on networks used for road planning. While \alt, if carefully implemented, typically beats \dijkstra,
+	especially for mid to long range queries. In practice, link graphs are often not feasible due to extreme demands on space capacity. For \multiModal routing
+	\dijkstra performs similar to \uniModal routing, being feasible for short range queries, but scaling bad for increasing ranges. \anr, if paired with efficient algorithms
+	for both networks, is a promising approach to \multiModal route planning, as seen in \libref{accessNodeRouting}.\\\\
+	Route planning, in particular in practice, is a complex topic. A typical application needs to account for more than just finding a route with the shortest travel time.
+	Turn penalties and multi-criteria routing, such as the cost of a trip, are important factors for a client and need to be considered. A similar observation is done
+	for \multiModal routing, where transportation mode restrictions, in practice, are not just a set of available modes, but rather a complex model with
+	multiple states depending on previous states, as explained in \sectionref{multiModal_sec}.
+	
+	Most algorithms do not adapt well to such restrictions, leading to the development of many very specialized solutions. Because of that, existing
+	approaches, such as \anr, rather try to combine multiple algorithms, all suited well for their own specialized type of network. In particular
+	for \multiModal routing, including common restrictions occurring in practice, there does not yet exist a feasible solution for networks of a large scale,
+	such as big countries or even continents. However, with increasing research in the last decade, many promising approaches were developed and
+	a solution does not seem too far.
