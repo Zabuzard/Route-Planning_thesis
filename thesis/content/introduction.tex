@@ -1,10 +1,9 @@
 % Introduction
-\section{Introduction}\label{introduction}
+\chapter{Introduction}\label{introduction}
 	Route planning refers to the problem of finding an \textit{optimal} route between given locations in a network.
 	With the ongoing expansion of road and public transit networks all over the world route planner gain more and
 	more importance. This led to a rapid increase in research \libref{routePlanningOverview, networks, transitModels}
-	of relevant topics and development of route planner software \libref{navHistoryEarly, navHistoryNewer, vehicleNavigation}.
-	
+	of relevant topics and development of route planner software \libref{navHistoryEarly, navHistoryNewer, vehicleNavigation}.\\\\
 	However, a common problem of most such services is that they are limited to one transportation mode only.
 	That is a route can only be taken by a car or train but not by both at the same time. This is known as \uniModal routing.
 	In contrast to that \multiModal routing allows the alternation of transportation modes. For example a route that
@@ -14,7 +13,64 @@
 	The difficulty with \multiModal routing lies in most algorithms being fitted to networks with specific properties.
 	Unfortunately, road networks differ a lot from public transit networks. As such, a route planning algorithm
 	fitted to a certain type of network will likely yield undesired results, have an impractical running time or not
-	even be able to be used at all on different networks. We will explore this later in \sectionref{evaluation}.\\\\
+	even be able to be used at all on different networks. We will explore this later in \sectionref{evaluation}.
+
+% Contributions
+\section{Contributions}
+	Our main contribution to this research field is the development of \cobweb \libref{cobweb}, which is an open-source
+	framework for \multiModal route planning developed in the context of this thesis. Further, in \sectionref{evaluation}
+	we give a detailed evaluation of experiments demonstrating the effectiveness of our implementations for all algorithms
+	explained in this thesis. Additionally, we give an overview over route planning and relevant approaches, as well as a
+	thorough explanation for all used algorithms including examples illustrating them.\\\\
+	\cobweb is able to parse networks given in the \osm and \gtfs format, which we will explore later in \sectionref{inputData_sec}, as well as
+	in compressed formats, such as \bzipTwo \libref{bzipTwoFormat}, \gzip \libref{gzipFormat}, \zip \libref{zipFormat} and \xz \libref{xzFormat}.
+	Networks are then represented in one of the models presented in \sectionref{models}. Metadata, like names of roads, are saved in an external
+	database and retrieved again later.\\\\
+	The backend offers three {\restApi}s \libref{rest} using a client-server-based structure communicating over the \http \libref{http} which
+	are written primarily in \java.
+	One \api is for planning journeys, one for searching nodes by their name and one for retrieving the nearest node to a given location.
+	
+	The routing \api answers journey planning requests from a given source to a destination. The answer contains multiple viable journeys.
+	A request consists of
+	\begin{itemize}
+		\item[1.] \depTime, the departure time to start journeys at;
+		\item[2.] \modes, transportation modes allowed for the journey. Applicable are \car, \bike, \foot and \tram;
+		\item[3.] \fromJ, the source node to departure from;
+		\item[4.] \toJ, the destination node to travel to.
+	\end{itemize}
+	The server then computes journeys using the algorithms presented in \sectionref{shortestPathProblem} and responds with a list of viable
+	journeys. A journey mainly consists of geographic coordinates describing the path to travel and metadata, such as which
+	transportation mode to use for which segment, names of roads and time information for each segment.
+	
+	The name search \api finds \osm nodes by their name. Therefore, we developed \lexiSearch \libref{lexiSearch}, an \api for retrieving
+	information in given datasets.
+	It maintains names of \osm nodes in an inverted $n$-gram index \libref{nGram, invertedIndex}. This makes it possible to efficiently
+	retrieve nodes by an approximate name which is allowed to have errors, such as spelling mistakes. This is known as fuzzy search, or
+	approximate string matching, see \libref{fuzzySearch} for details. Further, nodes can be retrieved by prefixes, yielding search
+	results \textit{as-you-type}. For example, a request with the approximate prefix name \textit{Freirb} would yield nodes with
+	the name \textit{Freiburg} and \textit{Freiburg im Breisgau}.
+	
+	The third \api offers retrieval of the \osm node nearest to a given geographic coordinate. Making it possible for a client to plan a
+	route from an arbitrary location to an arbitrary destination, for example by clicking on a map. \cobweb retrieves the nearest node by
+	using a \coverTree and solving the \nearestNeighborProblem, as explained in \sectionref{nearestNeighborProblem}.\\\\
+	% Cobweb frontend screenshot
+	\begin{figure}[!ht]
+		 \begin{center}
+			\includegraphics[scale=0.5]{res/cobweb_frontend}
+		\end{center}
+		\caption{Screenshot of {\cobweb}s \libref{cobweb} frontend, an open-source \multiModal route planner. It shows a \multiModal
+		route starting from a given source, using the modes \textit{foot-tram-foot-tram-foot} in that sequence to reach the destination.}
+		\label{cobweb_frontend}
+	\end{figure}\quad\\
+	\cobweb comes with a light web-based frontend (see \figref{cobweb_frontend} for an image). Its interface is very similar to other
+	route planning applications, providing input fields for a source and a destination, as well as a departure time and transportation mode
+	restrictions. The frontend is primarily written in \js and communicates with the backends {\restApi}s using asynchronous method invocations.
+	The resulting journeys are displayed on a map and highlighted according to metadata, such as the used transportation mode.\\\\
+	The source code of \cobweb, a release candidate, as well as a detailed description of the project, its {\api}s, an installation guide,
+	the structure and its control flow, can be found at \libref{cobweb}.
+	
+% Overview
+\section{Overview}
 	In this thesis we explore a technique with which we can combine an algorithm fitted for road networks with an algorithm
 	for public transit networks. Effectively obtaining a generic algorithm that is able to compute routes on combined networks.
 	The basic idea is simple, given a source and destination, both in the road network, we select \textit{access nodes} for both.
@@ -42,15 +98,5 @@
 	an efficient algorithm for route planning on public transit networks. With that, our road and transit networks get incompatible
 	and can not easily be combined. Therefore, we use the previously mentioned generic approach based on access nodes
 	for this type of network.\\\\
-	% Cobweb frontend screenshot
-	\begin{figure}[!ht]
-		 \begin{center}
-			\includegraphics[scale=0.5]{res/cobweb_frontend}
-		\end{center}
-		\caption{Screenshot of {\cobweb}s \libref{cobweb} frontend, an open-source \multiModal route planner. It shows a \multiModal
-		route starting from a given source, using the modes \textit{foot-tram-foot-tram-foot} in that sequence to reach the destination.}
-		\label{cobweb_frontend}
-	\end{figure}\quad\\
 	Further, we implemented the presented algorithms in the \cobweb \libref{cobweb} project, which is an open-source \multiModal
-	route planner (see \figref{cobweb_frontend} for an image of its frontend).
-	In \sectionref{evaluation} we show our experimental results and compare the techniques with each other.
+	route planner. In \sectionref{evaluation} we show our experimental results and compare the techniques with each other.

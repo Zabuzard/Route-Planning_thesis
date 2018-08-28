@@ -1,5 +1,5 @@
 %Shortest path problem
-\section{Shortest path problem}\label{shortestPathProblem}
+\chapter{Shortest path problem}\label{shortestPathProblem}
 	For route planning, routes through a network must be optimized in regards to one or even many criteria.
 	A common criteria is the \textit{travel time}. Others include cost, number of transfers or restrictions
 	in transportation types.
@@ -40,7 +40,7 @@
 	\end{mydef}
 
 %Time-independent
-\subsection{Time-independent}
+\section{Time-independent}
 	Route planning in time-independent networks is a very well studied problem.
 	Many efficient solutions to the shortest path problem exists. We introduce a very basic algorithm, \dijkstra
 	and a simple improvement based on heuristics, \astar.
@@ -104,7 +104,7 @@
 	The network shown by \figref{timeIndependentExample} acts as toy example for this section.
 
 %Dijkstra
-\subsubsection{Dijkstra}
+\subsection{Dijkstra}
 	\dijkstra \libref{dijkstra} is a simple approach to solving the shortest path problem. It can be viewed
 	as the logical extension of breadth-first search (\bfs) \libref{dijkstra} in weighted graphs. The algorithm
 	revolves around a priority queue where it stores neighboring nodes, sorted by their shortest path cost.
@@ -171,11 +171,11 @@
 	
 	The $\dist$ function, often implemented as array, stores the tentative shortest path weight to the given node.
 	$\prev$ is used for path extraction at the end, it stores the parent nodes used for the shortest paths represented by $\dist$.
-	The algorithm starts by initializing both collections with default values. Initially the distance to all nodes, except the source, is unknown.
+	The algorithm starts by initializing both collections with default values. Initially, the distance to all nodes, except the source, is unknown.
 	Thus, $\infty$ is used for them. $Q$ represents the list of nodes that need to be processed, usually implemented as priority queue.
 	Initially, it only holds the source node $s$.
 	
-	In the example $Q$ is initially $\{v_1\}$. The algorithm then relaxes $v_1$ and stores distances to its neighbors:
+	In the example $Q$ starts as $\{v_1\}$. The algorithm then relaxes $v_1$ and stores distances to its neighbors:
 	\begin{center}
 		\begin{tabular}{CC}
 			\dist(v_2) = 8	&\prev(v_2) = v_1,\\
@@ -211,7 +211,7 @@
 		\end{tabular}
 	\end{center}
 	The only node left is the target node $v_5$ now. It is relaxed and the loop terminates.
-	The algorithm backtracks the parent pointer
+	The algorithm backtracks the parent pointers
 	\begin{align*}
 		\prev(v_5)	&= v_2,\\
 		\prev(v_2)	&= v_4,\\
@@ -226,7 +226,7 @@
 	which is the path shown by the last example in the figure.
 
 %A*
-\subsubsection{\astar and \alt}\label{alt}
+\subsection{\astar and \alt}\label{alt}
 	An important observation of \dijkstra is that, if it settles the shortest path distance to a node, then,
 	all nodes which are closer to the source, were already settled in a previous round.
 	
@@ -309,7 +309,7 @@
 	in $\mathcal{O}(1)$ by only implicitly reversing the edges.
 
 %Time-dependent
-\subsection{Time-dependent}\label{time_dependent_sec}
+\section{Time-dependent}\label{time_dependent_sec}
 	Approaches designed for time-independent networks, such as \alt, have an important drawback. Optimization is always done on
 	assuming that edge costs are constant. However, in a time-dependent network, this is not the case. The weight of an edge is
 	dependent on the departure time, which is not known in advance.\\\\
@@ -321,11 +321,11 @@
 	for time-dependent data, such as \textit{timetables} (see \sectionref{timetable_sec}).
 
 %Connection scan
-\subsubsection{Connection scan}\label{csa}
+\subsection{Connection scan}\label{csa}
 	Connection scan (\csa) \libref{csa} is an algorithm for route planning specially designed for time-dependent networks,
 	such as public transit networks. It processes the network represented as timetable, as defined by \defref{timetable}.\\\\
 	The algorithm is very simple. All connections of the timetable are sorted by their departure time.
-	Give a query connections are explored increasing in their departure time. The algorithm is fast primarily due to the fact that
+	Given a query, connections are explored increasing in their departure time. The algorithm is fast primarily due to the fact that
 	connections can be maintained in a simple array. In contrast to \dijkstra, it does not need to maintain a priority queue or
 	other more complex data-structures. Arrays are heavily optimized and benefit from a lot of effects, like cache locality \libref{cacheLocality}.
 	% CSA implementation
@@ -486,7 +486,7 @@
 	The earliest arrival time at \karlsruhe is $S[k] = \timef{5}{03}{pm}$.
 	
 %Multi-modal
-\subsection{Multi-modal}\label{multiModal_sec}
+\section{Multi-modal}\label{multiModal_sec}
 	So far, all presented route planning algorithms are limited to networks only consisting routes of one transportation mode,
 	for example a train network. We only distinguished between time-independent and time-dependent networks. However, in practice
 	we want to plan routes involving multiple transportation modes. For example using a bicycle to drive to the next train main station,
@@ -552,7 +552,7 @@
 	Afterwards, we present a generic approach to combine any \uniModal algorithms for limited \multiModal route planning.
 
 %Modified Dijkstra
-\subsubsection{Modified Dijkstra}\label{modifiedDijkstra}
+\subsection{Modified Dijkstra}\label{modifiedDijkstra}
 	In order to adapt \dijkstra and its variants \astar and \alt for \multiModal graphs (see \defref{multiModalGraph}), the algorithm
 	needs to account for the labels at edges.\\\\
 	Given a \multiModal graph, a source $s$ and a target $t$, and a set of available transportation modes
@@ -590,7 +590,7 @@
 			 	\draw[thick, ->] (-1, 0) to (q0);
 			 	\draw[thick, ->] (q0) to [loop above] node[above] {$m \in S$} (q0);
 			 	\draw[thick, ->] (q0) to node[above] {$m' \in M \setminus S$} (q1);
-			 	\draw[thick, ->] (q1) to [loop above] node[above] {$m' \in M \setminus S$} (q1);
+			 	\draw[thick, ->] (q1) to [loop above] node[above] {$m' \in M$} (q1);
 			\end{tikzpicture}
 		\end{center}
 		\caption{The transportation mode constraints of \dijkstra, adapted to \multiModal routing.}
@@ -630,7 +630,7 @@
 	combinations, which is usually not feasible.
 
 %Access nodes
-\subsubsection{Access nodes}\label{accessNodes}
+\subsection{Access nodes}\label{accessNodes}
 	Often, combining multiple networks of different types into one representation, such as a graph, is not appropriate.
 	We have seen that graph representations for public transit networks dramatically scale in size, due to
 	representing time information. A timetable is more suited for such a network type and algorithms optimized to a

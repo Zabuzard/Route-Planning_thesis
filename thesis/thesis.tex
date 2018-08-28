@@ -1,4 +1,4 @@
-\documentclass[11pt,oneside,bibliography=totoc,abstracton]{scrartcl}
+\documentclass[11pt,oneside,bibliography=totoc,abstracton]{scrreprt}
 
 % Resemble a4wide style
 \usepackage{geometry}
@@ -20,6 +20,24 @@
 \usepackage{array}% More table options
 \usepackage{verbatim}% New environment, also for comments
 \usepackage{listings}% New environment, mainly used for code
+\usepackage{etoolbox}% Tools for changing commands
+
+% Fancy chapter styles
+\usepackage[Lenny]{fncychap}
+\makeatletter
+  \DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+  \DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+  \DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+  \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+  \DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+  \DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+  \DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+\makeatother
+\makeatletter
+  \patchcmd{\@makechapterhead}{\vspace*{50\p@}}{\vspace*{-20\p@}}{}{}
+  \patchcmd{\@makeschapterhead}{\vspace*{50\p@}}{\vspace*{10\p@}}{}{}
+  \patchcmd{\DOTIS}{\vskip 40\p@}{\vskip 0\p@}{}{}
+\makeatother
 
 \usepackage{fancyhdr}% Can create headers and footers
 \usepackage{amssymb}% Provides usage of special characters and symbols
@@ -73,7 +91,7 @@
 	urlcolor=blue
 }
 
-% Custom header
+% Disable header for beginning and use fancy instead of plain
 \fancyhead[LO,RE]{}
 \fancyhead[LE,RO]{}
 
@@ -283,11 +301,12 @@
 \newcommand{\macromathsf}[1]{\macro{\ensuremath{\textsf{#1}}}}
 
 % Disable hacks
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\macrohighlight}[1]{#1}
+\renewcommand{\todo}[1]{}
+\renewcommand{\macrohighlight}[1]{#1}
 
 % Macros
 \newcommand{\java}{\macrosc{Java}}
+\newcommand{\js}{\macrosc{JavaScript}}
 \newcommand{\astar}{\macrosc{A\ensuremath{^{\star}}}}
 \newcommand{\alt}{\macrosc{ALT}}
 \newcommand{\bfs}{\macrosc{BFS}}
@@ -297,6 +316,7 @@
 \newcommand{\opnv}{\macrosc{ÖPNV}}
 \newcommand{\dijkstra}{\macrosc{Dijkstra}}
 \newcommand{\cobweb}{\macrosc{Cobweb}}
+\newcommand{\lexiSearch}{\macrosc{LexiSearch}}
 \newcommand{\nns}{\macrosc{NNS}}
 \newcommand{\kdTree}{\macrosc{k-d tree}}
 \newcommand{\vpTree}{\macrosc{VP tree}}
@@ -314,6 +334,12 @@
 \newcommand{\xml}{\macrosc{XML}}
 \newcommand{\zip}{\macrosc{ZIP}}
 \newcommand{\csv}{\macrosc{CSV}}
+\newcommand{\bzipTwo}{\macrosc{BZIP2}}
+\newcommand{\gzip}{\macrosc{GZIP}}
+\newcommand{\xz}{\macrosc{XZ}}
+\newcommand{\restApi}{\macrosc{REST-API}}
+\newcommand{\api}{\macrosc{API}}
+\newcommand{\http}{\macrosc{HTTP}}
 
 \newcommand{\true}{\macromathsf{true}}
 \newcommand{\false}{\macromathsf{false}}
@@ -346,6 +372,10 @@
 \newcommand{\freiburgR}{\macromathsf{Freiburg}}
 \newcommand{\stuttgartR}{\macromathsf{Stuttgart}}
 \newcommand{\switzerlandR}{\macromathsf{Switzerland}}
+\newcommand{\depTime}{\macromathsf{depTime}}
+\newcommand{\modes}{\macromathsf{modes}}
+\newcommand{\fromJ}{\macromathsf{from}}
+\newcommand{\toJ}{\macromathsf{to}}
 
 % Operator
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -369,6 +399,16 @@
 \begin{document}
 % Command renews that need to be inside the document
 \renewcommand{\figurename}{Fig.}% Fig. instead of Figure when linking figures
+\renewcommand{\bibname}{References}% References instead of Bibliography for literature
+\renewcommand{\chaptername}{Section}
+\newgeometry{
+	includeheadfoot,
+ 	left=1.5in,
+	right=1in,
+	top=0.1in,
+	bottom=1in
+	%margin=4cm
+}
 
 % Begin of content
 % Titlepage
@@ -385,7 +425,7 @@
 			Supervisor:	& Prof.~Dr.~Hannah Bast\\
 			Advisor:		&  Patrick Brosi
 		\end{tabular}
-		\todo{disable todos and macro highlights.}% Remove todo for final submission
+		%\todo{disable todos and macro highlights.}% Remove todo for final submission
 	}
 	\maketitle
 	% Suppress page number on title page
@@ -408,9 +448,7 @@
 	been prepared for another examination or assignment, either
 	wholly or excerpts thereof.
 	\vfill
-	\parbox{4cm}{\hrule
-	\strut \centering\footnotesize Place, Date} \hfill\parbox{4cm}{\hrule
-	\strut \centering\footnotesize Signature}
+	\parbox{4cm}{\hrule \strut \centering\footnotesize Place, Date} \hfill\parbox{4cm}{\hrule \strut \centering\footnotesize Signature}
 \end{abstract}
 \clearpage
 
@@ -419,9 +457,9 @@
 \input{content/abstract}
 \clearpage
 % Commands that need to be after the preamble
-\fancyhead[LO,RE]{\parbox{0.7\textwidth}{\textbf{\rightmark}}}
-\fancyhead[LE,RO]{\textbf{Section \arabic{section}}}
-
+\fancyhead[LO,RE]{\parbox{0.7\textwidth}{\textbf{\nouppercase{\rightmark}}}}
+\fancyhead[LE,RO]{\textbf{Section \arabic{chapter}}}
+\restoregeometry
 \input{content/introduction}
 \input{content/preliminaries}
 \input{content/models}

@@ -1,5 +1,5 @@
 % Evaluation
-\section{Evaluation}\label{evaluation}
+\chapter{Evaluation}\label{evaluation}
 	In this section we report on our experimental results for the presented algorithms on three data sets of increasing size.
 	Therefore, we first give insights on the data sets and how the network models are obtained. Afterwards we evaluate
 	{\coverTree}s, \dijkstra, \astar (with $\asTheCrowFlies$), \alt, \csa and \multiModal methods such as the adopted \dijkstra
@@ -22,7 +22,7 @@
 	evaluated in terms of increasing range.
 
 %Input data
-\subsection{Input data}
+\section{Input data}\label{inputData_sec}
 	We consider three data sets, consisting of road and public transit data. The road network is extracted from \osm \libref{osm}
 	formatted data and transit data is given in the \gtfs \libref{gtfs} format.\\\\
 	Our data sets represent the region around the german cities \freiburgR and \stuttgartR. Their road network is
@@ -37,7 +37,7 @@
 	The transit data used for \stuttgartR is under restricted public access (refer to \libref{vvsContact}).
 
 %OSM
-\subsubsection{\osm}
+\subsection{\osm}
 	\osm \libref{osm} (OpenStreetMap) data is represented in a \xml structure describing
 	\begin{itemize}
 		\item[1.] \textit{nodes}, with an unique identifier and a coordinate given as pair of latitude and longitude;
@@ -218,7 +218,7 @@ building=train_station
 	\end{table}
 
 %GTFS
-\subsubsection{\gtfs}
+\subsection{\gtfs}
 	\gtfs \libref{gtfs} is short for General Transit Feed Specification, it defines a common format
 	for public transit schedules. It comes compressed as \zip archive, consisting multiple
 	text files formatted as \csv tables. The mandatory tables are
@@ -371,7 +371,7 @@ S6, S3 3, 180
 	\end{table}\quad\\\\
 
 %Experiments
-\subsection{Experiments}
+\section{Experiments}
 	This section shows our experimental results for the algorithms presented in \sectionref{nearestNeighborProblem}
 	and \sectionref{shortestPathProblem}. The algorithms are implemented in the context of the \cobweb \libref{cobweb} project,
 	which is an open-source \multiModal route planner written in \java.\\\\
@@ -379,11 +379,11 @@ S6, S3 3, 180
 	The maximal heap size of {\java}s virtual machine is restricted to $85$ GB.
 
 %Nearest neighbor computation
-\subsubsection{Nearest neighbor computation}
+\subsection{Nearest neighbor computation}
 	For solving the \nearestNeighborProblem we implemented a \coverTree data-structure with corresponding retrieval methods,
 	as explained in \sectionref{coverTree}. It operates on nodes of the road network obtained from the data sets
 	\freiburgR, \stuttgartR and \switzerlandR, using $\asTheCrowFlies$ as metric on the nodes.\\\\
-	The experiment contains of continuous insertion of nodes, for each of the three networks respectively, and then measuring
+	The experiment consists of continuous insertion of nodes, for each of the three networks respectively, and then measuring
 	random nearest neighbor queries, i.e. the execution time of \algoref{coverTreeSearch}. Measurements are done for tree sizes
 	of $1$, $10\,000$ and then in steps of $10\,000$. Each measurement is averaged over $1\,000$ queries using randomly selected nodes.\\
 	% Cover tree results
@@ -405,11 +405,11 @@ S6, S3 3, 180
 	parent of many other, locally close nodes. And as such, the tree is balanced well, resulting in efficient queries
 	that are able to quickly find the correct path in the tree that leads to the nearest neighbor.
 	
-	Due to the same reason, the running time scales approximately logarithmic with increasing size. Queries take longer, if the
-	depth of the tree increases. In a well balanced \coverTree, the depth is logarithmic to its size.
+	Due to the same reason, the running time scales approximately logarithmic with increasing size. Queries take longer if the
+	depth of the tree increases. In a well balanced \coverTree the depth is logarithmic to its size.
 
 %Uni-modal routing
-\subsubsection{Uni-modal routing}
+\subsection{Uni-modal routing}
 	The first experiment for \uniModal routing compares time-independent methods for solving the \shortestPathProblem.
 	It measures an implementation of \dijkstra (see \algoref{dijkstra}), the \astar algorithm (see \sectionref{alt})
 	using $\asTheCrowFlies$ as heuristic and \alt with the precomputed heuristic shown in \defref{alt_heuristic}.
@@ -419,7 +419,7 @@ S6, S3 3, 180
 	for the source nodes to all other nodes in the graph. Source nodes with a bad connectivity are rejected and exchanged
 	against another random source node. This is determined by a source node having no node in the graph with a rank of at
 	least $2^{15}$ which is only rarely the case for randomly chosen nodes.
-	We then choose nodes as destinations that have a Dijkstra of
+	We then choose nodes as destinations that have a Dijkstra rank of
 	\begin{align*}
 		2^0, 2^1, \ldots, 2^k
 	\end{align*}
@@ -518,7 +518,7 @@ S6, S3 3, 180
 	 congestion as much as \csa and is still more subject to the range of queries, which is not captured by this experiment.
 
 %Multi-modal routing
-\subsubsection{Multi-modal routing}
+\subsection{Multi-modal routing}
 	For \multiModal routing we compare a modified \dijkstra (see \sectionref{modifiedDijkstra}), running on a link graph (see \defref{linkGraph}), with
 	our simplified version of \anr (refer to \sectionref{accessNodes}. \anr runs on a road graph and a timetable, using an ordinary \dijkstra for the road
 	and \csa for the transit network. For a given query, it computes the three nearest neighbors to the source and destination as access nodes,

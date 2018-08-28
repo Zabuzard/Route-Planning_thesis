@@ -1,12 +1,12 @@
 % Conclusion
-\section{Conclusion}\label{conclusion}
+\chapter{Conclusion}\label{conclusion}
 	Route planning is a problem of much interest that gained a lot of interest in the last decades. Problem settings like \uniModal route planning are
 	well researched, efficient solutions were developed. Corresponding research is now focused on \multiModal routing and other difficult problems
 	occurring in practice, such as turn penalties and multi criteria routing.\\\\
-	We have presented common and established models for road and transit networks. Graph-based solutions are straightforward representations of the network,
+	We have presented common and established models for road and transit networks. Graph based solutions are straightforward representations of the network,
 	but can not easily adapt to time dependent data, such as transit networks. Timetables are non-graph based alternatives for public transit networks
-	which fit their structure better than static graphs. Additionally, a link graph can be used to combine graph-based models for multiple networks in a
-	straightforward manner. While it might not necessarily be an effective approach, it makes route planning on combined networks for graph-based
+	which fit their structure better than static graphs. Additionally, a link graph can be used to combine graph based models for multiple networks in a
+	straightforward manner. While it might not necessarily be an effective approach, it makes route planning on combined networks for graph based
 	algorithms possible.
 	
 	In order to explain more sophisticated route planning approaches, we presented the \nearestNeighborProblem and thoroughly discussed an
@@ -21,14 +21,15 @@
 	available after the initial departure time. \csa is fast because it heavily exploits cache locality \libref{cacheLocality} and other low-level optimizations
 	for arrays.
 	
-	For \multiModal route planning we show how \dijkstra can be adapted to run on a link graph, representing a combined network. Further, we present the
-	general concept of \anr and propose a simplified variant of it, generalized to an arbitrary algorithm for road networks and another algorithm for transit
-	networks. This makes it possible to combine a graph-based solution like \dijkstra, or even more sophisticated approaches, for the road network,
+	For \multiModal route planning we showed how \dijkstra can be adapted to run on a link graph, representing a combined network. Further, we presented the
+	general concept of \anr and proposed a simplified variant of it, generalized to an arbitrary algorithm for road networks and another algorithm for transit
+	networks. This makes it possible to combine a graph based solution like \dijkstra, or even more sophisticated approaches, for the road network,
 	with a timetable based approach for transit networks, such as \csa.
 	
-	Further, we present experimental results of implementations in the \cobweb project \libref{cobweb} and discuss them. For the experiments three data sets are used,
-	\freiburgR, \stuttgartR and \switzerlandR. The setup, as well as the structure of the input data, is thoroughly explained.
-	{\coverTree}s and \csa turn out to be a a very efficient solution to their corresponding problems. \dijkstra works well for short range queries,
+	Further, we presented experimental results of implementations in the \cobweb project \libref{cobweb} and discussed them.
+	For the experiments three data sets are used, \freiburgR, \stuttgartR and \switzerlandR.
+	The setup, as well as the structure of the input data, was thoroughly explained. {\coverTree}s and \csa turned out to be a a very
+	efficient solution to their corresponding problems. \dijkstra works well for short range queries,
 	but scales bad for increasing ranges. Further, it lacks behind more sophisticated approaches as seen in \figref{uniModalTimeIndependentResultsExternalOverview}.
 	\astar using $\asTheCrowFlies$ does not perform well on networks used for road planning. While \alt, if carefully implemented, typically beats \dijkstra,
 	especially for mid to long range queries. In practice, link graphs are often not feasible due to extreme demands on space capacity. For \multiModal routing

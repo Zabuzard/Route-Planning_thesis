@@ -1,5 +1,5 @@
 %Nearest neighbor problem
-\section{Nearest neighbor problem}\label{nearestNeighborProblem}
+\chapter{Nearest neighbor problem}\label{nearestNeighborProblem}
 	In this section we introduce the \nearestNeighborProblem, also known as nearest neighbor search (\nns).
 	First, we define the problem. Then a short overview of related research is given, after which we elaborate on
 	a solution called {\coverTree} \libref{coverTree}.
@@ -80,7 +80,7 @@
 		d: \mathbb{R}^2 \times \mathbb{R}^2, ((x_1, y_1), (x_2, y_2)) \mapsto \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
 	\end{align*}
 	Informally $d$ computes the \textit{ordinary} straight-line distance between two points.\\\\
-	The nearest neighbor of $x_5$ is $x_1$ as
+	The nearest neighbor of $x_5$ is $x_1$, as
 	\begin{align*}
 		d(x_5, x_1)	&= \sqrt{(50 - 70)^2 + (50 - 70)^2}\\
 				&= \sqrt{800}
@@ -94,9 +94,9 @@
 	\begin{align*}
 		d(x_1, x_2) = d(x_1, x_3) = d(x_1, x_4) = d(x_1, x_5)
 	\end{align*}
-	Any of them is a valid solution to the nearest neighbor problem of $x_1$.\\\\
+	Any of them is a valid solution to the nearest neighbor problem for $x_1$.\\\\
 	The search for a nearest neighbor is a well understood problem \libref{nnsOld, nnsNew} and has many
-	applications. Without restrictions, solving the problem on general metrics was proven to
+	applications. Without restrictions, solving the problem on general metrics is proven to
 	require $\Omega(n)$ time \libref{nnsOld}, where $n$ is the amount of points.
 	
 	Typical approaches divide the space into regions, exploiting properties of the metric space.
@@ -121,7 +121,7 @@
 	\end{mydef}
 
 %Cover tree
-\subsection{Cover tree}
+\section{Cover tree}
 	\begin{mydef}\label{coverTree}
 		A \textnormal{cover tree} $T$ on a metric space $(M, d)$ is a leveled tree $(V, E)$.
 		
@@ -163,7 +163,7 @@
 	tree placed at level $i$, we know that all nodes of the subtree rooted at $v$ are associated with points
 	inside a distance of at most $2^i$. This means that, if we search for a nearest neighbor,
 	and traverse to a node $v$ in the tree, all nodes underneath $v$ are relatively close to $v$. So, if we already have a
-	candidate for a nearest neighbor, with distance of $d$ and $v$ is already further away than $d + 2^i$;
+	candidate for a nearest neighbor, with a distance of $d$ and $v$ is already further away than $d + 2^i$;
 	$v$ and all nodes in its subtree can not improve the distance.
 	% Cover tree example
 	\begin{figure}[!ht]
