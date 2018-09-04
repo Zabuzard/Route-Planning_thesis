@@ -6,7 +6,32 @@
 
 % Future Work
 \section{Future Work}
-Blabla. \todo{Write something...}
+	Our goals for the future are focused on further extending and improving \cobweb. The most important step in order to make our \anr version
+	viable is to implement a sophisticated routing algorithm for road networks. Such as techniques based on \textit{contraction}, like contraction
+	hierarchies (\ch) \libref{ch} and transit node routing (\tnr) \libref{tnr, tnrReconsidered}. Combined with \csa this should yield promising
+	acceptable low query times for shortest path computations.
+	
+	To improve the quality of our shortest paths, access node selection needs to be improved. It should not solely be based on vicinity.
+	Stops should be ordered in a certain priority, measuring their importance for the network. Ideally, a stop is important if it is part
+	of many shortest paths. A simple hierarchy can be obtained by counting the amount of connections available at a certain stop.
+	The more connections, the more likely it is important.
+	The hierarchy can further be fine tuned by injecting query logs of other applications or manually selecting big main
+	stations before smaller stops.\\\\
+	Another important aspect is to greatly expand the amount of metadata displayed next to a computed journey in the frontend.
+	An application that is to be used by clients must give extensive information on routes. Not only the name of a street and identification numbers of
+	trains, but also including precise information on a road type, possible restrictions, access to the complete schedule of the trip of a transit vehicle,
+	cost, and possibly even include forecasts for traffic congestion.
+	
+	Currently, \cobweb uses a database to store metadata which are not directly relevant to routing. The data is then later, after computing
+	the shortest route, retrieved to \textit{annotate} the journey. For efficient retrieval, in particular if the amount of stored metadata increases,
+	the database structure needs to be improved. Also, parsing in a new data-feed and inserting missing information into the database does take
+	too long at the moment and should be improved.\\\\
+	Long term goals consist of adding multi-criteria routing \libref{multiCriteria}, such as optimizing not only for the earliest arrival time but
+	also for factors like cost and amount of transfers. And adding support for real-time data (\rtd) \libref{rtd}, for example incorporating traffic
+	congestion, road outage and transit vehicle delays.
+	Real-time data is already available for most networks, especially for transit networks. However, \rtd is particularly hard to implement,
+	because the underlying network changes, possibly invalidating precomputations. Fortunately, only small sections of a
+	network are affected and need to be adjusted, leading to the identification of a changes impact and possible recomputations.
 
 % Summary
 \section{Summary}
