@@ -2,16 +2,21 @@
 \chapter{Conclusion}\label{conclusion}
 	Route planning is a problem of much interest that gained a lot of interest in the last decades. Problem settings like \uniModal route planning are
 	well researched, efficient solutions were developed. Corresponding research is now focused on \multiModal routing and other difficult problems
-	occurring in practice, such as turn penalties and multi criteria routing.\\\\
+	occurring in practice, such as turn penalties and multi criteria routing.
+
+% Future Work
+\section{Future Work}
+Blabla. \todo{Write something...}
+
+% Summary
+\section{Summary}
 	We have presented common and established models for road and transit networks. Graph based solutions are straightforward representations of the network,
 	but can not easily adapt to time dependent data, such as transit networks. Timetables are non-graph based alternatives for public transit networks
 	which fit their structure better than static graphs. Additionally, a link graph can be used to combine graph based models for multiple networks in a
 	straightforward manner. While it might not necessarily be an effective approach, it makes route planning on combined networks for graph based
-	algorithms possible.
-	
+	algorithms possible.\\\\
 	In order to explain more sophisticated route planning approaches, we presented the \nearestNeighborProblem and thoroughly discussed an
-	efficient solution to the problem and various variants, using {\coverTree}s.
-	
+	efficient solution to the problem and various variants, using {\coverTree}s.\\\\
 	We covered basic route planning algorithms, such as \dijkstra and common optimizations like \astar. The effectiveness of \astar heavily relies on the chosen
 	heuristic, which depends on the underlying structure of the network. \alt was presented as a solution to this problem, providing a general applicable heuristic
 	which is based on the actual shortest path distances to chosen landmarks. For an overview of more sophisticated \uniModal time-independent
@@ -24,8 +29,7 @@
 	For \multiModal route planning we showed how \dijkstra can be adapted to run on a link graph, representing a combined network. Further, we presented the
 	general concept of \anr and proposed a simplified variant of it, generalized to an arbitrary algorithm for road networks and another algorithm for transit
 	networks. This makes it possible to combine a graph based solution like \dijkstra, or even more sophisticated approaches, for the road network,
-	with a timetable based approach for transit networks, such as \csa.
-	
+	with a timetable based approach for transit networks, such as \csa.\\\\
 	Further, we presented experimental results of implementations in the \cobweb project \libref{cobweb} and discussed them.
 	For the experiments three data sets are used, \freiburgR, \stuttgartR and \switzerlandR.
 	The setup, as well as the structure of the input data, was thoroughly explained. {\coverTree}s and \csa turned out to be a a very
