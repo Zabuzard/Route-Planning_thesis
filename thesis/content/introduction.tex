@@ -17,7 +17,30 @@
 
 % Related Work
 \section{Related Work}
-Blabla.\todo{Write something...}
+	Research on route planning began roughly in the \datef{1950}s with the development of \dijkstra \libref{dijkstra} and the
+	\bellmanFord \libref{dijkstra}. Ten years later \dijkstra was improved using certain heuristics, introducing \astar \libref{alt}.
+	While those algorithms are all able to compute the shortest path in a road network, they are too slow on real world networks of
+	realistic size, such as the scale of a country or even a state.
+	
+	Thus, starting from \datef{2000}, research focused on developing speedup techniques for \dijkstra. Basic techniques include
+	bi-directional search, goal-directed search and contraction. In \datef{2005} \astar was further
+	improved by introducing a heuristic based on \textit{landmarks}, exploiting properties of the triangle inequality,
+	called \alt \libref{alt}. Around the same time, techniques based on edge labels were developed. A prominent refinement of this
+	approach is called \arcFlags \libref{arcFlags}. \datef{2008} contraction hierarchies (\ch) \libref{ch} was presented as a
+	very efficient algorithm based on contraction. Also, transit node routing (\tnr) \libref{tnr}, a technique based on \textit{access nodes},
+	was developed. A year later, it was shown that approaches can efficiently be combined, yielding very fast solutions.
+	Resulting in \chase \libref{chase}, which combines \ch with \arcFlags, and a combination of \tnr and \arcFlags, that yield query times
+	of around $0.005$ milliseconds on road networks of country size (compare to \figref{uniModalTimeIndependentResultsExternalOverview}
+	in \sectionref{evaluation}).\\\\
+	For public transportation networks, research was first focused on adapting existing solutions for road networks.
+	From \datef{2005} to \datef{2012} most of the mentioned algorithms were successfully extended to compute shortest
+	paths in public transportation networks \libref{networks, simpleTimeExpanded, transitModels, tnrTransit, routePlanningOverview}.
+	Unfortunately, most do not perform well on transit networks, as such networks have a completely different structure from which
+	previous speedup techniques do not benefit much.
+	
+	Because of that, techniques specially for transit networks have been developed. Efficient algorithms include \transferPatterns
+	\libref{transferPatterns} from \datef{2010}, \raptor \libref{raptor} from \datef{2012} and \csa \libref{csa} from \datef{2017}.
+
 
 % Contributions
 \section{Contributions}
