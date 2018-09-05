@@ -39,8 +39,16 @@
 	previous speedup techniques do not benefit much.
 	
 	Because of that, techniques specially for transit networks have been developed. Efficient algorithms include \transferPatterns
-	\libref{transferPatterns} from \datef{2010}, \raptor \libref{raptor} from \datef{2012} and \csa \libref{csa} from \datef{2017}.
-
+	\libref{transferPatterns} from \datef{2010}, \raptor \libref{raptor} from \datef{2012} and \csa \libref{csa} from \datef{2017}.\\\\
+	A similar approach was done for \multiModal routing, were most algorithms have been adapted to also run in combined networks,
+	accounting for transportation mode restrictions \libref{labelShortestPath, alt, lcsppShortcuts}.
+	However, the topic is still relative new and promising approaches, as well as extensive research, appear only since around
+	\datef{2008}. Theoretical background was provided by \libref{labelShortestPath, lcssp}.
+	Nowadays, research is focused on \anr \libref{accessNodeRouting, routePlanningOverview}, a general approach for combining
+	multiple networks using \text{access nodes}. As well as on improving techniques for solving related subproblems, such as
+	efficient access node selection and solving the \lcspp \libref{labelShortestPath} with less restrictions.\\\\
+	Meanwhile, related, more practice-oriented problems are studied, such as penalizing turns \libref{turnPenaltiesOld, turnPenaltiesNew}
+	or general multi criteria routing \libref{multiCriteria, multiCriteriaSelection, routePlanningOverview}.
 
 % Contributions
 \section{Contributions}
