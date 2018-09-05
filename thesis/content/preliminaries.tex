@@ -7,12 +7,12 @@
 	\begin{mydef}\label{graph}
 		A \textnormal{graph} $G$ is a tuple $(V, E)$ with a set of nodes $V$ and a set of
 		edges $E \subseteq V \times \mathbb{R}_{\ge 0} \times V$.
-		An \textnormal{edge} $e \in E$ is an ordered tuple $(u, w, v)$ with source node $u \in V$, a non-negative
+		An \textnormal{edge} $e \in E$ is an ordered tuple $(u, w, v)$ with a source node $u \in V$, a non-negative
 		weight $w \in \mathbb{R}_{\ge 0}$ and a destination node $v \in V$.
 	\end{mydef}\quad\\
 	Note that \defref{graph} actually defines a \textit{directed} graph, as opposed to an \textit{undirected} graph where an
 	edge like $(u, w, v)$ would be considered equal to the edge of opposite direction $(v, w, u)$ (compare to \libref{graphTheory}).
-	However, for transportation networks an undirected graph often is not applicable, for example due to one way streets or
+	However, for transportation networks an undirected graph often is not applicable, for example, due to one way streets or
 	time dependent connections like trains which depart at different times for different directions.
 	
 	In the context of route planning we refer to the weight $w$ of an edge $(u, w, v)$ as \textit{cost}. It can be used to encode the length
@@ -41,22 +41,22 @@
 		\caption{Illustration of an example graph with five nodes and six edges.}
 		\label{graph_example}
 	\end{figure}\quad\\
-	As an example consider the graph $G = (V, E)$ with
+	As an example, consider the graph $G = (V, E)$ with
 	\begin{align*}
 		V	&= \{v_1, v_2, v_3, v_4, v_5\} \text{ and}\\
-		E	&= \{(v_1, 8, v_2), (v_1, 1, v_3), (v_2, 1, v_1), (v_2, 2, v_5), (v_3, 2, v_4), (v_4, 1, v_2)\}.
+		E	&= \{(v_1, 8, v_2), (v_1, 1, v_3), (v_2, 1, v_1), (v_2, 2, v_5), (v_3, 2, v_4), (v_4, 1, v_2)\},
 	\end{align*}
 	which is illustrated by \figref{graph_example}.
 	\begin{mydef}
-		Given a graph $G = (V, E)$ the function $\src: E \to V, ((u, w, v)) \mapsto u$ gets the \textnormal{source}
-		of an edge. Analogously $\dest: E \to V, ((u, w, v)) \mapsto v$ retrieves the \textnormal{destination}.
+		Given a graph $G = (V, E)$ the function $\src: E \to V, (u, w, v) \mapsto u$ gets the \textnormal{source}
+		of an edge. Analogously $\dest: E \to V, (u, w, v) \mapsto v$ retrieves the \textnormal{destination}.
 	\end{mydef}
 	\begin{mydef}\label{path}
 		A \textnormal{path} in a graph $G = (V, E)$ is a sequence $p = e_1e_2e_3\ldots$ of edges $e_i \in E$ such that
 		\begin{align*}
 			\forall i: \dest(e_i) = \src(e_{i + 1}).
 		\end{align*}
-		We write $e \in p$ if an edge $e$ is contained at least once in the path $p$.
+		We write $e \in p$ if an edge $e$ appears at least once in the path $p$.
 		The \textnormal{length} of a path is the amount of edges it contains, i.e. the length of the sequence.
 		The \textnormal{weight} or \textnormal{cost} is the sum of its edges weights.
 		
@@ -72,7 +72,7 @@
 		\end{align*}
 		with length $k + l$, also denoted by $p = q_1q_2$.
 	\end{mydef}\quad\\
-	An example for a path in the graph $G$ would be
+	An example of a path in the graph $G$ would be
 	\begin{align*}
 		p	&=(v_1, 8, v_2)(v_2, 1, v_1)(v_1, 1, v_3).
 	\end{align*}
@@ -81,7 +81,7 @@
 % Tree
 \section{Tree}
 	\begin{mydef}\label{tree}
-		A \textnormal{tree} is an graph $T = (V, E)$ with the following properties:
+		A \textnormal{tree} is a graph $T = (V, E)$ with the following properties:
 		\begin{itemize}
 			\item[1.] There is exactly one node $r \in V$ with no ingoing edges, called the \textnormal{root}, i.e.
 				\begin{align*}
@@ -97,7 +97,7 @@
 	\begin{mydef}\label{subTree}
 		The \textnormal{subtree} of a tree $T = (V, E)$ rooted at a node $r' \in V$ is a tree $T' = (V', E')$. $V' \subseteq V$ is the set
 		of nodes that can be reached from $r'$. That is, all nodes that are part of possible paths starting at $r'$.
-		Likewise $E' \subseteq E$ is the set of edges restricted to the vertices in $V'$. The root of $T'$ is $r'$.
+		Likewise, $E' \subseteq E$ is the set of edges restricted to the vertices in $V'$. The root of $T'$ is $r'$.
 	\end{mydef}
 	\begin{mydef}\label{treeDepth}
 		The \textnormal{depth} of a node $v$ in a tree $T = (V, E)$, denoted by $\depth(v)$, is defined as the amount of
@@ -147,7 +147,7 @@
 			 	\draw[thick, ->] (v2) to (v6);
 			\end{tikzpicture}
 		\end{center}
-		\caption{Example of an unlabeled tree (left) and the subtree of $v_2$ (right).}
+		\caption{An example of an unlabeled tree (left) and the subtree of $v_2$ (right).}
 		\label{treeExample}
 	\end{figure}\quad\\
 	\figref{treeExample} shows a tree with $7$ nodes. The node $v_1$ is the root; $v_5, v_6, v_3$
@@ -251,15 +251,15 @@
 	
 	There, we measure the distance between geographical locations given as pair of \textit{latitude} and \textit{longitude} coordinates.
 	Latitude and longitude, often denoted by $\phi$ and $\lambda$, are real numbers in the ranges $(-90, 90)$ and $[-180, 180)$ respectively,
-	measured in degrees. However, for convenience we represent them in radians. Both representations are equivalent to each other
+	measured in degrees. However, for convenience, we represent them in radians. Both representations are equivalent to each other
 	and can easily be converted using the ratio $360^\circ = 2 \pi \text{ rad}$.\\\\
-	A commonly used measure is the \textit{as-the-crow-flies} metric, which is equivalent to the euclidean distance in the euclidean space.
+	A commonly used measure is the \textit{as-the-crow-flies} metric, which is equivalent to the Euclidean distance in the Euclidean space.
 	\defref{asTheCrowFlies} defines an approximation of this distance on locations given by latitude and longitude coordinates.
 	The approximation is commonly known as equirectangular projection of the earth \libref{equiRectProjection}.
 	Note that there are more accurate methods for computing the great-circle distance for geographical locations,
 	like the haversine formula \libref{haversine}. However, they come with a significant computational overhead.
 	\begin{mydef}\label{asTheCrowFlies}
-		Given a set of coordinates $M = \left\{(\phi, \lambda) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in [-\pi, \pi)\right\}$ we define
+		Given a set of coordinates $M = \left\{(\phi, \lambda) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in [-\pi, \pi)\right\}$, we define
 		$\asTheCrowFlies: M \times M \to \mathbb{R}$ such that
 		\begin{align*}
 			\left(\left(\phi_1, \lambda_1\right), \left(\phi_2, \lambda_2\right)\right) \mapsto
