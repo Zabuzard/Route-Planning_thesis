@@ -526,10 +526,10 @@ S6, S3 3, 180
 	used to compute the shortest paths between the sources and destinations access nodes. Additionally, one shortest path query from the source
 	to the destination, limited to the road network, is run. In total this makes
 	\begin{itemize}
-		\item[] $2 \times$ $3$-nearest neighbor queries from source and destination,
-		\item[] $6 \times$ \dijkstra from source and destination to access nodes,
-		\item[] $9 \times$ \csa between access nodes,
-		\item[] $1 \times$ \dijkstra from source to destination, limited to the road graph.
+		\item $2 \times$ $3$-nearest neighbor queries from source and destination,
+		\item $6 \times$ \dijkstra from source and destination to access nodes,
+		\item $9 \times$ \csa between access nodes,
+		\item $1 \times$ \dijkstra from source to destination, limited to the road graph.
 	\end{itemize}
 	The measurement is done similar to the experiments for \uniModal time-independent routing, as seen
 	in \figref{uniModalTimeIndependentResults}, measuring for specific increasing \textit{Dikstra rank}s. Additionally, the measurement is fixed

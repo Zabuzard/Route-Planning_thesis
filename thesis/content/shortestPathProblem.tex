@@ -1,7 +1,7 @@
 %Shortest path problem
 \chapter{Shortest path problem}\label{shortestPathProblem}
-	For route planning, routes through a network must be optimized in regards to one or even many criteria.
-	A common criteria is the \textit{travel time}. Others include cost, number of transfers or restrictions
+	For route planning, routes through a network must be optimized with regards to one or even many criteria.
+	A common criterion is the \textit{travel time}. Others include cost, number of transfers or restrictions
 	in transportation types.
 	
 	In this chapter, we will first give an informal description of the \earliestArrivalProblem. Followed by
@@ -12,13 +12,13 @@
 	Afterwards, we explain two solutions for combined networks, using multiple transportation modes. There, the problem
 	description slightly changes by adding transportation mode restrictions.\\\\
 	\begin{mydef}
-		The earliest arrival problem asks for finding a \textnormal{route} in a network with following properties
+		The earliest arrival problem asks for finding a \textnormal{route} in a network with the following properties.
 		\begin{itemize}
 			\item[1.] The route must start at $s$ and end at $t$.
 			\item[2.] The departure time at $s$ is $\tau$.
 			\item[3.] All other applicable routes must have a greater travel time, i.e. arrive later at $t$.
 		\end{itemize}
-		Points $s$ and $t$ are given source and target points in the network respectively. $\tau$ is the desired departure time,
+		Points $s$ and $t$ are given source and target points in the network, respectively. $\tau$ is the desired departure time,
 		it may be ignored for a time-independent network.
 	\end{mydef}
 	\begin{mydef}
@@ -41,7 +41,7 @@
 
 %Time-independent
 \section{Time-independent}
-	Route planning in time-independent networks is a very well studied problem.
+	Route planning in time-independent networks is a well understood problem.
 	Many efficient solutions to the shortest path problem exists. We introduce a very basic algorithm, \dijkstra
 	and a simple improvement based on heuristics, \astar.
 	% Time-independent example
@@ -101,7 +101,7 @@
 		weights are $10$, $7$ and $6$. The last example represents the shortest path from $v_1$ to $v_5$.}
 		\label{timeIndependentExample}
 	\end{figure}\quad\\
-	The network shown by \figref{timeIndependentExample} acts as toy example for this section.
+	The network shown in \figref{timeIndependentExample} acts as toy example for this section.
 
 %Dijkstra
 \subsection{Dijkstra}
@@ -166,13 +166,13 @@
 		\BlankLine
 		\caption{Dijkstra's algorithm for computing shortest paths in time-independent graphs.}\label{dijkstra}
 	\end{algorithm}\DecMargin{1em}\quad\\\\
-	To familiarize with the algorithm, we step through the execution for the graph shown by \figref{timeIndependentExample},
+	To familiarize with the algorithm, we step through the execution for the graph shown in \figref{timeIndependentExample},
 	with $v_1$ as source and $v_5$ as target node.
 	
 	The $\dist$ function, often implemented as array, stores the tentative shortest path weight to the given node.
 	$\prev$ is used for path extraction at the end, it stores the parent nodes used for the shortest paths represented by $\dist$.
 	The algorithm starts by initializing both collections with default values. Initially, the distance to all nodes, except the source, is unknown.
-	Thus, $\infty$ is used for them. $Q$ represents the list of nodes that need to be processed, usually implemented as priority queue.
+	Thus, $\infty$ is used for them. $Q$ represents the list of nodes that need to be processed, usually implemented as a priority queue.
 	Initially, it only holds the source node $s$.
 	
 	In the example $Q$ starts as $\{v_1\}$. The algorithm then relaxes $v_1$ and stores distances to its neighbors:
@@ -203,7 +203,7 @@
 	\end{center}
 	Note that $v_4$ improves the distance to $v_2$. The previous values for $v_2$ are overwritten and the
 	tentative shortest path to $v_2$ uses $(v_4, 1, v_2)$ and not $(v_1, 8, v_2)$ anymore.
-	In the next round $v_2$ is relaxed which improves the distance to $v_5$:
+	In the next round $v_2$ is relaxed, which improves the distance to $v_5$:
 	\begin{center}
 		\begin{tabular}{CC}
 			\dist(v_5) = 6	&\prev(v_5) = v_2,\\
@@ -231,7 +231,7 @@
 	all nodes which are closer to the source, were already settled in a previous round.
 	
 	Moreover, the algorithm explores the graph in all directions equally. It has no sense of \textit{goal direction}.\\\\
-	The \astar algorithm \libref{alt} is a simple extension of \dijkstra which improves its efficiency by steering the
+	The \astar algorithm \libref{alt} is a simple extension of \dijkstra, which improves its efficiency by steering the
 	exploration more towards the target. \figref{dijkstra_vs_astar} illustrates this by comparing the \textit{search space}
 	of both algorithms. The search space of \astar is smaller and much more directed to the target node $t$.
 	% A-star vs Dijkstra
@@ -280,14 +280,14 @@
 	A heuristic is a good choice if it approximates the actual shortest path distance well. As such, the \textit{as-the-crow-flies} heuristic works well
 	on networks with a high connectivity in all directions. For example a residential area of a city without one way streets. Unfortunately, in road
 	networks, the common case is to first drive into the opposite direction in order to reach a fast highway. This even gets worse on networks
-	where the importance of nodes heavily differ, such as public transit networks. For train networks, the typical case is that one first needs
+	where the importance of nodes heavily differs, such as public transit networks. For train networks, the typical case is that one first needs
 	to travel to a main station. This is obviously due to a main station having a much better connectivity and faster trains available.
 	Because of that, the effectiveness of \textit{as-the-crow-flies} is very limited on such networks.\\\\
 	The \textit{landmark heurstic} partially solves the issue. An \astar algorithm using the landmark heuristic is called \alt \libref{alt},
 	which stands for \textit{landmarks and triangle inequality}.
 	
 	The heuristic provides a more generic approach by approximating the distance
-	between nodes $u$ and $v$ by using precomputed distances with pre-determined nodes $l$, called \textit{landmarks}.
+	between nodes $u$ and $v$ by using precomputed distances with predetermined nodes $l$, called \textit{landmarks}.
 	\begin{mydef}\label{alt_heuristic}
 		Given a set of landmarks $L \subseteq V$, the heuristic $\landmarks$ is defined by
 		\begin{align*}
@@ -303,7 +303,7 @@
 	Refer to \libref{alt} for a detailed analysis.\\\\
 	The computation of the actual shortest path distances, to and from the landmarks, can be done by using \dijkstra. But, instead of
 	running the algorithm for all pairs of nodes, the distances can be obtained with two runs only. Therefore, the algorithm is slightly modified by dropping
-	\textbf{lines 9} and \textbf{10}, such that the algorithm relaxes the whole network. By that, a single run of \dijkstra with a landmark $l$ as source,
+	\textbf{lines 9} and \textbf{10}, such that the algorithm relaxes the whole network. By that, a single run of \dijkstra with a landmark $l$ as the source,
 	computes the distances $\dist(l, v)$ to all nodes $v$ in the network. By reversing the graph, i.e. edges $(u, w, v)$ become $(v, w, u)$, the distances to
 	the landmarks can be obtained analogously with $l$ as source again. Depending on the graph implementation, reversal can be done
 	in $\mathcal{O}(1)$ by only implicitly reversing the edges.
@@ -313,9 +313,9 @@
 	Approaches designed for time-independent networks, such as \alt, have an important drawback. Optimization is always done on
 	assuming that edge costs are constant. However, in a time-dependent network, this is not the case. The weight of an edge is
 	dependent on the departure time, which is not known in advance.\\\\
-	\dijkstra and its variants \astar and \alt can easily be adapted to also work in time-dependent networks by taking the departure
+	\dijkstra and its variants \astar and \alt can easily be adapted to also work with time-dependent networks by taking the departure
 	time into consideration when computing the weight of an edge. However, their effectiveness is very limited.
-	Nonetheless, they where used for a long time for time-dependent networks too. With increasing research on route
+	Nonetheless, they were used for a long time for time-dependent networks too. With increasing research on route
 	planning in time-dependent networks, more effective algorithms, such as \transferPatterns \libref{transferPatterns}
 	and \csa \libref{csa}, were developed. Many of them do not use graphs and prefer data-structures that are designed
 	for time-dependent data, such as \textit{timetables} (see \sectionref{timetable_sec}).
@@ -391,19 +391,19 @@
 		\caption{Connection scan algorithm for computing shortest paths in time-dependent networks, represented by timetables.}\label{csa_algo}
 	\end{algorithm}\DecMargin{1em}\quad\\\\
 	\algoref{csa_algo} shows the full connection scan algorithm. The array $S$ stores for each stop the currently best arrival time.
-	$T$ associates for each trip the first connection it is taken with. $J$ is used for path extraction and memorizes for each stop a
+	$T$ associates for each trip the first connection, it is taken with. $J$ is used for path extraction and memorizes for each stop a
 	segment of a trip, consisting of enter and exit connections $c_{\enter}$ and $c_{\exit}$ respectively, and a footpath $f$:
 	\begin{align*}
 		(c_{\enter}, c_{\exit}, f)
 	\end{align*}
 	It represents a path which takes the segment of the trip starting at $c_{\enter}$, ending at $c_{\exit}$ and then taking the footpath $f$ from
-	the arrival stop of $c_{\exit}$. Such an entry is associated to the arrival stop of the footpath $f$, always representing the parent path
+	the arrival stop of $c_{\exit}$. Such an entry is associated with the arrival stop of the footpath $f$, always representing the parent path
 	that results in the current best arrival time for the corresponding stop.\\\\
 	The algorithm starts by initializing the arrays with default values and relaxing all initial footpaths. Connections are then explored
 	increasing in their departure time, starting from the first connection $c_0$ that starts after the departure time $\tau$. \textbf{Line 7}
-	is typically implemented as \textit{binary search} \libref{binarySearch} on a sorted array of connections $C$.
+	is typically implemented as a \textit{binary search} \libref{binarySearch} on a sorted array of connections $C$.
 	
-	\textbf{Line 9} is the stopping criteria, which lets the algorithm terminate once a connection departs after the current best arrival
+	\textbf{Line 9} is the stopping criterion, which lets the algorithm terminate once a connection departs after the current best arrival
 	time at the target $t$. Since connections are explored increasing in time, it is impossible that a connection can improve on the
 	arrival time anymore.
 	
@@ -423,7 +423,7 @@
 	It consists of five connections, denoted by $c_1, c_2, c_3, c_4$ and $c_5$,
 	sorted by departure time. We assume only the three self-loop footpaths on the stops $f$, $o$ and $k$.
 	
-	Assume a query from \freiburg, represented by stop $f$ to \karlsruhe, represented by $k$, with a departure time of
+	Assume a query from \freiburg, represented by stop $f$, to \karlsruhe, represented by $k$, with a departure time of
 	$\tau = \timef{3}{50}{pm}$. The initial configuration after \textbf{line 3} is
 	\begin{align*}
 		S[f]		&= S[o] = S[k] = \infty,\\
@@ -450,7 +450,7 @@
 	\begin{align*}
 		c_2	&= (f, o, \timef{4}{03}{pm}, \timef{4}{50}{pm}, t_{17024}).
 	\end{align*}
-	However, it induces no changes, as the previous connection already arrived at \offenburg earlier.
+	However, it induces no changes, as the previous connection already arrived in \offenburg earlier.
 	The algorithm continues by exploring
 	\begin{align*}
 		c_3	&= (o, k, \timef{4}{29}{pm}, \timef{4}{58}{pm}, t_{104}).
@@ -479,17 +479,17 @@
 	\end{align*}
 	which yields the path which takes
 	\begin{itemize}
-		\item[] the footpath from \freiburg to \freiburg,
-		\item[] $t_{104}$ starting with $c_1$ to $c_3$, which is using the \ticef from \freiburg to \karlsruhe,
-		\item[] and a final footpath from \karlsruhe to \karlsruhe.
+		\item the footpath from \freiburg to \freiburg,
+		\item $t_{104}$ starting with $c_1$ to $c_3$, which is using the \ticef from \freiburg to \karlsruhe,
+		\item and a final footpath from \karlsruhe to \karlsruhe.
 	\end{itemize}
 	The earliest arrival time at \karlsruhe is $S[k] = \timef{5}{03}{pm}$.
 	
 %Multi-modal
 \section{Multi-modal}\label{multiModal_sec}
-	So far, all presented route planning algorithms are limited to networks only consisting routes of one transportation mode,
-	for example a train network. We only distinguished between time-independent and time-dependent networks. However, in practice
-	we want to plan routes involving multiple transportation modes. For example using a bicycle to drive to the next train main station,
+	So far, all presented route planning algorithms are limited to networks only consisting of routes of one transportation mode,
+	for example a train network. We only distinguished between time-independent and time-dependent networks. However, in practice,
+	we want to plan routes involving multiple transportation modes. For example, using a bicycle to drive to the next train main station,
 	using the road network, and then entering a train.\\\\
 	To represent transportation mode possibilities in the networks, we slightly modify our models. All edges in graph based models
 	get transportation mode labels, formalized by \defref{multiModalGraph}.
@@ -507,7 +507,7 @@
 	\end{align*}
 	The \textit{timetable} model is adjusted by assigning all connections the mode $\tram$ and
 	all footpaths \foot.\\\\
-	Another difficulty of \multiModal routing is that, in practice, it is usually not be applicable to change transportation modes arbitrarily.
+	Another difficulty of \multiModal routing is that, in practice, it is usually not applicable to change transportation modes arbitrarily.
 	User have different requirements and preferences regarding the change of modes. For example, it might not be possible to
 	use a car right after traveling with a tram and then leaving it at a train station before continuing the journey using a train.
 	If the model does not account for this, the algorithm should not be allowed to pick such a route.\\
@@ -557,9 +557,9 @@
 	needs to account for the labels at edges.\\\\
 	Given a \multiModal graph, a source $s$ and a target $t$, and a set of available transportation modes
 	\begin{align*}
-		S	\subseteq \{\car, \bike, \foot, \tram\} = M
+		S	\subseteq \{\car, \bike, \foot, \tram\} = M,
 	\end{align*}
-	The modified \dijkstra computes a shortest path $p$ from $s$ to $t$ which does only use
+	the modified \dijkstra computes a shortest path $p$ from $s$ to $t$ which does only use
 	edges labeled with available modes, i.e.
 	\begin{align*}
 		\forall e \in p: \mode(e) \subseteq S.
@@ -596,7 +596,7 @@
 		\caption{The transportation mode constraints of \dijkstra, adapted to \multiModal routing.}
 		\label{modifiedDijkstraModesAutomaton}
 	\end{figure}
-	The modified \dijkstra accepts the transportation mode model shown by \figref{modifiedDijkstraModesAutomaton}.\\\\
+	The modified \dijkstra accepts the transportation mode model shown in \figref{modifiedDijkstraModesAutomaton}.\\\\
 	While this modification works perfectly fine for \dijkstra, it does impair the effectiveness of \astar and \alt. The problem is that
 	the heuristic of \astar can not know the transportation mode restrictions $S$ beforehand. Because of that, a heuristic must
 	always assume that the fastest possible transportation mode is chosen. Else, it might be possible that the actual shortest
@@ -613,7 +613,7 @@
 		S	&= M.
 	\end{align*}
 	The actual impact on the effectiveness heavily depends on the type of network. It has no effect at all, if all edges on
-	the shortest path for $S = M$ can also be taken with the actual restricted version of $S$. It gets worse if edges are
+	the shortest path for $S = M$ can also be taken with the actual restricted version of $S$. It gets worse if some edges are
 	not available anymore, for example a highway that can not be taken for $S = \{\foot\}$, although the heuristic assumed
 	it can be taken using a \car.
 	
@@ -666,8 +666,8 @@
 		\dest(p_1)	&= \src(p_2),\\
 		\dest(p_2)	&= \src(p_3).
 	\end{align*}
-	Of all paths satisfying this constraints, $p$ is chosen as the path with the smallest cost. Additionally, we consider the shortest path $q$
-	between the source and destination that only uses the road network. The final path is again the one with the smaller cost.
+	Of all paths satisfying these constraints, $p$ is chosen as the path with the smallest cost. Additionally, we consider the shortest path $q$
+	between the source and destination that only uses the road network. The final path is again the one with the smallest cost.
 	\figref{accessNodesScheme} illustrates the scheme of this approach.
 	% Access Nodes Scheme
 	\begin{figure}[!ht]
@@ -718,8 +718,8 @@
 			\end{tikzpicture}
 		\end{center}
 		\caption{Scheme of \accessNodeRouting. Circular nodes represent the source and destination node,
-		rectangular nodes are their corresponding access nodes. Solid edges indicate shortest paths in the first network,
-		dashed lines are in the second network.}
+			rectangular nodes are their corresponding access nodes. Solid edges indicate shortest paths in the first network,
+			dashed lines are in the second network.}
 		\label{accessNodesScheme}
 	\end{figure}\quad\\
 	The accepted transportation mode model is shown by \figref{accessNodesModesAutomaton}.
@@ -742,7 +742,7 @@
 			\end{tikzpicture}
 		\end{center}
 		\caption{The transportation mode constraints of \accessNodeRouting with two networks. $A$ represents the transportation
-		mode model accepted by the algorithm on the first network, $B$ refers to the automaton of the algorithm on the second network.}
+			mode model accepted by the algorithm on the first network, $B$ refers to the automaton of the algorithm on the second network.}
 		\label{accessNodesModesAutomaton}
 	\end{figure}\quad\\
 	Note that the resulting path is not necessarily a valid solution to the \shortestPathProblem anymore. A correct solution may not even contain any
