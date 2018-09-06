@@ -56,7 +56,7 @@
 			 	\node[below right] at (x11) {$x_{11}$};
 			\end{tikzpicture}
 		\end{center}
-		\caption{Grid showing eleven points in the cartesian plane $\mathbb{R}^2$.}
+		\caption{Grid showing eleven points in the Cartesian plane $\mathbb{R}^2$.}
 		\label{nearestNeighborProblemExample}
 	\end{figure}\quad\\
 	For following examples the toy data set shown in \figref{nearestNeighborProblemExample} is introduced.
@@ -74,12 +74,12 @@
 		x_{10}	&= (20, 70),\\
 		x_{11}	&= (10, 80).
 	\end{align*}
-	All points are elements of the cartesian plane $\mathbb{R}$. The Euclidean distance $d$ is chosen as metric on this set.
-	For two dimensions it can be defined as:
+	All points are elements of the Cartesian plane $\mathbb{R}$. The Euclidean distance $d$ is chosen as metric on this set.
+	For two dimensions, it can be defined as:
 	\begin{align*}
 		d: \mathbb{R}^2 \times \mathbb{R}^2, ((x_1, y_1), (x_2, y_2)) \mapsto \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
 	\end{align*}
-	Informally $d$ computes the \textit{ordinary} straight-line distance between two points.\\\\
+	Informally, $d$ computes the \textit{ordinary} straight-line distance between two points.\\\\
 	The nearest neighbor of $x_5$ is $x_1$, as
 	\begin{align*}
 		d(x_5, x_1)	&= \sqrt{(50 - 70)^2 + (50 - 70)^2}\\
@@ -137,9 +137,9 @@
 			C_i	&= \{m \in M | \exists v \in V : \lvl(v) = i \land \assoc(v) = m\}.
 		\end{align*}
 		
-		The following properties must hold
+		The following properties must hold:
 		\begin{itemize}
-			\item[1.] For a level $i$ there must not exist nodes which are associated with the same point $m \in M$:
+			\item[1.] For a level $i$, there must not exist nodes, which are associated with the same point $m \in M$:
 				\begin{align*}
 					\nexists v, v' \in V : i = \lvl(v) = \lvl(v') \land v \neq v' \land \assoc(v) = \assoc(v')
 				\end{align*}
@@ -158,7 +158,7 @@
 				\end{align*}
 		\end{itemize}
 	\end{mydef}
-	A cover tree \libref{coverTree} has interesting distance properties on its nodes which allows for
+	A cover tree \libref{coverTree} has interesting distance properties on its nodes, which allows for
 	efficient retrieval of nearest neighbors. The general approach is straightforward. Given a node $v$ in the
 	tree placed at level $i$, we know that all nodes of the subtree rooted at $v$ are associated with points
 	inside a distance of at most $2^i$. This means that, if we search for a nearest neighbor,
@@ -446,7 +446,7 @@
 			 	\node[inner sep=10pt, circle, draw=orange, opacity=0.5, pattern=crosshatch, pattern color=orange] at (x11) {};
 			\end{tikzpicture}
 		\end{center}
-		\caption{Figure that shows the separation property for each level of the cover tree shown by \figref{coverTreeExample}.
+		\caption{A figure that shows the separation property for each level of the cover tree shown in \figref{coverTreeExample}.
 			The levels are highlighted in the same manner than in the previous example. The levels are $6, 5, 4$ and $3$ from
 			top left to bottom right. The radii around the points have a size of $2^6, 2^5, 2^4$ and $2^3$.}
 		\label{coverTreeExampleRange}
@@ -466,7 +466,7 @@
 	\end{align*}
 	For the last two properties we take a look at \figref{coverTreeExampleRange}. It illustrates the fourth property.
 	The property states that all points in a cover $C_i$ must have a distance of at least $2^i$ to each other.
-	For level $6$ this is trivial since the set only contains $x_1$. For level $5$ it must hold that
+	For level $6$ this is trivial, since the set only contains $x_1$. For level $5$ it must hold that
 	\begin{align*}
 		d(x_1, x_{11}) = 50 > 32 = 2^5,
 	\end{align*}
@@ -477,9 +477,9 @@
 	of $2^6$ around their parent $x_1$ covers all nodes. Likewise are $x_1, x_2, x_3, x_4$ and $x_5$ included
 	in the circle around their parent $x_1$ with radius $2^5$.
 	
-	Note that it is not necessary that a node covers its whole subtree in its level. As example, we refer to $x_1$ in level $5$
-	which does not cover $x_{10}$, as $d(x_1, x_{10}) > 2^5$, though it is part of the subtree rooted at $x_1$. The third property only demands
-	that a parent covers all its direct children, not grandchildren or similar.\\\\
+	Note that it is not necessary that a node covers its whole subtree in its level. As an example, we refer to $x_1$ in level $5$
+	which does not cover $x_{10}$, as $d(x_1, x_{10}) > 2^5$, though it is part of the subtree rooted at $x_1$.
+	The third property only demands that a parent covers all its direct children, not grandchildren or similar.\\\\
 	% Cover tree insertion
 	\IncMargin{1em}
 	\begin{algorithm}
@@ -536,16 +536,16 @@
 		\caption{Searching a nearest neighbor in a cover tree operating on a metric space $(M, d)$.}\label{coverTreeSearch}
 	\end{algorithm}\DecMargin{1em}\quad\\
 	A search for a nearest neighbor follows a similar approach. \algoref{coverTreeSearch} starts at the root and traverses
-	the tree by following the children. The candidate set is refined by only following children which are closer than
+	the tree by following the children. The candidate set is refined by only following children, which are closer than
 	\begin{align*}
 		d(p, Q) + 2^i.
 	\end{align*}
-	There, the distance to the set represents the distance of the currently best candidate. Nodes in the subtree
+	There, the distance to the set represents the distance of the current best candidate. Nodes in the subtree
 	rooted at a child can maximally be $2^i$ closer than the child itself. Therefore, take a look
 	at \figref{coverTreeExampleRange} where $x_2$ is maximally $2^5$ closer to $x_7$ than $x_1$, else it would not
 	be covered by its parent $x_1$.
 	Because of that the algorithm only follows children which can have nodes in their subtree
-	that improve over the currently best candidate. Other children are rejected.
+	that improve over the current best candidate. Other children are rejected.
 	
 	Note that the algorithm must track down all levels, as another node could show up in the lowest level because of
 	the separation property.\\\\
@@ -594,7 +594,7 @@
 		\caption{Computing the $k$-neighborhood by using a cover tree which operates on a metric space $(M, d)$.}\label{coverTreeKNeighborhood}
 	\end{algorithm}\DecMargin{1em}\quad\\
 	The cover tree can also be used to efficiently compute the $k$-nearest neighbors or the $k$-neighborhood.
-	In order to compute the $k$-nearest neighbors, \algoref{coverTreeKSearch} extends the range bound from the currently
+	In order to compute the $k$-nearest neighbors, \algoref{coverTreeKSearch} extends the range bound from the current
 	best candidate to the $k$-th best candidate. Likewise does \algoref{coverTreeKNeighborhood} extend the bound to
 	the given range $k$ instead of involving candidate distances.\\\\
 	For other operations and a detailed analysis of the cover tree, as well as its complexity and a comparison

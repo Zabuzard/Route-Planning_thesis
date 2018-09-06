@@ -74,7 +74,7 @@
 		\item[4.] \toJ, the destination node to travel to.
 	\end{itemize}
 	The server then computes journeys using the algorithms presented in \sectionref{shortestPathProblem} and responds with a list of viable
-	journeys. A journey mainly consists of geographic coordinates describing the path to travel along and metadata, such as which
+	journeys. A journey mainly consists of geographical coordinates describing the path to travel along and metadata, such as which
 	transportation mode to use for which segment, names of roads and time information for each segment.
 	
 	The name search \api finds \osm nodes by their name. Therefore, we developed \lexiSearch \libref{lexiSearch}, an \api for retrieving
@@ -85,7 +85,7 @@
 	results \textit{as-you-type}. For example, a request with the approximate prefix name \textit{Freirb} would yield nodes with
 	the name \textit{Freiburg} and \textit{Freiburg im Breisgau}.
 	
-	The third \api offers retrieval of the \osm node nearest to a given geographic coordinate. Making it possible for a client to plan a
+	The third \api offers retrieval of the \osm node nearest to a given geographical coordinate. Making it possible for a client to plan a
 	route from an arbitrary location to an arbitrary destination, for example by clicking on a map. \cobweb retrieves the nearest node by
 	using a \coverTree and solving the \nearestNeighborProblem, as explained in \sectionref{nearestNeighborProblem}.\\\\
 	% Cobweb front end screenshot

@@ -10,9 +10,9 @@
 	A road network typically is time-independent. It consists of geographical locations and roads connecting them with each other.
 	We assume that a road can be taken at any time, with no time dependent constraints (see \fakesectionref{2} of \libref{networks}).
 	
-	Modeling the network as graph is straightforward, \defref{roadGraph} goes into detail.
+	Modeling the network as a graph is straightforward, \defref{roadGraph} goes into detail.
 	\begin{mydef}\label{roadGraph}
-		A \textnormal{road graph} is a graph $G = (V, E)$ with a set of geographic coordinates
+		A \textnormal{road graph} is a graph $G = (V, E)$ with a set of geographical coordinates
 		\begin{align*}
 			V = \{(\phi, \lambda) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in \left[-\pi, \pi\right)\},
 		\end{align*}
@@ -70,52 +70,52 @@
 		\end{center}
 		\caption{Example of a road network with its corresponding road graph. White connections indicate roads,
 			dark gray rectangles represent houses or other static objects.
-			Geographical coordinates for each node, as well as edge weights are omitted in the graph illustration.}
+			Geographical coordinates for each node, as well as edge weights are omitted in the illustration.}
 		\label{roadGraphExample}
 	\end{figure}\quad\\
 	\figref{roadGraphExample} shows a contrived example road network with the corresponding road graph.
 	Note that two way streets result in two edges, one edge for every direction the road can be taken.\\\\
-	Since edge weights are represented as average time it needs to take the road, it is possible to encode different road types.
+	Since edge weights are represented as the average time it needs to take the road, it is possible to encode different road types.
 	For example the average speed on a motorway is much higher than on a residential street. As such, the weight of an edge
 	representing a motorway is much smaller than the weight of an edge representing a residential street.
 	
-	While the example has exactly one node per road junction this must not always be the case. Typical real world data often consists
+	While the example has exactly one node per road junction this must not always be the case. Typical real world data often consist
 	of multiple nodes per road segment. However, \defref{roadGraph} is still valid for such data as long as there are edges
 	between the nodes if and only if there is a road connecting the locations.
 
 % Transit graph
 \section{Transit graph}\label{transitGraph}
 	Transit networks can be modeled similar to road graphs. The key difference is that transit networks are time-dependent
-	while road networks typically are not. For example an edge connecting \textit{Freiburg main station} with \textit{Karlsruhe main station}
+	while road networks typically are not. For example an edge connecting \textit{Freiburg main station} to \textit{Karlsruhe main station}
 	can not be taken at any time since trains and other transit vehicles only depart at certain times. The schedule might even change
 	at different days.\\\\
 	The difficulty lies in modeling time dependence in a static graph. There are two common approaches to that problem
 	(see \libref{networks, transitModels, routePlanningOverview}).\\\\
-	The first approach is called \textit{time-dependent}. There, edge weights are not static numbers but piecewise
+	The first approach is called \textit{time-dependent}. There, edge weights are not static numbers, but piecewise
 	continuous functions that take a date with time and compute the cost it needs to take the edge when starting at the given time.
-	This includes waiting time. As an example assume an edge $(u, c, v)$ with the cost function $c$. The edge represents a
+	This includes waiting time. As an example, assume an edge $(u, c, v)$ with the cost function $c$. The edge represents a
 	train connection and the travel time is $10$ minutes. However, the train departs at \timef{10}{15}{am}, while the starting time
-	is \timef{10}{00}{am}. The cost function thus computes a waiting time of $15$ minutes plus the travel time of $10$ minutes.
+	is \timef{10}{00}{am}. Thus, the cost function computes a waiting time of $15$ minutes plus the travel time of $10$ minutes.
 	Resulting in an edge weight of $25$ minutes.
 	
-	The main problem with this model is that it makes pre-computations for route planning very difficult as
+	The main problem with this model is that it makes precomputations for route planning very difficult as
 	the starting time is not known in advance.\\\\
 	The second approach, originally from \libref{simpleTimeExpanded}, is called \textit{time-expanded}.
 	There, the idea is to remove any time dependence from the graph by creating additional nodes for every
-	event at a station. A node then also has a time information next to its geographic location.
+	event at a station. Then, a node also has a time information next to its geographical location.
 	\begin{mydef}\label{simpleTransitGraph}
-		A \textnormal{time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographic coordinates
+		A \textnormal{time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographical coordinates
 		\begin{align*}
 			V = \left\{\left(\phi, \lambda, t\right) \middle| \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in \left[-\pi, \pi\right), t \text{ time}\right\},
 		\end{align*}
 		for example a train arriving or departing at a train station at a certain time.
 		
-		For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location and $v_t$  its time.\\\\
+		For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location and $v_t$ its time.\\\\
 		There is an edge $(u, w, v) \in E$ iff
 		\begin{itemize}
 			\item[1.] there is a vehicle departing from $u$ at time $u_t$ which arrives at $v$ at time $v_t$ without stops in between, or
 			\item[2.] $v$ is the node at the same coordinates than $u$ with the smallest time $v_t$ that is still
-			greater than $u_t$. This edge represents exiting a vehicle and waiting for another connection. That is
+				greater than $u_t$. This edge represents exiting a vehicle and waiting for another connection. That is
 			\begin{align*}
 				\forall v' \in V \setminus \{v\}	&: v'_\phi = u_\phi \land v'_\lambda = u_\lambda \land v'_t \ge u_t\\
 									&\Rightarrow v'_t - u_t > v_t - u_t.
@@ -203,25 +203,25 @@
 		\label{simpleTransitGraphExample}
 	\end{figure}\quad\\
 	\defref{simpleTransitGraph} defines such a time expanded transit graph and \figref{simpleTransitGraphExample} shows an example.
-	For simplicity it is assumed that the trains have no stops other than shown in the schedule. The schedule lists four trains:
+	For simplicity, it is assumed that the trains have no stops other than shown in the schedule. The schedule lists four trains:
 	\begin{itemize}
-		\item[1.] The \ticef which travels from \freiburg to \karlsruhe via \offenburg,
-		\item[2.] the \tregiof connecting \freiburg with \offenburg,
-		\item[3.] the \tregios driving from \offenburg to \karlsruhe and
-		\item[4.] ICE \tices which travels in the opposite direction, connecting \karlsruhe with \freiburg without intermediate stops.
+		\item[1.] The \ticef, which travels from \freiburg to \karlsruhe via \offenburg,
+		\item[2.] the \tregiof, connecting \freiburg with \offenburg,
+		\item[3.] the \tregios, driving from \offenburg to \karlsruhe and
+		\item[4.] the \tices, which travels in the opposite direction, connecting \karlsruhe with \freiburg without intermediate stops.
 	\end{itemize}
 	As seen in the example, the resulting graph has no time dependency anymore and is static, as well as all edge weights.
 	The downside is that the graph size dramatically increases as a new node is introduced for every single event.
 	In order to limit the growth, we assume that a schedule is the same every day and does not change. In fact, most schedules are
-	stable and often change only slightly, for example on weekends or at holidays. In practice hybrid models can be used for
+	stable and often change only slightly, for example on weekends or on holidays. In practice hybrid models can be used for
 	those exceptions.\\\\
 	However, the model still lacks an important feature. It does not represent \textit{transfer buffers} \libref{transitModels, routePlanningOverview} yet.
 	It takes some minimal amount of time to exit a vehicle and enter a different vehicle, possibly even at a different platform.
 	
 	We model that by further distinguishing the nodes by arrival and departure events. In between we can then add transfer
-	nodes which model the transfer duration. Therefore, the previous definition is adjusted and \defref{realisticTransitGraph} is received.
+	nodes, which model the transfer duration. Therefore, the previous definition is adjusted and \defref{realisticTransitGraph} is received.
 	\begin{mydef}\label{realisticTransitGraph}
-		A \textnormal{realistic time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographic coordinates
+		A \textnormal{realistic time expanded transit graph} is a graph $G = (V, E)$ with a set of events at geographical coordinates
 		\begin{align*}
 			V = \{(\phi, \lambda, t, e) | \phi \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right), \lambda \in \left[-\pi, \pi\right),
 			t \text{ time}, e \in \{\arrival, \departure, \transfer\}\},
@@ -230,7 +230,7 @@
 		
 		A node $(\phi, \lambda, t, e) \in V$ is an \textnormal{arrival node} if $e = \arrival$, analogously it is a
 		\textnormal{departure node} for $e = \departure$ and a transfer node for $e = \transfer$.
-		For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location, $v_t$  its time and $v_e$ its event type.\\\\
+		For a node $v \in V$, $v_\phi$ and $v_\lambda$ denote its location, $v_t$ its time and $v_e$ its event type.\\\\
 		For every arrival node $n$ there must exist a transfer node $m$ at the same coordinates such that $m_t = n_t + d$
 		with $d$ being the average transfer duration at the corresponding stop.\\\\
 		There is an edge $(u, w, v) \in E$ iff
@@ -361,9 +361,9 @@
 			connection and dashed edges involve transfer nodes. Edge weights are measured in minutes.}
 		\label{realisticTransitGraphExample}
 	\end{figure}\quad\\
-	\figref{realisticTransitGraphExample} shows how the transit graph from \figref{simpleTransitGraphExample} changes with transfer buffers.
+	\figref{realisticTransitGraphExample} shows how the transit graph of \figref{simpleTransitGraphExample} changes with transfer buffers.
 
-	The weight of edges connecting arrival nodes with transfer nodes is equal to the transfer duration, $5$ minutes in the example.
+	The weight of edges connecting arrival nodes to transfer nodes is equal to the transfer duration, $5$ minutes in the example.
 	The transfer duration can be different for each edge. A transfer is now possible if the departure of the desired vehicle is after
 	the arrival of the current vehicle plus the duration time. As seen in the example, edges connecting transfer nodes with departure
 	nodes are present exactly in this case. A transfer from \ticef to \tregios in \offenburg is indicated by taking the edge to the
@@ -402,18 +402,18 @@
 		an additional set of link edges $E_L = V_R \times \mathbb{R}_{\ge 0} \times V_T$.\\\\
 		There is an edge $(u, 0, v) \in E_L$ iff $\link(u)$ is defined and $v \in \link(u)$.
 	\end{mydef}\quad\\
-	The function $\link$ can be obtained in different ways. For example by creating a mapping from a road node $u$ to
+	The function $\link$ can be obtained in different ways. For example, by creating a mapping from a road node $u$ to
 	a stop $S$ if $u$ is in the vicinity of $S$ according to the $\asTheCrowFlies$ metric.
 	
-	Another straightforward possibility is to always connect a stop with the road node nearest to it. We will explore
+	Another straightforward possibility is to always connect a stop to the road node nearest to it. We will explore
 	this problem in \sectionref{nearestNeighborProblem}. An obvious downside of this approach is that the nearest road node
-	might not always have a good connectivity to the road network. A solution consists in creating a road node at the coordinates
+	might not always have a good connectivity in the road network. A solution consists in creating a road node at the coordinates
 	of the stop as representative. The node can then be connected with all road nodes in the vicinity.
 
 % Timetable
 \section{Timetable}\label{timetable_sec}
 	Timetables \libref{routePlanningOverview} are non-graph based representations for transit networks.
-	They consists of stops, trips, connections and footpaths.
+	They consist of stops, trips, connections and footpaths.
 	\begin{mydef}\label{timetable}
 		A \textnormal{timetable} is a tuple $(S, T, C, F)$ with stops $S$, trips $T$, connections $C$ and footpaths $F$.
 	\end{mydef}\quad\\
@@ -422,9 +422,9 @@
 	\lambda \in \left[-\pi, \pi\right)$.
 	
 	A trip is a scheduled vehicle, like the \ticef in the example schedule of \figref{simpleTransitGraphExample} or a bus.\\\\
-	In contrast to a trip, a connection is only a segment of a trip without stops in between. For example the connection
+	In contrast to a trip, a connection is only a segment of a trip without stops in between. For example, the connection
 	of the \ticef from \freiburg at \timef{3}{56}{pm} to \offenburg with arrival at \timef{4}{28}{pm}.
-	It is defined as tuple $c = (s_{\dep}, s_{\arr}, t_{\dep}, t_{\arr}, o)$ with $s_{\dep}, s_{\arr} \in S$ representing the
+	It is defined as a tuple $c = (s_{\dep}, s_{\arr}, t_{\dep}, t_{\arr}, o)$ with $s_{\dep}, s_{\arr} \in S$ representing the
 	departure and arrival stop of the connection respectively. Analogously $t_{\dep}$ is the time the vehicle departs
 	at $s_{\dep}$ and $t_{\arr}$ when it arrives at $s_{\arr}$. And $o \in T$ is the trip the connection belongs to.\\\\
 	Footpaths represent transfer possibilities between stops and are formalized as ordered tuple $(s_{\dep}, d, s_{\arr})$ with

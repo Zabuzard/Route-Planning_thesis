@@ -571,7 +571,7 @@ S6, S3 3, 180
 	only about $15$ GB for the road graph and the timetable.\\\\
 	As expected, the simplified version of \anr does not beat the ordinary \dijkstra, as it still needs to compute long range routes on the road graph
 	using \dijkstra. The key problem of our approach is that access nodes, which are chosen as nearest neighbors, might be far away or not even
-	be reachable when using the road network. Geographic proximity does not necessarily imply short travel times.
+	be reachable when using the road network. Geographical proximity does not necessarily imply short travel times.
 	In this case, the $6$ short range \dijkstra computations are actually long range computations, for which \dijkstra scales bad.
 	
 	However, \anr has one major advantage over \dijkstra. It can use any algorithm that computes shortest paths on a road network.
