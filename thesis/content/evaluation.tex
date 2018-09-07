@@ -5,7 +5,7 @@
 	{\coverTree}s, \dijkstra, \astar (with $\asTheCrowFlies$), \alt, \csa and \multiModal methods such as the adopted \dijkstra
 	and our simplified version of \anr on the given data sets.\\\\
 	When evaluating shortest path queries on randomly chosen source and target nodes, the resulting paths tend to be long-range.
-	However, in practice most queries are only local and algorithms like \dijkstra do not scale well with increasing range.
+	However, in practice, most queries are only local and algorithms like \dijkstra do not scale well with increasing range.
 	To overcome this measurement problem, we introduce the notion of a \textit{Dijkstra rank} \libref{dijkstraRank}.
 	\begin{mydef}\label{dijkstraRank}
 		Given a graph $G = (V, E)$, the \textnormal{Dijkstra rank} of a node $v \in V$ is the number of the iteration in which,
@@ -26,12 +26,12 @@
 	We consider three data sets, consisting of road and public transit data. The road network is extracted from \osm \libref{osm}
 	formatted data and transit data is given in the \gtfs \libref{gtfs} format.\\\\
 	Our data sets represent the region around the german cities \freiburgR and \stuttgartR. Their road network is
-	of similar size, while our transit data for \freiburgR only includes tram data, whereas the data for \stuttgartR
-	also includes train and bus connections. The size of our transit network for \stuttgartR is about ten times the size of
+	of similar size, while our transit data for \freiburgR only include tram data, whereas the data for \stuttgartR
+	also include train and bus connections. The size of our transit network for \stuttgartR is about ten times the size of
 	the network for \freiburgR.
 	
 	Furthermore, we include a road and transit network for the country \switzerlandR. The transit data consists of train, tram and
-	bus connections. Both networks are about three times the size of the {\stuttgartR}s.\\\\
+	bus connections. Both networks are about three times the size of {\stuttgartR}s.\\\\
 	We obtain our road networks from \libref{freiburgRoadSource, stuttgartRoadSource, switzerlandRoadSource}
 	and our transit networks from \libref{freiburgTransitSource, switzerlandTransitSource}.
 	The transit data used for \stuttgartR is under restricted public access (refer to \libref{vvsContact}).
@@ -79,8 +79,8 @@
   </relation>
 </osm>
 	\end{lstlisting}\quad\\
-	A small \osm example data set is shown by \lstref{osmExample}. Ways are used to represent roads consisting
-	of nodes. Tags are used to describe metadata like speed limits for a road or whether it is a one-way street or not.
+	A small \osm example data set is shown in \lstref{osmExample}. Ways are used to represent roads consisting
+	of nodes. Tags are used to describe metadata like speed limits for a road or whether it is a one way street or not.
 	However, the format also contains a lot of data not directly relevant for route planning, like shapes of buildings
 	and outlines of public parks. Therefore, we filter \osm data and only keep relevant information.
 	\begin{lstlisting}[caption={Tag filter for \osm ways.},label={osmFilter},style={FilterStyle},mathescape={true},
@@ -128,13 +128,13 @@ building=train_station
 	and none of the pairs under \textit{$--$DROP} are kept, as they represent roads of the network. All other ways are
 	rejected, as well as all relations.
 	After that, we read the nodes and only keep nodes that occurred at least once in any of the ways that passed the filter.
-	Our road network is then build using the remaining nodes as graph nodes, translating the ways into edges between the nodes.
+	Our road network is then built using the remaining nodes as graph nodes, translating the ways into edges between the nodes.
 	
 	Ways with a positive \textit{oneway} tag are translated into edges only going into the given direction, else we generate
-	both edges for both directions. The cost of an edge is computed as the time it needs to travel the direct distance between
-	the source and destination coordinates (see \defref{asTheCrowFlies}) with a certain speed. The speed is determined either
+	edges for both directions. The cost of an edge is computed as the time it takes to travel the direct distance between
+	the source and destination coordinates (see \defref{asTheCrowFlies}) at a certain speed. The speed is determined either
 	by a given \textit{maxspeed} tag or the average speed for the road type defined by the \textit{highway} tag.
-	Therefore, we use the average speed references shown by \tableref{highwaySpeeds}.
+	Therefore, we use the average speed references shown in \tableref{highwaySpeeds}.
 	\begin{table}[ht]
 	 	\begin{center}
 	 		\phantom{v}\quad\\
@@ -160,7 +160,7 @@ building=train_station
 				service		&$7$\\\hline
 			\end{tabular}
 		\end{center}
-		\caption{Average speed in km/h for a \osm way with the corresponding value for the \textit{highway} tag.}
+		\caption{Average speed in km/h for an \osm way with the corresponding value for the \textit{highway} tag.}
 		\label{highwaySpeeds}
 	\end{table}
 	\begin{table}[ht]
@@ -176,13 +176,13 @@ building=train_station
 				\switzerlandR	&$5\,530$	&$279$	&$2\,627\,645$	&$5\,226\,060$\\\hline
 			\end{tabular}
 		\end{center}
-		\caption{Size of the \osm data sets, in megabyte (MB) before and after filtering, and the size of the resulting road graphs
+		\caption{The size of the \osm data sets, in megabyte (MB) before and after filtering, and the size of the resulting road graphs
 			in amount of nodes $|V|$ and edges $|E|$.}
 		\label{osmSize}
 	\end{table}\quad\\\\
 	The size of the resulting road graphs (see \sectionref{roadGraphSec}) for all three data sets is reported in \tableref{osmSize}.
 	As seen, filtering the \osm data sets beforehand reduces the size of data that is to be processed by $95\%$ to $97\%$.
-	The road graphs have approximately two edges per node. This is due to most streets being two-way streets, thus generating
+	The road graphs have approximately two edges per node. This is due to most streets being a two way street, thus generating
 	two edges per connection between two nodes. Obviously, road junctions are, compared to the amount of nodes, rare and thus,
 	multiple edges do only rarely share the same node. The in- and outdegree of nodes is extremely low, mostly $2$ ($\approx 80\%$),
 	as seen in \tableref{roadDegree}.
@@ -212,15 +212,15 @@ building=train_station
 			\end{tabular}
 			\end{tabular}
 		\end{center}
-		\caption{Table showing the number of nodes of the corresponding road graph that have a certain in- or outdegree.
-		That is, the number of ingoing and outgoing edges respectively.}
+		\caption{A table showing the number of nodes of the corresponding road graph that have a certain in- or outdegree.
+			That is, the number of ingoing and outgoing edges respectively.}
 		\label{roadDegree}
 	\end{table}
 
 %GTFS
 \subsection{\gtfs}
 	\gtfs \libref{gtfs} is short for General Transit Feed Specification, it defines a common format
-	for public transit schedules. It comes compressed as \zip archive, consisting multiple
+	for public transit schedules. It comes compressed as \zip archive, consisting of multiple
 	text files formatted as \csv tables. The mandatory tables are
 	\begin{itemize}
 		\item[1.] \textit{agency.txt}, defining metadata about the transit agency;
@@ -228,11 +228,11 @@ building=train_station
 		\item[3.] \textit{trips.txt}, consisting of single trips, belonging to a route;
 		\item[4.] \textit{stop\_times.txt}, having departure and arrival times at the stops for all connections in the network;
 		\item[5.] \textit{stops.txt}, providing metadata and coordinates of all stops;
-		\item[6.] \textit{calendar.txt} defining the service pattern at which routes are available.
+		\item[6.] \textit{calendar.txt} defining the service pattern on which routes are available.
 	\end{itemize}
-	Furthermore, there are a couple of optional tables of which we are only interested in
+	Furthermore, there are a couple of optional tables, of which we are only interested in
 	\begin{itemize}
-		\item[7.] \textit{transfer.txt}, provides transfer possibilities between stops and their duration.
+		\item[7.] \textit{transfers.txt}, provides transfer possibilities between stops and their duration.
 	\end{itemize}
 		\begin{lstlisting}[caption={\gtfs example data set, inspired by \libref{gtfsExample}.},label={gtfsExample},style={GTFSStyle},mathescape={true},
 		float,floatplacement=ht]
@@ -275,7 +275,7 @@ S3, S6, 2, 300
 S6, S3 3, 180
 	\end{lstlisting}\quad\\
 	An example feed can be seen in \lstref{gtfsExample}. The format is similar to our definition of timetables (see \sectionref{timetable_sec}),
-	with the difference that connections are not directly given as edges departing from one stop and another, but as pair of arrival and
+	with the difference that connections are not directly given as edges departing from one stop to another, but as pair of arrival and
 	departure time at stops. Also, it contains a lot of metadata which we do not process.\\\\
 	Construction of a realistic time expanded transit graph (see \defref{realisticTransitGraph}) is straightforward and mainly
 	involves around parsing \textit{stop\_times.txt}. We build two nodes for every entry, one representing the arrival event at the stop
@@ -296,11 +296,11 @@ S6, S3 3, 180
 	next arrival node.
 	
 	For the footpaths, we initially take the transfers given in \textit{transfers.txt}. In order to increase the quality
-	of our footpath model, we also connect stops with footpaths if they are within $600$ meters to each other.
+	of our footpath model, we also connect stops with footpaths if they are within $600$ meters of each other.
 	
 	However, our footpaths need to fulfill strong properties (see \sectionref{timetable_sec}), which the given
 	transfers usually not obey. Therefore, we have to add self-loop footpaths, if not present. And we need to compute
-	the transitive closure of the given footpaths in order to ensure that they are transitively closed. Therefore, it is
+	the transitive closure of the given footpaths in order to ensure that they are transitively closed. Thus, it is
 	crucial that the range, for which close stops are connected, is kept low. Else, the amount of footpaths dramatically increases
 	due to the transitive closure.
 	
@@ -341,10 +341,10 @@ S6, S3 3, 180
 			\end{tabular}
 			\end{tabular}
 		\end{center}
-		\caption{Size of the \gtfs feeds, in kilobyte (KB) and the size of the resulting realistic time expanded transit graphs
+		\caption{The size of the \gtfs feeds, in kilobyte (KB) and the size of the resulting realistic time expanded transit graphs
 			in amount of nodes $|V|$ and edges $|E|$. Also, the size of the obtained timetable and details about the
 			footpath generation.\\
-			The column \textit{given} denotes the amount of footpaths already given in the \textit{transfer.txt} file,
+			The column \textit{given} denotes the amount of footpaths already given in the \textit{transfers.txt} file,
 			\textit{self-loops} represents how many missing self-loop paths were added. Likewise does \textit{close} report how
 			many footpaths we added for connecting close stops with each other. And \textit{closure} denotes
 			the amount of paths added to ensure that the model is transitively closed.}
@@ -366,7 +366,7 @@ S6, S3 3, 180
 				\switzerlandR	&$19\,584\,786$\\\hline
 			\end{tabular}
 		\end{center}
-		\caption{Amount of link edges that are added when combining road with transit graphs to create a link graph.}
+		\caption{The amount of link edges that are added when combining road with transit graphs to create a link graph.}
 		\label{linkGraphSize}
 	\end{table}\quad\\\\
 
@@ -391,9 +391,9 @@ S6, S3 3, 180
 		 \begin{center}
 			\includegraphics[scale=0.55,angle=-90]{res/plots/coverTreeResults}
 		\end{center}
-		\caption{Query durations for \algoref{coverTreeSearch} in a \coverTree with increasing size,
-		for three road networks respectively. Measurements are done at a size of $1$, $10\,000$ and then in steps
-		of $10\,000$, averaged over $1\,000$ random queries. Running time is stated in milliseconds.}
+		\caption{Query durations for \algoref{coverTreeSearch} on a \coverTree with increasing size,
+			for three road networks respectively. Measurements are done at a size of $1$, $10\,000$ and then in steps
+			of $10\,000$, averaged over $1\,000$ random queries. Running time is stated in milliseconds.}
 		\label{coverTreeResults}
 	\end{figure}\quad\\
 	\figref{coverTreeResults} shows the results of the experiment. The method is comparably fast, even for large road
@@ -405,8 +405,8 @@ S6, S3 3, 180
 	parent of many other, locally close nodes. And as such, the tree is balanced well, resulting in efficient queries
 	that are able to quickly find the correct path in the tree that leads to the nearest neighbor.
 	
-	Due to the same reason, the running time scales approximately logarithmic with increasing size. Queries take longer if the
-	depth of the tree increases. In a well balanced \coverTree the depth is logarithmic to its size.
+	Due to the same reason, the running time scales approximately logarithmically with increasing size. Queries take longer if the
+	depth of the tree increases. In a well balanced \coverTree the depth is logarithmic in its size.
 
 %Uni-modal routing
 \subsection{Uni-modal routing}
@@ -425,7 +425,7 @@ S6, S3 3, 180
 	\end{align*}
 	where $k \ge 15$ is the maximal rank all source nodes have in common. By that, the queries cover all types of
 	ranges, highlighting how well the algorithms scale with queries of increasing ranges.
-	By that, we receive for every rank $2^i$ in total $50$ different queries of which we average the
+	By that, we receive for every rank $2^i$ in total $50$ different queries which we average the
 	measured running time over.\\
 	% Uni-modal time-independent results
 	\begin{figure}[!ht]
@@ -440,7 +440,7 @@ S6, S3 3, 180
 		\label{uniModalTimeIndependentResults}
 	\end{figure}\quad\\
 	\figref{uniModalTimeIndependentResults} shows the results of the experiment. First of all, it can be seen that all
-	three methods do not scale well with queries of increasing ranges. Long range queries, like for a rank of $2^{20}$ or $2^{21}$ range
+	three methods do not scale well with queries of increasing ranges. Long range queries, like for a rank of $2^{20}$ or $2^{21}$, range
 	from $1$ to $10$ seconds. In fact, the running time scales exponentially for increasing ranges. Further, \astar and \alt are slower
 	than \dijkstra for short range queries. This is due to the increased overhead of the modified \dijkstra variants. Both need to
 	additionally evaluate their corresponding heuristic on every relaxed edge. However, for mid and, in particular, for long
@@ -487,7 +487,7 @@ S6, S3 3, 180
 		 \begin{center}
 			\includegraphics[scale=0.55,angle=-90]{res/plots/uniModalTimeDependentResultsAll}
 		\end{center}
-		\caption{Query durations of an time-independent variant of \dijkstra and \csa for three data sets, measured in milliseconds
+		\caption{Query durations of a time-independent variant of \dijkstra and \csa for three data sets, measured in milliseconds
 			on a logarithmic scale. Measurements are done for every $10$ minutes of the $10.10.2018$, averaged over $50$ random queries.
 			\dijkstra for \switzerlandR is measured in steps of $30$ minutes.}
 		\label{uniModalTimeDependentResultsAll}
@@ -501,21 +501,21 @@ S6, S3 3, 180
 			The duration is measured in milliseconds and all graphs range from \timef{12}{00}{am} to \timef{11}{59}{pm} for the $10.10.2018$.}
 		\label{uniModalTimeDependentResultsSingle}
 	\end{figure}\quad\\
-	 The algorithms are compared in \figref{uniModalTimeDependentResultsAll}, with their single performance
-	 highlighted by \figref{uniModalTimeDependentResultsSingle}.
+	The algorithms are compared in \figref{uniModalTimeDependentResultsAll}, with their single performance
+	highlighted in \figref{uniModalTimeDependentResultsSingle}.
 	 
-	 Both algorithms perform worse if the size of the time schedule increases, roughly increasing by a factor of $10$ for all three data sets.
-	 However, \csa runs on \switzerlandR $10$ times faster than \dijkstra on the small schedule of \freiburgR, where \csa even performs better
-	 by a factor of $1\,000$. Clearly, \csa outperforms \dijkstra for time-dependent routing, making it a very viable choice. \csa can even successfully
-	 compete against other approaches designed especially for time-dependent route planning, as shown by \libref{csa}.
+	Both algorithms perform worse if the size of the time schedule increases, roughly increasing by a factor of $10$ for all three data sets.
+	However, \csa runs on \switzerlandR $10$ times faster than \dijkstra on the small schedule of \freiburgR, where \csa even performs better
+	by a factor of $1\,000$. Clearly, \csa outperforms \dijkstra for time-dependent routing, making it a very viable choice. \csa can even successfully
+	compete against other approaches designed especially for time-dependent route planning, as shown by \libref{csa}.
 	 
-	 It can also be seen that \csa is subject to the traffic congestion of the time schedule. Yielding better running times in the evening and night
-	 from \timef{6}{00}{pm} to \timef{6}{00}{am}, than in the morning, noon and afternoon from \timef{6}{00}{am} to \timef{6}{00}{pm}.
-	 This is due to the fact that \csa needs to iterate all connections from a given time, not only relevant connections. In a rush hour, the schedule
-	 has way more connections that need to be processed, leading to a worse performance.
+	It can also be seen that \csa is subject to the traffic congestion of the time schedule. Yielding better running times in the evening and night
+	from \timef{6}{00}{pm} to \timef{6}{00}{am}, than in the morning, noon and afternoon from \timef{6}{00}{am} to \timef{6}{00}{pm}.
+	This is due to the fact that \csa needs to iterate all connections from a given time, not only relevant connections. In a rush hour, the schedule
+	has way more connections that need to be processed, leading to a worse performance.
 	 
-	 \dijkstra, on the other hand, only needs to scan connections available from the already processed routes. Thus, it is not affected by traffic
-	 congestion as much as \csa and is still more subject to the range of queries, which is not captured by this experiment.
+	\dijkstra, on the other hand, only needs to scan connections available from the already processed routes. Thus, it is not affected by traffic
+	congestion as much as \csa and is still more subject to the range of queries, which is not captured by this experiment.
 
 %Multi-modal routing
 \subsection{Multi-modal routing}
@@ -527,12 +527,12 @@ S6, S3 3, 180
 	to the destination, limited to the road network, is run. In total this makes
 	\begin{itemize}
 		\item $2 \times$ $3$-nearest neighbor queries from source and destination,
-		\item $6 \times$ \dijkstra from source and destination to access nodes,
+		\item $6 \times$ \dijkstra from the source and destination to access nodes,
 		\item $9 \times$ \csa between access nodes,
 		\item $1 \times$ \dijkstra from source to destination, limited to the road graph.
 	\end{itemize}
 	The measurement is done similar to the experiments for \uniModal time-independent routing, as seen
-	in \figref{uniModalTimeIndependentResults}, measuring for specific increasing \textit{Dikstra rank}s. Additionally, the measurement is fixed
+	in \figref{uniModalTimeIndependentResults}, measuring for specific increasing \textit{Dijkstra rank}s. Additionally, the measurement is fixed
 	to the $10.10.2018$ at \timef{12}{00}{pm}. The first experiment has no limitations on the transportation modes. All modes of the set
 	\begin{align*}
 		\{\car, \bike, \foot, \tram\}
@@ -541,14 +541,14 @@ S6, S3 3, 180
 	\begin{align*}
 		\{\bike, \tram\}.
 	\end{align*}
-	The results are given by \figref{multiModalResultsBaseline} and \figref{multiModalResultsRestricted} respectively.\\
+	The results are given in \figref{multiModalResultsBaseline} and \figref{multiModalResultsRestricted} respectively.\\
 	% Multi-modal results baseline
 	\begin{figure}[!ht]
 		 \begin{center}
 			\includegraphics[scale=0.55,angle=-90]{res/plots/multiModalResultsBaseline}
 		\end{center}
 		\caption{Results of \multiModal route planning with transportation modes $\{\car, \bike, \foot, \tram\}$.
-			Query duration of \dijkstra on a link graph and a simplified version of \anr using \dijkstra on a road graph and \csa on a timetable
+			Query durations of \dijkstra on a link graph and a simplified version of \anr using \dijkstra on a road graph and \csa on a timetable
 			are shown. Measurements are averaged over $50$ random queries with the specified Dijkstra rank. Query duration is measured
 			in milliseconds, presented on a logarithmic scale.}
 		\label{multiModalResultsBaseline}
@@ -564,7 +564,7 @@ S6, S3 3, 180
 	Transportation mode restrictions do not impair the running time of \dijkstra or \anr. Which is due to \dijkstra not using any
 	optimizations relying on transportation modes. Computation is done on the fly, without using precomputed results. The same holds for
 	the simplified \anr, which uses ordinary \dijkstra and \csa. Unfortunately, optimizations like \alt do not adapt well to \multiModal route planning,
-	since the precomputation must be done under the assumption of specific transportation modes restrictions, which might be different at query time.
+	since the precomputation must be done under the assumption of specific transportation mode restrictions, which might be different at query time.
 	
 	A key problem of \dijkstra on link graphs is that its running time is not applicable for long range queries and that a link graph scales
 	very bad in space consumption. In our experiments, the link graph for \switzerlandR consumes approximately $75$ GB, while \anr allocates
