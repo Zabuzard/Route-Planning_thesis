@@ -271,10 +271,10 @@
 \newcommand{\bigcupdot}{\charfusion[\mathop]{\bigcup}{\cdot}}
 \newcommand{\timef}[3]{\ensuremath{#1}\text{:}\ensuremath{#2}\textit{ #3}}
 \newcommand{\datef}[1]{\ensuremath{#1}}
-\newcommand{\figref}[1]{\textbf{Fig.\,\ref{#1}}}
+\newcommand{\figref}[1]{\textbf{Figure \ref{#1}}}
 \newcommand{\tableref}[1]{\textbf{Table \ref{#1}}}
-\newcommand{\progref}[1]{\textbf{Prg.\,\ref{#1}}}
-\newcommand{\lstref}[1]{\textbf{Lst.\,\ref{#1}}}
+\newcommand{\progref}[1]{\textbf{Program \ref{#1}}}
+\newcommand{\lstref}[1]{\textbf{Listing \ref{#1}}}
 \newcommand{\lemmaref}[1]{\textbf{Lemma \ref{#1}}}
 \newcommand{\theoremref}[1]{\textbf{Theorem \ref{#1}}}
 \newcommand{\sectionref}[1]{\textbf{Section \ref{#1}}}
@@ -300,6 +300,7 @@
 \newcommand{\macrosc}[1]{\macro{\textsc{#1}}}
 \newcommand{\macromath}[1]{\macro{\ensuremath{#1}}}
 \newcommand{\macromathsf}[1]{\macro{\ensuremath{\textsf{#1}}}}
+\newcommand{\macromathtext}[1]{\macro{\ensuremath{\text{#1}}}}
 
 % Disable hacks
 \renewcommand{\todo}[1]{}
@@ -375,8 +376,6 @@
 \newcommand{\tices}{\macromathsf{ICE 79}}
 \newcommand{\enter}{\macromathsf{enter}}
 \newcommand{\exit}{\macromathsf{exit}}
-\newcommand{\uniModal}{\macromathsf{uni-modal}}
-\newcommand{\multiModal}{\macromathsf{multi-modal}}
 \newcommand{\freiburgR}{\macromathsf{Freiburg}}
 \newcommand{\stuttgartR}{\macromathsf{Stuttgart}}
 \newcommand{\switzerlandR}{\macromathsf{Switzerland}}
@@ -384,6 +383,9 @@
 \newcommand{\modes}{\macromathsf{modes}}
 \newcommand{\fromJ}{\macromathsf{from}}
 \newcommand{\toJ}{\macromathsf{to}}
+
+\newcommand{\uniModal}{\macromathtext{uni-modal}}
+\newcommand{\multiModal}{\macromathtext{multi-modal}}
 
 % Operator
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -435,7 +437,7 @@
 		\end{tabular}
 		%\todo{disable todos and macro highlights}% Remove todo for final submission
 	}
-	\date{September 7, 2018}% Fix a date
+	\date{September 11, 2018}% Fix a date
 	\maketitle
 	% Suppress page number on title page
 	\thispagestyle{empty}
@@ -450,10 +452,10 @@
 \renewcommand{\abstractname}{\huge Declaration}
 \begin{abstract}
 	\vbox{}
-	I hereby declare, that I am the sole author and composer of my Thesis and that
+	I hereby declare, that I am the sole author and composer of my thesis and that
 	no other sources or learning aids, other than those listed, have been used.
 	Furthermore, I declare that I have acknowledged the work of others by providing
-	detailed references of said work. I hereby also declare, that my Thesis has not
+	detailed references of said work. I hereby also declare, that my thesis has not
 	been prepared for another examination or assignment, either
 	wholly or excerpts thereof.
 	\vfill

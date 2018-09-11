@@ -1,7 +1,7 @@
 %Shortest path problem
 \chapter{Shortest path problem}\label{shortestPathProblem}
-	For route planning, routes through a network must be optimized with regards to one or even many criteria.
-	A common criterion is the \textit{travel time}. Others include cost, number of transfers or restrictions
+	For route planning, routes through a network must be optimized with respect to one or even many criteria.
+	A common criterion is \textit{travel time}. Others include cost, number of transfers or restrictions
 	in transportation types.
 	
 	In this chapter, we will first give an informal description of the \earliestArrivalProblem. Followed by
@@ -253,7 +253,7 @@
 	\begin{mydef}\label{heuristic}
 		Given a graph $G = (V, E)$, a metric $\dist$ on $V$ (see \defref{metric}),
 		a \textnormal{heuristic} is a function $h: V \times V \to \mathbb{R}_{\ge 0}$ which approximates $\dist$.
-		The heurstic $h$ must be
+		The heuristic $h$ must be
 		\begin{itemize}
 			\item[1.] \textnormal{admissable}, i.e. never overestimate:
 				\begin{align*}
@@ -283,7 +283,7 @@
 	where the importance of nodes heavily differs, such as public transit networks. For train networks, the typical case is that one first needs
 	to travel to a main station. This is obviously due to a main station having a much better connectivity and faster trains available.
 	Because of that, the effectiveness of \textit{as-the-crow-flies} is very limited on such networks.\\\\
-	The \textit{landmark heurstic} partially solves the issue. An \astar algorithm using the landmark heuristic is called \alt \libref{alt},
+	The \textit{landmark heuristic} partially solves the issue. An \astar algorithm using the landmark heuristic is called \alt \libref{alt},
 	which stands for \textit{landmarks and triangle inequality}.
 	
 	The heuristic provides a more generic approach by approximating the distance
@@ -612,7 +612,7 @@
 	\begin{align*}
 		S	&= M.
 	\end{align*}
-	The actual impact on the effectiveness heavily depends on the type of network. It has no effect at all, if all edges on
+	The actual impact on the effectiveness heavily depends on the type of network. It has no effect at all if all edges on
 	the shortest path for $S = M$ can also be taken with the actual restricted version of $S$. It gets worse if some edges are
 	not available anymore, for example a highway that can not be taken for $S = \{\foot\}$, although the heuristic assumed
 	it can be taken using a \car.

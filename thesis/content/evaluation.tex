@@ -25,7 +25,7 @@
 \section{Input data}\label{inputData_sec}
 	We consider three data sets, consisting of road and public transit data. The road network is extracted from \osm \libref{osm}
 	formatted data and transit data is given in the \gtfs \libref{gtfs} format.\\\\
-	Our data sets represent the region around the german cities \freiburgR and \stuttgartR. Their road network is
+	Our data sets represent the region around the German cities \freiburgR and \stuttgartR. Their road network is
 	of similar size, while our transit data for \freiburgR only include tram data, whereas the data for \stuttgartR
 	also include train and bus connections. The size of our transit network for \stuttgartR is about ten times the size of
 	the network for \freiburgR.
@@ -277,8 +277,8 @@ S6, S3 3, 180
 	An example feed can be seen in \lstref{gtfsExample}. The format is similar to our definition of timetables (see \sectionref{timetable_sec}),
 	with the difference that connections are not directly given as edges departing from one stop to another, but as pair of arrival and
 	departure time at stops. Also, it contains a lot of metadata which we do not process.\\\\
-	Construction of a realistic time expanded transit graph (see \defref{realisticTransitGraph}) is straightforward and mainly
-	involves around parsing \textit{stop\_times.txt}. We build two nodes for every entry, one representing the arrival event at the stop
+	Construction of a realistic time expanded transit graph (see \defref{realisticTransitGraph}) is straight\-forward and mainly
+	revolves around parsing \textit{stop\_times.txt}. We build two nodes for every entry, one representing the arrival event at the stop
 	and another for the departure. Furthermore, we create a transfer node for every arrival node, indicating a transfer at the given stop.
 	Each arrival node is then connected by an edge with its corresponding departure and transfer node.
 	
@@ -289,7 +289,7 @@ S6, S3 3, 180
 	As a next step, waiting edges are created by sorting transfer nodes of a stop ascending in time and then creating edges
 	connecting them in that order. Finally, every departure node is connected to its previous transfer node. We find the
 	transfer node by using a \textit{binary search} \libref{binarySearch} on the sorted list of transfer nodes for this stop.\\\\
-	Timetables (see \defref{timetable}) are received similar. But simpler, as transfer nodes are not present. We process
+	Timetables (see \defref{timetable}) are received similarly. But simpler, as transfer nodes are not present. We process
 	all stops and trips defined in \textit{stops.txt} and \textit{trips.txt} and obtain the sets $S$ and $T$ respectively.
 	Connections are created by again processing entries in \textit{stop\_times.txt}, belonging to one trip, in the sequence
 	defined by \textit{stop\_sequence}. We create one connection for every departure node with the corresponding
